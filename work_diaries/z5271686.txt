@@ -1,1 +1,15 @@
 
+week1:
+find the valueful api for crawling data
+crawling, clean and format data
+brainstorm the novel functionality
+
+week2:
+draw the ER diagram, clean the data 
+write the user stroy and draw the ui diagram
+brainstorm the novel functionality
+
+week3:
+draw the ui diagram, double check the ER diagram and add more table to match the functionality
+wrote the description how some of the defined user stories to be implemented provied novel functionality
+import the data into database
