@@ -2,7 +2,8 @@ Week1
 Form the group, choose movie recommendation system as project topic, read project spec together. Design proposal structure.
 
 Week2
-Write user story drafts, design user interface.
+Write user story drafts, write story boards, design user integration interface, design user interface.
 
 Week3
 write user story boards，write proposal drafts
+finilise proposal drafts, start coding
