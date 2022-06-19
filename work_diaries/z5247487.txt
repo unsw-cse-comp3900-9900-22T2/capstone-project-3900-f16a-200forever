@@ -1,0 +1,9 @@
+Week1
+Form the group. Discussed and desided the chose of movie finder system. Discussed about the proposal.
+
+Week2
+Initialized the git repo with some start codes. Discussed about the functionalies. Wrote two epic stories.
+
+Week3
+Worked on the proposal. Initialized Jira backlog. Draw some UI diagram. Finalized the proposal.
+
