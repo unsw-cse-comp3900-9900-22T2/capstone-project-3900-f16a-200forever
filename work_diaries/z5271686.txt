@@ -10,6 +10,6 @@ write the user stroy and draw the ui diagram
 brainstorm the novel functionality
 
 week3:
-draw the ui diagram, double check the ER diagram and add more table to match the functionality
+draw the ui diagram, double check the ER diagram and rewrite the ER diagram
 wrote the description how some of the defined user stories to be implemented provied novel functionality
 import the data into database
