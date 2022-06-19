@@ -1,1 +1,13 @@
 working diaries
+
+-Week 1
+  Find a group, and then decide which topic to choose.
+
+-Week 2
+  Draw a low-quality UI diagrame and decide some of the functions
+  
+-Week 3
+  Draw a complete UI diagrame and a flow diagrame according to the UI diagrame.
+  Decide some new functions.
+
+-Week 4
