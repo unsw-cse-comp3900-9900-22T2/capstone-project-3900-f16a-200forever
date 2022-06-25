@@ -41,7 +41,7 @@ const Login = () => {
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Please input your username!" />
         </Form.Item>
 
         <Form.Item
@@ -54,7 +54,7 @@ const Login = () => {
             },
           ]}
         >
-          <Input.Password />
+          <Input.Password placeholder="Please input your password!" />
         </Form.Item>
 
         <Form.Item
