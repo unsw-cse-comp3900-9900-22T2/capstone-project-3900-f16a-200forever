@@ -6,6 +6,7 @@ from json import dumps
 import redis
 
 
+
 def defaultHandler(err):
     response = err.get_response()
     print('response', err, err.get_response())
@@ -21,13 +22,24 @@ def defaultHandler(err):
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 CORS(app)
-app.register_error_handler(Exception, defaultHandler)
 app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379')
 # next line is for multi env
 # app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 Session(app)
 
+
+
 from movie import controllers
 from movie import models
 from movie import error
+from movie.controllers import auth_bp
+
+app.register_blueprint(auth_bp)
+
+
+db.create_all()
+db.session.commit()
+
+#TODO: 记得移除
+#app.register_error_handler(Exception, defaultHandler)
