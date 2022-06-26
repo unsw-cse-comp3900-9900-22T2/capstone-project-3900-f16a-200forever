@@ -1,3 +1,4 @@
+from attr import validate
 from numpy import require
 from movie.models import users
 from movie import app, request
@@ -24,19 +25,14 @@ class LoginController(Resource):
   @auth_ns.expect(AuthNS.auth_login)
   @admin_ns.response(200, "Login Successfully")
   @admin_ns.response(400, "TODO")
-  @admin_ns.expect(AuthNS.auth_login)
+  @admin_ns.expect(AuthNS.auth_login, validate=True)
   def post(self):
-    req_parse = reqparse.RequestParser(bundle_errors=True)
-    req_parse.add_argument('email', required=True, type=str)
-    req_parse.add_argument('password', required=True, type=str)
-    args = req_parse.parse_args()
+    data = request.get_json()
 
-    email = args.get('email')
-    pw = args.get('password')
-    is_admin = args.get('auth')
-
-    print(args)
-
+    email = data['email']
+    pw = data['password']
+    is_admin = data['auth']
+    print(email)
     user = None
     if not is_admin:
       user = db.session.query(users.Users).filter(users.Users.email == email).first()
@@ -48,12 +44,12 @@ class LoginController(Resource):
     
     #encode the password
     if pw_encode(pw) != user.password:
-      print(pw_encode(pw))
       #TODO: response status
       return 400
 
     token = generate_token(email)
     session[email] = token
+    session["id"] = user.id
     return dumps({
         'token': generate_token(email)
     }), 200
@@ -63,15 +59,13 @@ class LoginController(Resource):
 class logoutController(Resource):
   @admin_ns.response(200, "Logout successfullly")
   @admin_ns.response(400, "TODO")
-  @admin_ns.expect(AdminNS.admin_logout)
+  @admin_ns.expect(AdminNS.admin_logout, validate=True)
   @auth_ns.response(200, "Logout successfullly")
   @auth_ns.response(400, "TODO")
-  @auth_ns.expect(AuthNS.auth_logout)
+  @auth_ns.expect(AuthNS.auth_logout, validate=True)
   def post(self):
-    req_parse = reqparse.RequestParser(bundle_errors=True)
-    req_parse.add_argument('email', required=True, type=str)
-    args = req_parse.parse_args()
-    email = args.get('email')
+    data = request.get_json()
+    email = data['email']
 
     if email not in session.keys():
       #TODO:

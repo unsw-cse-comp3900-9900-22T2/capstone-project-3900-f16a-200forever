@@ -5,8 +5,6 @@ from flask_session import Session
 from json import dumps
 import redis
 
-
-
 def defaultHandler(err):
     response = err.get_response()
     print('response', err, err.get_response())
@@ -29,18 +27,18 @@ db = SQLAlchemy(app)
 Session(app)
 
 
-
 from movie import controllers
 from movie import models
 from movie import error
-from movie.controllers import auth_bp, admin_bp
+from movie.controllers import auth_bp, admin_bp, event_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(event_bp)
 
 
 db.create_all()
 db.session.commit()
 
-#TODO: 记得移除
+#TODO: remember to remove the comment(#)
 #app.register_error_handler(Exception, defaultHandler)

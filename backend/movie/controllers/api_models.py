@@ -1,17 +1,11 @@
-from flask_restx import Namespace, fields
+from typing_extensions import Required
+from attr import field
+from flask_restx import Namespace
+from .models_format import login, logout, event_create
 from numpy import require
 
-login = {
-    'email': fields.String(required=True),
-    'password': fields.String(required=True),
-    'is_admin': fields.Boolean(required=True)
-}
 
 
-logout = {
-  'email': fields.String(required=True),
-
-}
 
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")
@@ -25,3 +19,9 @@ class AdminNS:
   admin_login = admin_ns.model('Admin login', login)
 
   admin_logout = admin_ns.model('Admin logout', logout)
+
+
+class EventNS:
+  event_ns = Namespace('Event', description="the api for manage event")
+
+  event_create_form = event_ns.model('Create event', event_create)
