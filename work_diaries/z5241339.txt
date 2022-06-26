@@ -7,3 +7,6 @@ Write user story drafts, write story boards, design user integration interface, 
 Week3
 write user story boards，write proposal drafts
 finilise proposal drafts, start coding
+
+Week4
+code frontend page(login/register)
