@@ -1,14 +1,41 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, notification } from "antd";
 import { Typography } from "antd";
+import axios from 'axios';
 import "../css/Login.css";
-const Login = () => {
+
+const Login = ({ updateLoginStatus }) => {
   const { Title } = Typography;
   const onFinish = (values) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
+    // todo add url
+    // todo handle success
+    // todo handle error
+    axios.post('/url', {
+      email: values["email"],
+      password: values["password"]
+    })
+    .then(function (response) {
+      console.log(response);
+      updateLoginStatus(true);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
+    // todo change the error msg
+    notification.open({
+      message: `Notification`,
+      description:
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      placement: "top",
+      duration: 3,
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
   };
 
   return (
@@ -32,16 +59,16 @@ const Login = () => {
         autoComplete="off"
       >
         <Form.Item
-          label="Username"
-          name="username"
+          label="Email"
+          name="email"
           rules={[
             {
               required: true,
-              message: "Please input your username!",
+              message: "Please enter your email!",
             },
           ]}
         >
-          <Input placeholder="Please input your username!" />
+          <Input placeholder="Please enter your username!" />
         </Form.Item>
 
         <Form.Item
@@ -50,14 +77,14 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: "Please enter your password!",
             },
           ]}
         >
-          <Input.Password placeholder="Please input your password!" />
+          <Input.Password placeholder="Please enter your password!" />
         </Form.Item>
-
-        <Form.Item
+        {/* todo discuss remember me */}
+        {/* <Form.Item
           name="remember"
           valuePropName="checked"
           wrapperCol={{
@@ -66,7 +93,7 @@ const Login = () => {
           }}
         >
           <Checkbox>Remember me</Checkbox>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item
           wrapperCol={{
@@ -79,8 +106,9 @@ const Login = () => {
             type="primary"
             htmlType="submit"
           >
-            Submit
+            LOGIN
           </Button>
+          {/* todo add forget button */}
         </Form.Item>
       </Form>
     </div>
