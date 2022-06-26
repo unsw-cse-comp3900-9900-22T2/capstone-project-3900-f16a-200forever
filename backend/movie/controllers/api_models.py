@@ -25,3 +25,4 @@ class EventNS:
   event_ns = Namespace('Event', description="the api for manage event")
 
   event_create_form = event_ns.model('Create event', event_create)
+  
