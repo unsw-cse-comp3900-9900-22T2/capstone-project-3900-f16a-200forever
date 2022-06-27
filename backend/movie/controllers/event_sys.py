@@ -31,10 +31,10 @@ class EventCreate(Resource):
       que_id = uuid.uuid4()
       que['id'] = que_id
       que['event_id'] = event['id']
-      new_que = events.Questions(que)
+      new_que = event.Questions(que)
       db.session.add(new_que)
       db.session.commit()
-    new_event  = events.Events(event)
+    new_event  = event.Events(event)
     db.session.add(new_event)
     db.session.commit()
 
