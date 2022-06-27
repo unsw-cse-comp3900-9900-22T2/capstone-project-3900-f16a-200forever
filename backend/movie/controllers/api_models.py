@@ -1,4 +1,3 @@
-from typing_extensions import Required
 from attr import field
 from flask_restx import Namespace
 from .models_format import login, logout, event_create

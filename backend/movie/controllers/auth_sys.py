@@ -33,12 +33,12 @@ class LoginController(Resource):
     pw = data['password']
     is_admin = data['auth']
     print(email)
-    user = None
+    curr_user = None
     if not is_admin:
-      user = db.session.query(user.Users).filter(user.Users.email == email).first()
+      curr_user = db.session.query(user.Users).filter(user.Users.email == email).first()
     else:
-      user = db.session.query(admin.Admins).filter(admin.Admins.email == email).first()
-    if user == None:
+      curr_user = db.session.query(admin.Admins).filter(admin.Admins.email == email).first()
+    if curr_user == None:
       #TODO: response status
       return 400
     
