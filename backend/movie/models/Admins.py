@@ -8,7 +8,7 @@ class Admins(db.Model):
   events = db.relationship('Events', backref='admin', lazy=True)
 
   def __repr__(self):
-    return '<Admin {}>'.format(self.id)
+    return '<Admin {} {}>'.format(self.id, self.email)
   
   def __init__(self, email, password):
     self.email = email

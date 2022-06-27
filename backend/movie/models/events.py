@@ -1,5 +1,4 @@
 from movie import db
-import uuid
 
 class Events(db.Model):
   __tablename__ = 't_events'
