@@ -1,18 +1,30 @@
 .homepage {
   height: 100%;
+  width: 100%;
+  display: flex;
 }
 
 .homepage_header {
-  height: 65px;
+  width: 100%;
   display: flex;
-  flex-direction: row;
+  cursor: alias;
   align-items: center;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  float: right;
+  align-items: center;
+  position: absolute;
+  flex-direction: row;
+
+  border-style: solid;
+  border-width: 5px;
 }
 
 .homepage_header_logo {
   width: 100px;
   height: 100%;
-  flex-direction: flex;
+
   flex-direction: row;
   align-items: center;
 }
@@ -25,11 +37,20 @@
 
 .homepage_header_titles {
   font-size: large;
-  
 }
-.homepage_header_login{
-    margin-left: 950px;
+.homepage_header_login {
+  float: right;
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  justify-content: right;
+  /* align-content: space-between; */
 }
-.homepage_header_register{
-    margin-left: 20px;
+.homepage_header_register {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  justify-content: right;
+  /* align-content: space-between; */
+  float: right;
 }

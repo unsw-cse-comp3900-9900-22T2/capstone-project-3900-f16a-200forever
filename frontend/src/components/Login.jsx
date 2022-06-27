@@ -2,13 +2,17 @@ import { Button, Checkbox, Form, Input, notification } from "antd";
 import { Typography } from "antd";
 import axios from "axios";
 import "../css/Login.css";
+import { useNavigate } from "react-router-dom";
+
 const tailLayout = {
   wrapperCol: {
     offset: 8,
     span: 16,
   },
 };
+
 const Login = ({ updateLoginStatus }) => {
+  let navigate = useNavigate();
   const { Title } = Typography;
   const onFinish = (values) => {
     // console.log("Success:", values);
@@ -56,11 +60,9 @@ const Login = ({ updateLoginStatus }) => {
           span: 8,
         }}
         wrapperCol={{
-          span: 16,
+          span: 20,
         }}
-        initialValues={{
-          remember: true,
-        }}
+     
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -110,13 +112,23 @@ const Login = ({ updateLoginStatus }) => {
           >
             LOGIN
           </Button>
+
+          <Button
+            classname="login-form-to-register"
+            onClick={()=>navigate("/register")}
+            htmlType="button"
+          >
+            do not have account? Click to register
+          </Button>
           <Button
             classname="login-forget-button"
-            
+            type="link"
             htmlType="button"
+            onClick={()=>navigate("/forgetpassword")}
           >
             Forget Password
           </Button>
+          
           {/* todo add forget button */}
         </Form.Item>
       </Form>

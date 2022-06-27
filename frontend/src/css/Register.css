@@ -1,8 +1,14 @@
 .register-form {
-  margin-top: 30px;
-  margin-left: 450px;
-  max-width: 400px;
+  margin: auto;
+  width: 50%;
+  border: 2px solid grey;
+  padding: 10px;
+  position: absolute;
   flex-direction: row;
+  margin-left: 350px;
+  max-width: 450px;
+  border-Radius: "30px";
+  justify-content: "space-between";
 }
 .register-form-button {
   width: 200%;
@@ -10,7 +16,7 @@
 }
 .register-title {
   margin-left: 320px;
-  margin-top: 100px;
+  padding-top: 70px;
 }
 /* .register-username-text {
   position: relative;

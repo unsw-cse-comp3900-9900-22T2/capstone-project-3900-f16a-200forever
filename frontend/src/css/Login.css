@@ -1,17 +1,24 @@
 .login-form {
-  margin-top: 30px;
-  margin-left: 450px;
-  max-width: 400px;
+  margin: auto;
+  width: 50%;
+  border: 2px solid grey;
+  padding: 10px;
+  position: absolute;
+  flex-direction: row;
+  margin-left: 350px;
+  max-width: 450px;
+  border-radius: "30px";
+  justify-content: "space-between";
 }
 .login-form-button {
-
-  /* margin-left: 20px; */
+    padding: 0%;
+    position: relative;
 }
 .login-title {
-    margin-left: 590px;
-    margin-top: 100px;
+  margin-left: 450px;
+  padding-top: 70px;
 }
-.login-forget-button{
-    /* margin-left: 200px; */
-    /* position:relative */
+.login-forget-button {
+  margin-left: 20px;
+  position: relative;
 }

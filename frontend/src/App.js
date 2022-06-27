@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import Header from "./components/Header";
+import ForgetPassword from "./components/ForgetPassword";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -25,7 +26,8 @@ function App() {
         }>
           <Route path = "/" element = {<HomePage/>}/>
           <Route path = "/login" element = {<Login updateLoginStatus={updateLoginStatus}/>}/>
-          <Route path = "/register" element = {<Register updateLoginStatus={updateLoginStatus}/>}/>  
+          <Route path = "/register" element = {<Register updateLoginStatus={updateLoginStatus}/>}/> 
+          <Route path = "/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>   
         </Route>
       </Routes>
     </Router>
