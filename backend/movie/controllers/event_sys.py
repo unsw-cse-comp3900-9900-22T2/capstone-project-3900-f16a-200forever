@@ -1,8 +1,9 @@
 
 from datetime import datetime
+from attr import validate
 from flask_restx import Resource, reqparse
 import datetime
-from movie.models import event
+from movie.models import event as Event
 from numpy import require
 from .api_models import EventNS
 import uuid
@@ -31,10 +32,10 @@ class EventCreate(Resource):
       que_id = uuid.uuid4()
       que['id'] = que_id
       que['event_id'] = event['id']
-      new_que = event.Questions(que)
+      new_que = Event.Questions(que)
       db.session.add(new_que)
       db.session.commit()
-    new_event  = event.Events(event)
+    new_event  = Event.Events(event)
     db.session.add(new_event)
     db.session.commit()
 

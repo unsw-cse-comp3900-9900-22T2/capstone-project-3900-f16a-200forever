@@ -9,12 +9,9 @@ class AuthNS:
 
   auth_logout = auth_ns.model('Auth logout', logout)
 
+
 class AdminNS:
   admin_ns = Namespace("Admin", description="the api of admin authentication")
-  admin_login = admin_ns.model('Admin login', login)
-
-  admin_logout = admin_ns.model('Admin logout', logout)
-
 
 class EventNS:
   event_ns = Namespace('Event', description="the api for manage event")

@@ -1,9 +1,9 @@
 from flask_restx import fields
 
 login = {
-    'email': fields.String(required=True),
-    'password': fields.String(required=True),
-    'is_admin': fields.Boolean(required=True)
+    "email": fields.String(required=True),
+    "password": fields.String(required=True),
+    "is_admin": fields.String(required=True)
 }
 
 
