@@ -10,6 +10,7 @@ const Login = ({ updateLoginStatus }) => {
     // todo add url
     // todo handle success
     // todo handle error
+    // todo forget password?
     axios.post('/url', {
       email: values["email"],
       password: values["password"]
