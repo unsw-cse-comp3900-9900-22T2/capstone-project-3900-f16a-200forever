@@ -1,6 +1,6 @@
 from attr import validate
 from numpy import require
-from movie.models import users
+from movie.models import user
 from movie import app, request
 from flask import session
 from flask_restx import Resource, reqparse
@@ -8,7 +8,7 @@ from json import dumps
 from flask_restx import Resource, Api
 from movie.utils.auth_util import generate_token, pw_encode
 from movie import db
-from movie.models import admins
+from movie.models import admin
 
 from .api_models import AuthNS, AdminNS
 

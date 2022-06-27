@@ -1,6 +1,6 @@
-from .authController import auth_ns 
-from .adminController import admin_ns
-from .eventController import event_ns
+from .auth_sys import auth_ns 
+from .admin_sys import admin_ns
+from .event_sys import event_ns
 from flask_restx import Api
 from flask import Blueprint
 

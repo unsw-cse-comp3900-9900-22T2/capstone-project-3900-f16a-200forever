@@ -2,7 +2,7 @@
 from datetime import datetime
 from flask_restx import Resource, reqparse
 import datetime
-from movie.models import events
+from movie.models import event
 from numpy import require
 from .api_models import EventNS
 import uuid
