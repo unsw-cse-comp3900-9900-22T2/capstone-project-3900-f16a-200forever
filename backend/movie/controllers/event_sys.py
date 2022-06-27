@@ -1,10 +1,13 @@
 
 from datetime import datetime
+from json import dumps
 from attr import validate
 from flask_restx import Resource, reqparse
 import datetime
 from movie.models import event as Event
 from numpy import require
+
+from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -18,13 +21,27 @@ class EventCreate(Resource):
   @event_ns.response(400, "TODO")
   @event_ns.expect(EventNS.event_create_form, validate=True)
   def post(self):
+    data = event_ns.payload
+    email = data['email']
+    token = data['token']
+
+    # check the user is valid or not
+    if not user_is_valid(email, token):
+      return dumps({"message": "the token is incorrect"}), 400
+    
+    # check the user is admin
+    if not user_is_admin(email):
+      return dumps({"message": "the user is admin, not permission"}), 400
+
     event = event_ns.payload
+    del event['email']
+    del event['token']
     event_id = uuid.uuid4()
 
     questions = event['questions']
     del event['questions']
     event['id'] = event_id
-    event['admin_id'] = 1#session['id']
+    event['admin_id'] = session['id']
     for que in list(questions):
       que = dict(que)
       if not check_correct_answer(int(que['correct_answer'])):
@@ -39,11 +56,6 @@ class EventCreate(Resource):
     db.session.add(new_event)
     db.session.commit()
 
+    return dumps({"message": "Create Event Successfully"}), 200
 
 
-
-def check_correct_answer(value):
-  if value != 1 and value != 2 and value != 3:
-    return False
-  return True
-    

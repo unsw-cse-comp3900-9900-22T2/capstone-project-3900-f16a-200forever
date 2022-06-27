@@ -9,7 +9,7 @@ login = {
 
 logout = {
   'email': fields.String(required=True),
-
+  'token': fields.String(required=True)
 }
 
 class Question_Form(fields.Raw):
@@ -24,6 +24,8 @@ class Question_Form(fields.Raw):
 
 #TODO: check the required
 event_create = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
   'topic': fields.String(required=True),
   'duration': fields.Integer(required=True),
   'deadline': fields.DateTime(required=True),
