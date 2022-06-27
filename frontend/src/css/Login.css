@@ -4,10 +4,14 @@
   max-width: 400px;
 }
 .login-form-button {
-  width: 200%;
-  margin-left: 20px;
+
+  /* margin-left: 20px; */
 }
 .login-title {
     margin-left: 590px;
     margin-top: 100px;
+}
+.login-forget-button{
+    /* margin-left: 200px; */
+    /* position:relative */
 }
