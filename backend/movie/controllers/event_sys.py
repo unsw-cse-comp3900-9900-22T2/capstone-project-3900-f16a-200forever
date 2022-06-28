@@ -86,21 +86,7 @@ class EventCreate(Resource):
 class Search(Resource):
   @event_ns.response(200, "Login Successfully")
   @event_ns.response(400, "Something wrong")
-  @event_ns.expect(EventNS.validation_form, validate=True)
-  def post(self):   
-    data = event_ns.payload
-
-    # check user has login
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
-
-    # check the user is valid or not
-    if not user_is_valid(data):
-      return dumps({"message": "the token is incorrect"}), 400
-        # check the user is admin
-    if not user_is_admin(data['email']):
-      return dumps({"message": "the user is not the admin, no permission"}), 400
-
+  def get(self):   
     parser = reqparse.RequestParser()
     parser.add_argument('keyword', type=str, location='args', required=True)
     """
