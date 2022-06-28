@@ -31,25 +31,7 @@ const SearchComponent = ({ updateLoginStatus }) => {
           />
         </Col>
       </Row>
-      <Divider orientation="left">Results</Divider>
-      {/* <Row gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
-        <Col span={3} offset={6}>
-          <Select defaultValue="By movie name">
-            <Option value="By movie name">By movie name</Option>
-            <Option value="By genre">By genre</Option>
-            <Option value="By directors">By directors</Option>
-          </Select>
-        </Col>
-        <Col  offset={1}>
-          <Search
-            placeholder="input search text"
-            enterButton="Search"
-            size="large"
-            // suffix={suffix}
-            onSearch={onSearch}
-          />
-        </Col>
-      </Row> */}
+     
     </div>
   );
 };

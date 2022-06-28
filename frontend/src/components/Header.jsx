@@ -8,9 +8,7 @@ function Header({ loginStatus }) {
   let navigate = useNavigate();
   return (
     <Affix>
-      {/* todo make header not transparent */}
       <Row>
-        {" "}
         <div className="homepage_header">
           {/* {logo} */}
           <Col offset={1}>
@@ -26,7 +24,6 @@ function Header({ loginStatus }) {
             {loginStatus ? (
               // todo modify welcome msg and layout
               <div>
-                {" "}
                 Welcome!
                 {/* todo add profile and logout button */}
               </div>
