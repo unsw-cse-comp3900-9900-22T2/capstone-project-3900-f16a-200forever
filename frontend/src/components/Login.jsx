@@ -3,6 +3,7 @@ import { Typography } from "antd";
 import axios from "axios";
 import "../css/Login.css";
 import { useNavigate } from "react-router-dom";
+import openNotification from "./Notification";
 
 const tailLayout = {
   wrapperCol: {
@@ -11,11 +12,11 @@ const tailLayout = {
   },
 };
 
-const Login = ({ updateLoginStatus }) => {
+const Login = ({ updateLoginStatus, updateUserInfo }) => {
   let navigate = useNavigate();
   const { Title } = Typography;
   const onFinish = (values) => {
-    // console.log("Success:", values);
+    console.log("Success:", values);
     // todo add url
     // todo handle success
     // todo handle error
@@ -28,31 +29,32 @@ const Login = ({ updateLoginStatus }) => {
       .then(function (response) {
         console.log(response);
         updateLoginStatus(true);
+        updateUserInfo({
+          "username": response["username"],
+          "token": response["token"]
+        })
+        // todo change url here
+        navigate("/");
       })
       .catch(function (error) {
         console.log(error);
+        openNotification({
+          "title": "An error occur",
+          "content": error
+        })
       });
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = () => {
     // console.log("Failed:", errorInfo);
     // todo change the error msg
-    notification.open({
-      message: `Notification`,
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-      placement: "top",
-      duration: 3,
-      onClick: () => {
-        console.log("Notification Clicked!");
-      },
-    });
+    openNotification({
+      "title": "Please enter all info"
+    })
   };
 
   return (
-    <div>
-      <Title className="login-title">Please log in </Title>
-
+    <div className="login-body">
       <Form
         className="login-form"
         name="basic"
@@ -67,6 +69,7 @@ const Login = ({ updateLoginStatus }) => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Title>Please log in here</Title>
         <Form.Item
           label="Email"
           name="email"
@@ -92,18 +95,6 @@ const Login = ({ updateLoginStatus }) => {
         >
           <Input.Password placeholder="Please enter your password!" />
         </Form.Item>
-        {/* todo discuss remember me */}
-        {/* <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
-
         <Form.Item {...tailLayout}>
           <Button
             classname="login-form-button"

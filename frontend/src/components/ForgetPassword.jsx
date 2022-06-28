@@ -1,12 +1,73 @@
 import React, { Component } from "react";
 import { Form, Typography, Col, Row, Input, Button } from "antd";
 import "../css/ForgetPassword.css";
+import axios from "axios";
+import openNotification from "./Notification";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 const ForgetPassword = () => {
+  let navigate = useNavigate();
   const { Title, Text } = Typography;
-  const onFinish = (values) => {};
-  const onFinishFailed = (errorInfo) => {};
+  const [email, setEmail] = useState("");
+
+  const updateEmail = (event) => {
+    // console.log(event.target.value);
+    setEmail(event.target.value);
+  }
+
+  const onFinish = (values) => {
+    console.log(values);
+    // todo change the url
+    axios
+      .post("/url", {
+        email: values["email"],
+        password: values["password"],
+        code: values["code"]
+      })
+      .then(function (response) {
+        console.log(response);
+        navigate("/login");
+      })
+      .catch(function (error) {
+        console.log(error);
+        openNotification({
+          "title": "An error occur",
+          "content": error
+        })
+      });
+  };
+
+  const onFinishFailed = () => {
+    openNotification({
+      "title": "Please enter all info"
+    })
+  };
+
+  const sendCode = () => {
+    console.log(email);
+    // todo change url
+    axios
+      .post("/url", {
+        email: email
+      })
+      .then(function (response) {
+        console.log(response);
+        openNotification({
+          "title": "Successful",
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+        openNotification({
+          "title": "An error occur",
+          "content": error
+        })
+      });
+  }
+
   return (
-    <div>
+    <div className="forgetpassword-body">
       <Form
         className="forgetpassword-form"
         name="basic"
@@ -28,43 +89,37 @@ const ForgetPassword = () => {
             offset: 4,
           }}
         >
-          <Title className="forgetpassword-title">Forgot passwords</Title>
+        <Title className="forgetpassword-title">Forgot passwords</Title>
         </Form.Item>
-
-        {/* email */}
         <Form.Item
           name="email"
-          label="E-mail"
+          label="email"
           rules={[
             {
               type: "email",
-              message: "The input is not valid E-mail",
+              message: "The input is not valid email",
             },
             {
               required: true,
-              message: "Please input your E-mail",
+              message: "Please enter your email",
             },
           ]}
         >
-          {/* 这个Form.Item包裹一个Input组件 */}
-          <Input />
+          <Input onChange={updateEmail}/>
         </Form.Item>
-        {/* code */}
         <Form.Item
           label="Verfication code"
           extra="Please provide email verfication code"
         >
           <Row gutter={20}>
-            {/* gutter 的单位是像素 */}
-            {/* Row被划分为24格，用Col与Span属性设定宽度 */}
             <Col span={8}>
               <Form.Item
-                name="Verfication code"
+                name="code"
                 noStyle
                 rules={[
                   {
                     required: true,
-                    message: "Please input the verification code you got!",
+                    message: "Please enter the verification code you got!",
                   },
                 ]}
               >
@@ -72,7 +127,9 @@ const ForgetPassword = () => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Button>Get code</Button>
+              <Button onClick={sendCode}>
+                Get code
+              </Button>
             </Col>
           </Row>
         </Form.Item>
@@ -104,14 +161,13 @@ const ForgetPassword = () => {
                 if (!value || getFieldValue("password") === value) {
                   return Promise.resolve();
                 }
-
                 return Promise.reject(
                   "The two passwords that you entered do not match!"
                 );
               },
             }),
           ]}
-          hasFeedback // 在输入框右侧，可以显示一个绿色勾勾 或者 红色叉叉 作为反馈。
+          hasFeedback
         >
           <Input.Password />
         </Form.Item>
@@ -121,11 +177,12 @@ const ForgetPassword = () => {
             span: 20,
           }}
         >
-          <Button>submit</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+          >
+            submit</Button>
         </Form.Item>
-        {/* passwords */}
-        {/* doublepasswords */}
-        {/* submit button */}
       </Form>
     </div>
   );

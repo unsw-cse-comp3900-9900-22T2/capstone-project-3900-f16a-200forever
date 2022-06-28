@@ -9,9 +9,14 @@ import ForgetPassword from "./components/ForgetPassword";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
+  const [userInfo, setUserInfo] = useState({})
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
+  }
+
+  const updateUserInfo = (userInfo) => {
+    setUserInfo(userInfo);
   }
 
   return (
@@ -20,14 +25,14 @@ function App() {
       <Routes>
         <Route path='/' element={
           <>
-            <Header loginStatus={ loginStatus }/>
+            <Header loginStatus={ loginStatus } userInfo={userInfo}/>
             <Outlet />
           </>
         }>
           <Route path = "/" element = {<HomePage/>}/>
-          <Route path = "/login" element = {<Login updateLoginStatus={updateLoginStatus}/>}/>
-          <Route path = "/register" element = {<Register updateLoginStatus={updateLoginStatus}/>}/> 
-          <Route path = "/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>   
+          <Route path = "/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path = "/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
+          <Route path = "/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
         </Route>
       </Routes>
     </Router>

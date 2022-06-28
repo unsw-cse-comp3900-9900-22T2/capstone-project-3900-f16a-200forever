@@ -4,31 +4,31 @@ import logo from "../images/logo.png";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
-function Header({ loginStatus }) {
+function Header({ loginStatus, userInfo }) {
 
   let navigate = useNavigate();
   return (
     <Affix>    
-      {/* todo make header not transparent */}
-      <div className="homepage_header">
-        {/* {logo} */}
-        <div className="homepage_header_logo">
-          <img src={logo} alt="logo" />
-        </div>
-        {/* todo make image and text into one image */}
-        <div className="homepage_header_titles">Movie Forever</div>
-        { loginStatus ?
-          // todo modify welcome msg and layout
-          <div> Welcome! 
-            {/* todo add profile and logout button */}
-          </div> :
-          <div>
-            <Button className="homepage_header_login" onClick={()=>navigate("/login")}>login</Button>
-            <Button className="homepage_header_register" onClick={()=>navigate("register")}>register</Button>
-          </div>
-        }        
+    <div className="header">
+      <div className="header-logo">
+        <img src={logo} alt="logo" />
       </div>
-    </Affix>
+      <div className="header-top-right-wrapper">
+        { loginStatus ?
+          <div>
+            Welcome!
+          </div>
+          :
+          <div>
+            <Button className="header-login-btn" onClick={()=>navigate("/login")}>login</Button>
+            <Button className="header-register-btn" onClick={()=>navigate("register")}>register</Button>
+          </div>
+        }
+      </div>
+    </div>
+  </Affix>
+
+
   );
 }
 export default Header;
