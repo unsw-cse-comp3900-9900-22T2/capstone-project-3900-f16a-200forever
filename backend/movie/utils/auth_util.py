@@ -26,7 +26,9 @@ def pw_encode(password):
   '''
   return hashlib.sha256(password.encode()).hexdigest()
 
-def user_is_valid(email, token):
+def user_is_valid(data):
+  email = data['email']
+  token = data['token']
   real_token = session[email]["token"]
   print(real_token)
   if real_token != token:
@@ -34,10 +36,17 @@ def user_is_valid(email, token):
   return True
 
 def user_is_admin(email):
-  return session[email]['admin']
+  if session[email]['admin'] == "False":
+    return False
+  return True
 
 def check_correct_answer(value):
   if value != 1 and value != 2 and value != 3:
     return False
   return True
     
+def user_has_login(email, session):
+  if email not in session.keys():
+    return False
+  return True
+

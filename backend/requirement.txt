@@ -37,3 +37,6 @@ toml==0.10.2
 urllib3==1.26.8
 Werkzeug==2.0.3
 wrapt==1.12.1
+fuzzywuzzy==0.18.0
+python-Levenshtein==0.12.2
+

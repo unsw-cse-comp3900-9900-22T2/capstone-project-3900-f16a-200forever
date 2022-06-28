@@ -7,8 +7,7 @@ login = {
     "is_admin": fields.String(required=True)
 }
 
-
-logout = {
+validation = {
   'email': fields.String(required=True),
   'token': fields.String(required=True)
 }

@@ -5,10 +5,10 @@ class Movies(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title' ,db.String(200), nullable=False)
     tagline = db.Column('tagline', db.String(200))
-    backdrop = db.Column('back_drop', db.String(200))
+    backdrop = db.Column('backdrop', db.String(200))
     discription = db.Column('discription', db.String(1000))
-    runtime = db.Column('runtime', db.Integer),
-    release_date = db.Column('release_time', db.DateTime)
+    runtime = db.Column('runtime', db.Integer)
+    release_time = db.Column('release_time', db.DateTime)
     release_status = db.Column('release_status', db.String(20))
     total_rating = db.Column('total_rating', db.Float(20))
     rating_count = db.Column('rating_count', db.Integer)

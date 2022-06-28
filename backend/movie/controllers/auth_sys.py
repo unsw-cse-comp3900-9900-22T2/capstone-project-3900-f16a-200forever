@@ -4,16 +4,15 @@ from numpy import require, str_
 from movie.models import user as User
 from movie import app, request
 from flask import session
-from flask_restx import Resource, reqparse
+from flask_restx import Resource
 from json import dumps
 from flask_restx import Resource, Api
-from movie.utils.auth_util import generate_token, pw_encode, user_is_valid
+from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, user_has_login
 from movie import db
 from movie.models import admin as Admin
 
 from .api_models import AuthNS, AdminNS
 
-from flask_restx import Namespace, fields
 
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
@@ -48,6 +47,7 @@ class LoginController(Resource):
       return dumps({"message": "Wrong password"}), 400
 
     token = generate_token(email)
+    print(token)
     session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
     return dumps({
         'token': generate_token(email)
@@ -61,17 +61,14 @@ class logoutController(Resource):
   def post(self):
     data = auth_ns.payload
 
-    email = data['email']
-    token = data['token']
-
-    if email not in session.keys():
+    if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
 
     
-    if not user_is_valid(email, token):
+    if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
 
-    session.pop(email)
+    session.pop(data['email'])
     return {"message": "logout successfully"}, 200
 
     
