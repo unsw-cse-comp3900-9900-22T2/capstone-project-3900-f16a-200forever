@@ -1,26 +1,37 @@
 import { Button, Checkbox, Form, Input, notification } from "antd";
 import { Typography } from "antd";
-import axios from 'axios';
+import axios from "axios";
 import "../css/Login.css";
+import { useNavigate } from "react-router-dom";
+
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
 
 const Login = ({ updateLoginStatus }) => {
+  let navigate = useNavigate();
   const { Title } = Typography;
   const onFinish = (values) => {
     // console.log("Success:", values);
     // todo add url
     // todo handle success
     // todo handle error
-    axios.post('/url', {
-      email: values["email"],
-      password: values["password"]
-    })
-    .then(function (response) {
-      console.log(response);
-      updateLoginStatus(true);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    // todo forget password?
+    axios
+      .post("/url", {
+        email: values["email"],
+        password: values["password"],
+      })
+      .then(function (response) {
+        console.log(response);
+        updateLoginStatus(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -29,11 +40,11 @@ const Login = ({ updateLoginStatus }) => {
     notification.open({
       message: `Notification`,
       description:
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
       placement: "top",
       duration: 3,
       onClick: () => {
-        console.log('Notification Clicked!');
+        console.log("Notification Clicked!");
       },
     });
   };
@@ -49,11 +60,9 @@ const Login = ({ updateLoginStatus }) => {
           span: 8,
         }}
         wrapperCol={{
-          span: 16,
+          span: 20,
         }}
-        initialValues={{
-          remember: true,
-        }}
+     
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -95,12 +104,7 @@ const Login = ({ updateLoginStatus }) => {
           <Checkbox>Remember me</Checkbox>
         </Form.Item> */}
 
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
+        <Form.Item {...tailLayout}>
           <Button
             classname="login-form-button"
             type="primary"
@@ -108,6 +112,23 @@ const Login = ({ updateLoginStatus }) => {
           >
             LOGIN
           </Button>
+
+          <Button
+            classname="login-form-to-register"
+            onClick={()=>navigate("/register")}
+            htmlType="button"
+          >
+            do not have account? Click to register
+          </Button>
+          <Button
+            classname="login-forget-button"
+            type="link"
+            htmlType="button"
+            onClick={()=>navigate("/forgetpassword")}
+          >
+            Forget Password
+          </Button>
+          
           {/* todo add forget button */}
         </Form.Item>
       </Form>

@@ -1,8 +1,8 @@
 import React from 'react';
-import '../css/HomePage.css'
+import '../css/HomePage.css';
 
 function HomePage() {
-    
+ 
     return(
         <div className='homepage'>
             {/* <Header/> */}
