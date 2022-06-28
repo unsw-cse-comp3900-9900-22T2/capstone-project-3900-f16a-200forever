@@ -1,17 +1,18 @@
 from movie import db
 
 class Movies(db.Model):
-    __tablename__ = 'Movies'
-    id = db.Column('id', db.Integer(20), primary_key=True)
+    __tablename__ = 't_movies'
+    id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title' ,db.String(200), nullable=False)
     tagline = db.Column('tagline', db.String(200))
-    backdrop = db.Column('backdrop', db.String(200))
+    backdrop = db.Column('back_drop', db.String(200))
     discription = db.Column('discription', db.String(1000))
-    runtime = db.Column('runtime', db.Integer(20))
-    release_date = db.Column('release_date', db.DateTime)
+    runtime = db.Column('runtime', db.Integer),
+    release_date = db.Column('release_time', db.DateTime)
     release_status = db.Column('release_status', db.String(20))
     total_rating = db.Column('total_rating', db.Float(20))
-    rating_count = db.Column('rating_count', db.Integer(20))
+    rating_count = db.Column('rating_count', db.Integer)
+    events = db.relationship('Events', secondary='r_event_movie', back_populates='movies', lazy=True)
 
     def __repr__(self):
         return '<Movie: {} {}>'.format(self.id, self.title)
@@ -28,6 +29,7 @@ class Movies(db.Model):
         self.total_rating = data['total_rating']
         self.rating_count = data['rating_count']
 
+"""
 class MovieActor(db.model):
     __tablename__ = 'Movie_actors'
     movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
@@ -89,3 +91,4 @@ class MovieImages(db.model):
         self.height = data['height']
         self.width = data['width']
         self.is_posters = data['is_posters']
+"""

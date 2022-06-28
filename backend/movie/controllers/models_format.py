@@ -1,3 +1,4 @@
+from attr import field
 from flask_restx import fields
 
 login = {
@@ -33,5 +34,6 @@ event_create = {
   'image_description': fields.String(required=True),
   'description': fields.String(required=True),
   'require_correctness_amt': fields.Integer(required=True),
-  'questions': fields.List(Question_Form(required=True))
+  'questions': fields.List(Question_Form(required=True)),
+  'movies': fields.List(fields.Integer, required=True)
 }
