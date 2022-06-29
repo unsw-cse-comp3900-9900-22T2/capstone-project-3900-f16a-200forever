@@ -3,23 +3,20 @@ import { Affix, Col, Row } from "antd";
 import logo from "../images/logo.png";
 import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
-
-function Header({ loginStatus }) {
+import "../css/AdminHeader.css"
+function AdminHeader({ loginStatus }) {
   let navigate = useNavigate();
   return (
     <Affix>
       <Row>
-        <div className="homepage-header">
+        <div className="admin-header">
           {/* {logo} */}
           <Col offset={1}>
-            <div className="homepage-header-logo">
+            <div className="admin-header-logo">
               <img src={logo} alt="logo" />
             </div>
           </Col>
-          <Col offset={3}>
-            {/* todo make image and text into one image */}
-            <div className="homepage-header-titles">Movie Forever</div>
-          </Col>
+
           <Col flex="auto">
             {loginStatus ? (
               // todo modify welcome msg and layout
@@ -30,18 +27,7 @@ function Header({ loginStatus }) {
             ) : (
               <div>
                 <Space size={"middle"} align={"end"}>
-                  <Button
-                    className="homepage-header-login"
-                    onClick={() => navigate("/login")}
-                  >
-                    login
-                  </Button>
-                  <Button
-                    className="homepage-header-register"
-                    onClick={() => navigate("register")}
-                  >
-                    register
-                  </Button>
+                  <Button className="admin-header-logout">logout</Button>
                 </Space>
               </div>
             )}
@@ -51,4 +37,4 @@ function Header({ loginStatus }) {
     </Affix>
   );
 }
-export default Header;
+export default AdminHeader;

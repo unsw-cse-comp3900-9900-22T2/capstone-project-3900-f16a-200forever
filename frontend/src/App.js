@@ -15,6 +15,10 @@ import SearchResult from "./components/SearchResult";
 import MovieDetail from "./pages/MovieDetail";
 import AdminLogin from "./components/AdminLogin";
 import AdminControl from "./components/AdminControl";
+import AdminHeader from "./components/AdminHeader";
+import EventControl from "./components/EventControl";
+import CreateEvent from "./pages/CreateEvent";
+import EditEvent from "./pages/EditEvent";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
 
@@ -59,13 +63,35 @@ function App() {
       </Routes>
       <Routes>
         <Route
-          path="/admin/login"
-          element={<AdminLogin updateLoginStatus={updateLoginStatus} />}
-        ></Route>
-        <Route
-          path="/admin/control"
-          element={<AdminControl updateLoginStatus={updateLoginStatus} />}
-        ></Route>
+          path="/admin"
+          element={
+            <>
+              <AdminHeader loginStatus={loginStatus} />
+              <Outlet />
+            </>
+          }
+        >
+          <Route
+            path="/admin/login"
+            element={<AdminLogin updateLoginStatus={updateLoginStatus} />}
+          ></Route>
+          <Route
+            path="/admin/control"
+            element={<AdminControl updateLoginStatus={updateLoginStatus} />}
+          ></Route>
+          <Route
+            path="/admin/event/control"
+            element={<EventControl updateLoginStatus={updateLoginStatus} />}
+          ></Route>
+          <Route
+            path="/admin/event/create"
+            element={<CreateEvent></CreateEvent>}
+          ></Route>
+          <Route
+            path="/admin/event/edit"
+            element={<EditEvent></EditEvent>}
+          ></Route>
+        </Route>
       </Routes>
     </Router>
   );

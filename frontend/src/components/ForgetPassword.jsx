@@ -22,7 +22,7 @@ const ForgetPassword = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-      >
+      >  
         <Form.Item
           wrapperCol={{
             offset: 4,
@@ -46,7 +46,6 @@ const ForgetPassword = () => {
             },
           ]}
         >
-          {/* 这个Form.Item包裹一个Input组件 */}
           <Input />
         </Form.Item>
         {/* code */}
@@ -55,8 +54,6 @@ const ForgetPassword = () => {
           extra="Please provide email verfication code"
         >
           <Row gutter={20}>
-            {/* gutter 的单位是像素 */}
-            {/* Row被划分为24格，用Col与Span属性设定宽度 */}
             <Col span={8}>
               <Form.Item
                 name="Verfication code"
@@ -111,7 +108,7 @@ const ForgetPassword = () => {
               },
             }),
           ]}
-          hasFeedback // 在输入框右侧，可以显示一个绿色勾勾 或者 红色叉叉 作为反馈。
+          hasFeedback
         >
           <Input.Password />
         </Form.Item>
@@ -123,9 +120,6 @@ const ForgetPassword = () => {
         >
           <Button>submit</Button>
         </Form.Item>
-        {/* passwords */}
-        {/* doublepasswords */}
-        {/* submit button */}
       </Form>
     </div>
   );
