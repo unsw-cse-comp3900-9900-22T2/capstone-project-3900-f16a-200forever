@@ -1,4 +1,6 @@
 from movie import db
+from sqlalchemy import *
+from movie.models.genre import Genres
 
 class Movies(db.Model):
   __tablename__ = 't_movies'
@@ -6,18 +8,32 @@ class Movies(db.Model):
   title = db.Column('title' ,db.String(200), nullable=False)
   tagline = db.Column('tagline', db.String(200))
   backdrop = db.Column('backdrop', db.String(200))
-  discription = db.Column('discription', db.String(1000))
+  description = db.Column('description', db.String(1000))
   runtime = db.Column('runtime', db.Integer)
   release_time = db.Column('release_time', db.DateTime)
   release_status = db.Column('release_status', db.String(20))
   total_rating = db.Column('total_rating', db.Float(20))
   rating_count = db.Column('rating_count', db.Integer)
   events = db.relationship('Events', secondary='r_event_movie', back_populates='movies', lazy=True)
-  movie_director_rel = db.relationship('Persons', secondary='r_movie_director', back_populates='director_movie_rel', lazy=True)
-  movie_actor_rel = db.relationship('Persons', secondary='r_movie_actor', back_populates='actor_movie_rel', lazy=True)
+  #movie_director_rel = db.relationship('Persons', secondary='r_movie_director', back_populates='person_movie_rel', lazy=True)
+  #movie_actor_rel = db.relationship('Persons', secondary='r_movie_actor', back_populates='actor_movie_rel', lazy=True)
   movie_genre = db.relationship('Genres', secondary='r_movie_genre', back_populates='genre_movie', lazy=True)
   images = db.relationship('MovieImages', backref='movie', lazy=True)
-
+  movie_director_rel = db.relationship(
+        "Persons",
+        secondary='r_movie_director', 
+        back_populates="director_movie_rel",
+        lazy=True,
+        #overlaps="movie_actor_rel, director_movie_rel"
+        overlaps="movie_actor_rel"
+  )
+  movie_actor_rel = db.relationship(
+        "Persons",
+        secondary='r_movie_actor',
+        back_populates="director_movie_rel",
+        #overlaps="movie_director_rel, actot_movie_rel"
+        overlaps="movie_director_rel"
+  )
   def __repr__(self):
     return '<Movie: {} {}>'.format(self.id, self.title)
 
@@ -33,7 +49,7 @@ class Movies(db.Model):
     self.total_rating = data['total_rating']
     self.rating_count = data['rating_count']
 
-class MovieImages(db.model):
+class MovieImages(db.Model):
   __tablename__ = 't_movie_images'
   id = db.Column('id', db.Integer, primary_key=True)
   file_path = db.Column('file_path', db.String(256), nullable=False)
@@ -50,3 +66,15 @@ class MovieImages(db.model):
     self.file_path = data['file_path']
     self.height = data['height']
     self.width = data['width']
+
+class MovieGenre(db.Model):
+  __tablename__ = 'r_movie_genre'
+  genre_id = db.Column('genre_id', db.Integer, db.ForeignKey('t_genres.id'), primary_key=True)
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
+
+  def __repr__(self):
+    return '<MovieGenre movie id: {} genren id: {}>'.format(self.movie_id, self.genre_id)
+
+  def __init__(self, data):
+    self.genre_id = data['genre_id']
+    self.movie_id = data['movie_id']

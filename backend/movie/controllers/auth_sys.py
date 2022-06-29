@@ -83,6 +83,7 @@ class LoginController(Resource):
     # check email format
     if not correct_email_format(email):
       return dumps({"message": "Please enter correct email"}), 400
+      
     # check the user has login or not
     if email in session.keys():
       return dumps({"message": "The user has logined"}), 400
@@ -120,7 +121,6 @@ class logoutController(Resource):
 
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
-
     
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400

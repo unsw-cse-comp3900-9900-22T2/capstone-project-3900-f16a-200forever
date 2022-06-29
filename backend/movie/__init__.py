@@ -24,6 +24,7 @@ app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379')
 # next line is for multi env
 # app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
+db.pool_pre_ping=True
 Session(app)
 
 
