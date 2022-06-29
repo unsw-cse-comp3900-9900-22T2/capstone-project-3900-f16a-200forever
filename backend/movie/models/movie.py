@@ -13,7 +13,9 @@ class Movies(db.Model):
     total_rating = db.Column('total_rating', db.Float(20))
     rating_count = db.Column('rating_count', db.Integer)
     events = db.relationship('Events', secondary='r_event_movie', back_populates='movies', lazy=True)
-
+    movie_director_rel = db.relationship('Persons', secondary='r_movie_director', back_populates='director_movie_rel', lazy=True)
+    movie_actor_rel = db.relationship('Persons', secondary='r_movie_actor', back_populates='actor_movie_rel', lazy=True)
+    
     def __repr__(self):
         return '<Movie: {} {}>'.format(self.id, self.title)
 
@@ -29,35 +31,8 @@ class Movies(db.Model):
         self.total_rating = data['total_rating']
         self.rating_count = data['rating_count']
 
-"""
-class MovieActor(db.model):
-    __tablename__ = 'Movie_actors'
-    movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
-    person_id = db.Column('person_id', db.Integer(20), db.ForeignKey('Persons.id'))
-    character = db.Column('character', db.String(200))
-    order = db.Column('order', db.Integer(20))
 
-    def __repr__(self):
-        return '<Movie id: {} actor id: {}>'.format(self.movie_id, self.person_id)
 
-    def __init__(self, data):
-        self.movie_id = data['movie_id']
-        self.person_id = data['person_id']
-        self.character = data['character']
-        self.order = data['order']
-
-class MovieDirector(db.model):
-    __tablename__ = 'Movie_directors'
-    movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
-    person_id = db.Column('person_id', db.Integer(20), db.ForeignKey('Persons.id'))
-
-    def __repr__(self):
-        return '<Movie id: {} director id: {}>'.format(self.movie_id, self.person_id)
-
-    def __init__(self, data):
-        self.movie_id = data['movie_id']
-        self.person_id = data['person_id']
-        
 
 class MovieGenres(db.Model):
     __tablename__ = 'Movie_genres'
