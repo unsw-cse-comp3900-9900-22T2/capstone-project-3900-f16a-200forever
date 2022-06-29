@@ -14,7 +14,7 @@ class MovieDetailController(Resource):
     def get(self):
         data = MovieNs.payload
         movie_id = data['movie_id']
-        movie_details = db.session.query(M.movies).filter(M.movies.id == movie_id).first()
+        movie_details = db.session.query(M.Movies).filter(M.Movies.id == movie_id).first()
         if movie_details != None:
             return movie_details.to_dict()
         else:
