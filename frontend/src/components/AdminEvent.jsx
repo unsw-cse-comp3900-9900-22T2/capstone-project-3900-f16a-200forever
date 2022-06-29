@@ -12,6 +12,7 @@ import {
   Checkbox,
   TimePicker,
 } from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Space } from "antd";
 import "../css/AdminPages.css";
 import { useState } from "react";
@@ -25,6 +26,9 @@ const onChange = (time, timeString) => {
 };
 
 const AdminEvent = () => {
+  const onFinish = (values) => {
+    console.log("Received values of form:", values);
+  };
   const [fileList, setFileList] = useState([
     {
       uid: "-1",
@@ -36,6 +40,8 @@ const AdminEvent = () => {
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
+  const [value, setValue] = useState(1);
 
   const onPreview = async (file) => {
     let src = file.url;
@@ -93,10 +99,88 @@ const AdminEvent = () => {
         </Form.Item>
 
         {/* question and correct answer */}
-        <Form.Item wrapperCol={{span: 10, offset:10}} labelCol={{span: 10, offset:8}}>
-          <Button type="primary" ghost>create a new event</Button>
-        </Form.Item>
+        {/* <Form.Item wrapperCol={{span: 10, offset:10}} labelCol={{span: 10, offset:8}}>
+          
+        </Form.Item> */}
       </Form>
+      <center>
+        {" "}
+        <Form
+          name="dynamic_form_nest_item"
+          onFinish={onFinish}
+          autoComplete="off"
+        >
+          <Form.List name="question">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Space
+                    key={key}
+                    style={{
+                      display: "flex",
+                      marginBottom: 8,
+                    }}
+                    align="baseline"
+                  >
+                    <Form.Item {...restField} label="question descriotion">
+                      <TextArea rows={4} />
+                    </Form.Item>
+                    <Form.Item>
+                      <Radio.Group>
+                        <Space direction="vertical">
+                          <Radio value={1}>
+                            <Input
+                              style={{
+                                width: 300,
+                                marginLeft: 10,
+                              }}
+                            />
+                          </Radio>
+                          <Radio value={2}>
+                            <Input
+                              style={{
+                                width: 300,
+                                marginLeft: 10,
+                              }}
+                            />
+                          </Radio>
+                          <Radio value={3}>
+                            <Input
+                              style={{
+                                width: 300,
+                                marginLeft: 10,
+                              }}
+                            />
+                          </Radio>
+                          <Radio value={4}>
+                            <Input
+                              style={{
+                                width: 300,
+                                marginLeft: 10,
+                              }}
+                            />
+                          </Radio>
+                        </Space>
+                      </Radio.Group>
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add field
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form>
+      </center>
     </div>
   );
 };
