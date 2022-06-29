@@ -1,4 +1,4 @@
 from flask_restx import Namespace
 
-class MovieNs:
+class MovieNS:
     movie_ns = Namespace('Movie', description='Movie related operations')

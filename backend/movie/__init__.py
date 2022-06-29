@@ -31,3 +31,9 @@ Session(app)
 from movie import controllers
 from movie import models
 from movie import error
+from movie.controllers import movie_bp
+
+app.register_blueprint(movie_bp)
+
+db.create_all()
+db.session.commit()

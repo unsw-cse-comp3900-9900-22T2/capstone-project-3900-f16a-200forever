@@ -3,10 +3,10 @@ from flask import Flask
 from flask_restx import Resource, reqparse
 from flask_restx import Namespace
 from movie import db
-from api_movie import MovieNs
+from api_movie import MovieNS
 from movie.models import movie as M
 
-movie_ns = MovieNs.movie_ns
+movie_ns = MovieNS.movie_ns
 
 # show the details of the movie
 @movie_ns.route('/moviedetails')
