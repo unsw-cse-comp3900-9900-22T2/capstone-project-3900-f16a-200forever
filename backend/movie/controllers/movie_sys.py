@@ -8,6 +8,7 @@ from movie.models import movie as M
 
 movie_ns = MovieNs.movie_ns
 
+# show the details of the movie
 @movie_ns.route('/moviedetails')
 class MovieDetailController(Resource):
     @movie_ns.response(200, 'Successfully retrieved movie details')
@@ -22,6 +23,7 @@ class MovieDetailController(Resource):
         else:
             return {'message': 'Movie not found'}, 404
 
+# enter a keyword and get the list of movies corresponding to the keyword
 @movie_ns.route('/search')
 class MovieSearchController(Resource):
     @movie_ns.response(200, 'Successfully find movie')
