@@ -5,13 +5,15 @@ from movie import db
 from api_movie import MovieNs
 from movie.models import movie as M
 
+movie_ns = MovieNs.movie_ns
+
 @MovieNs.route('/moviedetails')
 class MovieDetailController(Resource):
     @MovieNs.response(200, 'Successfully retrieved movie details')
     @MovieNs.response(400, 'Something went wrong')
     # @MovieNs.response(404, 'Movie not found')
     def get(self):
-        data = MovieNs.payload
+        data = movie_ns.payload
         movie_id = data['movie_id']
         movie_details = db.session.query(M.Movies).filter(M.Movies.id == movie_id).first()
         if movie_details != None:
