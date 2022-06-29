@@ -1,11 +1,39 @@
 import time
 import jwt
-from config import SECRET
+from config import SECRET, EMAIL
 import hashlib
 from flask import session
 import re
 from movie import db
 from movie.models import user as User
+import smtplib
+from email.mime.text import MIMEText
+import math, random
+ 
+def generateOTP():
+  """
+  generate 4 digit verfication code
+  """
+  digits = "0123456789"
+  OTP = ""
+  for i in range(4) :
+    OTP += digits[math.floor(random.random() * 10)]
+ 
+  return OTP
+
+def send_email(email, code):
+  print(2)
+  msg = MIMEText(str(code))
+  msg['Subject'] = 'The verfication code from Movie Forever' 
+  msg['From'] = EMAIL
+  msg['To'] = email
+  print(3)
+  server = smtplib.SMTP('smtp.163.com')
+  print(4)
+  server.login("19167640706@163.com", 'Iverson123aj')
+  print(1)
+  server.sendmail(EMAIL, [email], msg.as_string())
+  server.quit()
 
 def generate_token(email):
   d = {
