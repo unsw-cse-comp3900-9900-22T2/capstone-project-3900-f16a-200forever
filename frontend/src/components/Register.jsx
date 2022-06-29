@@ -3,7 +3,7 @@ import { Typography } from "antd";
 import axios from "axios";
 import "../css/Register.css";
 
-const Register = ({ updateLoginStatus }) => {
+const Register = ({ updateLoginStatus, updateUserInfo }) => {
   const { Title, Text } = Typography;
   const onFinish = (values) => {
     // console.log("Success:", values);
@@ -47,10 +47,8 @@ const Register = ({ updateLoginStatus }) => {
 
   // todo modify the layout for comfirm password
   return (
-    <div>
-      <Title className="register-title">
-        Welcome! Please register your account!
-      </Title>
+    <div className="register-body">
+      
       <Form
         className="register-form"
         name="basic"
@@ -67,6 +65,9 @@ const Register = ({ updateLoginStatus }) => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Title>
+          Welcome! Please register!
+        </Title>
         <Form.Item
           label="username"
           name="username"

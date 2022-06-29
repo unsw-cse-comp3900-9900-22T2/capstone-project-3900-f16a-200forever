@@ -4,51 +4,30 @@ import logo from "../images/logo.png";
 import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 
-function Header({ loginStatus }) {
+function Header({ loginStatus, userInfo }) {
+
   let navigate = useNavigate();
   return (
-    <Affix>
-      <Row>
-        <div className="homepage_header">
-          {/* {logo} */}
-          <Col offset={1}>
-            <div className="homepage_header_logo">
-              <img src={logo} alt="logo" />
-            </div>
-          </Col>
-          <Col offset={3}>
-            {/* todo make image and text into one image */}
-            <div className="homepage_header_titles">Movie Forever</div>
-          </Col>
-          <Col flex="auto">
-            {loginStatus ? (
-              // todo modify welcome msg and layout
-              <div>
-                Welcome!
-                {/* todo add profile and logout button */}
-              </div>
-            ) : (
-              <div>
-                <Space size={"middle"} align={"end"}>
-                  <Button
-                    className="homepage_header_login"
-                    onClick={() => navigate("/login")}
-                  >
-                    login
-                  </Button>
-                  <Button
-                    className="homepage_header_register"
-                    onClick={() => navigate("register")}
-                  >
-                    register
-                  </Button>
-                </Space>
-              </div>
-            )}
-          </Col>
-        </div>
-      </Row>
-    </Affix>
+    <Affix>    
+    <div className="header">
+      <div className="header-logo">
+        <img src={logo} alt="logo" />
+      </div>
+      <div className="header-top-right-wrapper">
+        { loginStatus ?
+          <div>
+            Welcome!
+          </div>
+          :
+          <div>
+            <Button className="header-login-btn" onClick={()=>navigate("/login")}>login</Button>
+            <Button className="header-register-btn" onClick={()=>navigate("register")}>register</Button>
+          </div>
+        }
+      </div>
+    </div>
+  </Affix>
+
   );
 }
 export default Header;

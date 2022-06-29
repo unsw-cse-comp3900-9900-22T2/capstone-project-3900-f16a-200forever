@@ -17,44 +17,29 @@ import AdminLogin from "./components/AdminLogin";
 import AdminControl from "./components/AdminControl";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
+  const [userInfo, setUserInfo] = useState({})
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
   };
 
+  const updateUserInfo = (userInfo) => {
+    setUserInfo(userInfo);
+  }
+
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Header loginStatus={loginStatus} />
-              <Outlet />
-            </>
-          }
-        >
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/login"
-            element={<Login updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/register"
-            element={<Register updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/forgetpassword"
-            element={<ForgetPassword updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/searchresult"
-            element={<SearchResult updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/moviedetail"
-            element={<MovieDetail updateLoginStatus={updateLoginStatus} />}
-          />
+        <Route path='/' element={
+          <>
+            <Header loginStatus={ loginStatus } userInfo={userInfo}/>
+            <Outlet />
+          </>
+        }>
+          <Route path = "/" element = {<HomePage/>}/>
+          <Route path = "/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path = "/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
+          <Route path = "/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
         </Route>
       </Routes>
       <Routes>

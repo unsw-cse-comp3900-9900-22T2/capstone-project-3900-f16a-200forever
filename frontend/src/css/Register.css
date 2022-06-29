@@ -1,28 +1,21 @@
 .register-form {
   margin: auto;
-  width: 50%;
+  margin-top: 180px;
+  width: 500px;
   border: 2px solid grey;
   padding: 10px;
-  position: absolute;
+  display: block;
   flex-direction: row;
-  margin-left: 350px;
-  max-width: 450px;
   border-Radius: "30px";
   justify-content: "space-between";
 }
+
+.register-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .register-form-button {
   width: 200%;
   margin-left: 20px;
 }
-.register-title {
-  margin-left: 320px;
-  padding-top: 70px;
-}
-/* .register-username-text {
-  position: relative;
-  top: 0;
-  left: 0;
-  padding: 10px;
-  justify-content: "center";
-  align-items: "center";
-} */
