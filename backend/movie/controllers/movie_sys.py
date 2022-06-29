@@ -3,6 +3,7 @@ from flask_restx import Resource, Api
 from flask_restx import Namespace
 from movie import db
 from api_movie import MovieNs
+from movie.models import movie as M
 
 
 @MovieNs.route('/moviedetails')
@@ -13,7 +14,7 @@ class MovieDetailController(Resource):
     def get(self):
         data = MovieNs.payload
         movie_id = data['movie_id']
-        movie_details = db.session.query.filter(id == movie_id).first()
+        movie_details = db.session.query(M.movies).filter(M.moviesid == movie_id).first()
         if movie_details != None:
             return movie_details.to_dict()
         else:
