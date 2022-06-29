@@ -7,11 +7,11 @@ from movie.models import movie as M
 
 movie_ns = MovieNs.movie_ns
 
-@MovieNs.route('/moviedetails')
+@movie_ns.route('/moviedetails')
 class MovieDetailController(Resource):
-    @MovieNs.response(200, 'Successfully retrieved movie details')
-    @MovieNs.response(400, 'Something went wrong')
-    # @MovieNs.response(404, 'Movie not found')
+    @movie_ns.response(200, 'Successfully retrieved movie details')
+    @movie_ns.response(400, 'Something went wrong')
+    # @movie_ns.response(404, 'Movie not found')
     def get(self):
         data = movie_ns.payload
         movie_id = data['movie_id']
