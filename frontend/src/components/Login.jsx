@@ -16,21 +16,22 @@ const Login = ({ updateLoginStatus, updateUserInfo }) => {
   let navigate = useNavigate();
   const { Title } = Typography;
   const onFinish = (values) => {
-    console.log("Success:", values);
+    console.log(values);
     // todo add url
     // todo handle success
     // todo handle error
     // todo forget password?
     axios
-      .post("/url", {
+      .post("http://127.0.0.1:8080/login", {
         email: values["email"],
         password: values["password"],
+        is_admin: false
       })
       .then(function (response) {
         console.log(response);
         updateLoginStatus(true);
         updateUserInfo({
-          "username": response["username"],
+          // "username": response["username"],
           "token": response["token"]
         })
         // todo change url here
@@ -43,6 +44,7 @@ const Login = ({ updateLoginStatus, updateUserInfo }) => {
           "content": error
         })
       });
+
   };
 
   const onFinishFailed = () => {
