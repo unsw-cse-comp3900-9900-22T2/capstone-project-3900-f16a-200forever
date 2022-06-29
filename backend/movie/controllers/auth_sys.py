@@ -71,4 +71,4 @@ class logoutController(Resource):
     session.pop(data['email'])
     return {"message": "logout successfully"}, 200
 
-    
+    // register
