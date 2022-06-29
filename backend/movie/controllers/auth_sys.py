@@ -8,7 +8,10 @@ from flask import session
 from flask_restx import Resource
 from json import dumps
 from flask_restx import Resource, Api
-from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, user_has_login, correct_email_format
+from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
+                                  user_has_login, correct_email_format, \
+                                  username_format_valid, username_is_unique, \
+                                  email_is_unique, correct_password_format
 from movie import db
 from movie.models import admin as Admin
 
@@ -17,6 +20,54 @@ from .api_models import AuthNS, AdminNS
 
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
+
+@auth_ns.route('/register')
+class RegisterController(Resource):
+  @auth_ns.response(200, "Login Successfully")
+  @auth_ns.response(400, "Something wrong")
+  @auth_ns.expect(AuthNS.auth_register, validate=True)
+  def post(self):
+    data = auth_ns.payload
+    name = data['name']
+    email = data['email']
+    pw = data['password']
+
+    # check user name format
+    if not username_format_valid(name):
+      return dumps({"message": "Username must be 6-20 characters"}), 400
+  
+    # check user name has exist or not
+    if not username_is_unique(name):
+      return dumps({"message": "The username already exists"}), 400
+
+    # check email format
+    if not correct_email_format(email):
+      return dumps({"message": "Email format not correct"}), 400
+
+    # check email has been registed or not
+    if not email_is_unique(email):
+      return dumps({"message": "The email is already been registed"}), 400
+
+    # check password format
+    if not correct_password_format(pw):
+      return dumps({"message": "The password is too short, at least 8 characters"}), 400
+
+    #encode pw
+    data['password'] = pw_encode(pw)
+    # commit into db
+    new_user = User.Users(data)
+    db.session.add(new_user)
+    db.session.commit()
+
+    # generate token, save to redis
+    token = generate_token(email)
+    print(token)
+    session[email] = {'token': token, "id": new_user.id, "admin": False}
+
+    return dumps({
+        'token': generate_token(email),
+        'name': new_user.name
+    }), 200
 
 @auth_ns.route('/login')
 class LoginController(Resource):
@@ -55,7 +106,7 @@ class LoginController(Resource):
     session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
 
     return dumps({
-        'token': generate_token(email),
+        'token': token,
         'name': curr_user.name
     }), 200
   

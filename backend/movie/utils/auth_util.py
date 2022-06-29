@@ -4,6 +4,8 @@ from config import SECRET
 import hashlib
 from flask import session
 import re
+from movie import db
+from movie.models import user as User
 
 def generate_token(email):
   d = {
@@ -56,3 +58,27 @@ def correct_email_format(email):
   if re.fullmatch(pattern, email):
     return True
   return False
+
+def email_is_unique(email):
+  user = db.session.query(User.Users).filter(User.Users.email == email).first()
+  if user == None:
+    return True
+  return False
+
+def username_format_valid(name):
+  if len(name) < 6:
+    return False
+  if len(name) > 20:
+    return False
+  return True
+
+def username_is_unique(name):
+  user = db.session.query(User.Users).filter(User.Users.name == name).first()
+  if user == None:
+    return True
+  return False
+
+def correct_password_format(pw):
+  if len(pw) < 8:
+    return False
+  return True

@@ -65,7 +65,7 @@ class EventCreate(Resource):
         # add movie
       movieid_set = event['movies']
       for movie in list(movieid_set):
-        if not movie_id_valid(session, movie):
+        if not movie_id_valid(movie):
           raise
         data['movie_id'] = movie
         data['event_id'] = event['id']

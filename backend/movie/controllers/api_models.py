@@ -1,12 +1,13 @@
 from attr import field
 from flask_restx import Namespace
-from .models_format import login, validation, event_create
+from .models_format import login, validation, event_create, register
 from numpy import require
 
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")
   auth_login = auth_ns.model('Auth Login', login)
   auth_logout = auth_ns.model('Auth logout', validation)
+  auth_register = auth_ns.model('Auth register', register)
 
 class AdminNS:
   admin_ns = Namespace("Admin", description="the api of admin authentication")
