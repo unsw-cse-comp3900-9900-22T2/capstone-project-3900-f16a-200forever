@@ -3,25 +3,32 @@ import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import Header from "./components/Header";
 import ForgetPassword from "./components/ForgetPassword";
-
+import SearchResult from "./components/SearchResult";
+import MovieDetail from "./pages/MovieDetail";
+import AdminLogin from "./components/AdminLogin";
+import AdminControl from "./components/AdminControl";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({})
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
-  }
+  };
 
   const updateUserInfo = (userInfo) => {
     setUserInfo(userInfo);
   }
 
   return (
-    
-      <Router>
+    <Router>
       <Routes>
         <Route path='/' element={
           <>
@@ -35,8 +42,17 @@ function App() {
           <Route path = "/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
         </Route>
       </Routes>
+      <Routes>
+        <Route
+          path="/admin/login"
+          element={<AdminLogin updateLoginStatus={updateLoginStatus} />}
+        ></Route>
+        <Route
+          path="/admin/control"
+          element={<AdminControl updateLoginStatus={updateLoginStatus} />}
+        ></Route>
+      </Routes>
     </Router>
-    
   );
 }
 

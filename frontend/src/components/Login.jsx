@@ -64,7 +64,6 @@ const Login = ({ updateLoginStatus, updateUserInfo }) => {
         wrapperCol={{
           span: 20,
         }}
-     
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -106,7 +105,7 @@ const Login = ({ updateLoginStatus, updateUserInfo }) => {
 
           <Button
             classname="login-form-to-register"
-            onClick={()=>navigate("/register")}
+            onClick={() => navigate("/register")}
             htmlType="button"
           >
             do not have account? Click to register
@@ -115,11 +114,11 @@ const Login = ({ updateLoginStatus, updateUserInfo }) => {
             classname="login-forget-button"
             type="link"
             htmlType="button"
-            onClick={()=>navigate("/forgetpassword")}
+            onClick={() => navigate("/forgetpassword")}
           >
             Forget Password
           </Button>
-          
+
           {/* todo add forget button */}
         </Form.Item>
       </Form>

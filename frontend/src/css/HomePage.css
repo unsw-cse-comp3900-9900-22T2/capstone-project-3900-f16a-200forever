@@ -49,14 +49,15 @@
   display: flex;
   flex-direction: row;
   align-items: right;
-  justify-content: right;
+  justify-content: right; */
   /* align-content: space-between; */
 }
+
 .header-register-btn {
   display: flex;
   flex-direction: row;
   align-items: right;
   justify-content: right;
   /* align-content: space-between; */
-  float: right;
+  /* float: right; */ 
 }

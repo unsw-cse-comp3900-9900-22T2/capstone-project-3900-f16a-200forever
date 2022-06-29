@@ -1,7 +1,7 @@
 import React from "react";
-import { Affix } from "antd";
+import { Affix, Col, Row } from "antd";
 import logo from "../images/logo.png";
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function Header({ loginStatus, userInfo }) {
@@ -27,7 +27,6 @@ function Header({ loginStatus, userInfo }) {
       </div>
     </div>
   </Affix>
-
 
   );
 }
