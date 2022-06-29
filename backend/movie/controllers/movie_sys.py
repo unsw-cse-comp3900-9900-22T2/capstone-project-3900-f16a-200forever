@@ -4,6 +4,7 @@ from flask_restx import Resource, reqparse
 from flask_restx import Namespace
 from movie import db
 from api_movie import MovieNs
+from movie.models import movie as M
 
 movie_ns = MovieNs.movie_ns
 
@@ -15,7 +16,7 @@ class MovieDetailController(Resource):
     def get(self):
         data = movie_ns.payload
         movie_id = data['movie_id']
-        movie_details = db.session.query.filter(id == movie_id).first()
+        movie_details = db.session.query(M.Movies).filter(M.Movies.id == movie_id).first()
         if movie_details != None:
             return movie_details.to_dict()
         else:
