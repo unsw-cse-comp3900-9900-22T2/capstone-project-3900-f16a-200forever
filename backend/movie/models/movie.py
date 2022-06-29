@@ -1,17 +1,17 @@
 from movie import db
 
 class Movies(db.Model):
-    __tablename__ = 'Movies'
+    __tablename__ = 't_movies'
     id = db.Column('id', db.Integer(20), primary_key=True)
     title = db.Column('title' ,db.String(200), nullable=False)
     tagline = db.Column('tagline', db.String(200))
     backdrop = db.Column('backdrop', db.String(200))
     discription = db.Column('discription', db.String(1000))
-    runtime = db.Column('runtime', db.Integer(20))
+    runtime = db.Column('runtime', db.Integer)
     release_date = db.Column('release_date', db.DateTime)
     release_status = db.Column('release_status', db.String(20))
     total_rating = db.Column('total_rating', db.Float(20))
-    rating_count = db.Column('rating_count', db.Integer(20))
+    rating_count = db.Column('rating_count', db.Integer)
 
     def __repr__(self):
         return '<Movie: {} {}>'.format(self.id, self.title)
@@ -29,7 +29,7 @@ class Movies(db.Model):
         self.rating_count = data['rating_count']
 
 class MovieActor(db.model):
-    __tablename__ = 'Movie_actors'
+    __tablename__ = 'r_movie_actors'
     movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
     person_id = db.Column('person_id', db.Integer(20), db.ForeignKey('Persons.id'))
     character = db.Column('character', db.String(200))
@@ -45,7 +45,7 @@ class MovieActor(db.model):
         self.order = data['order']
 
 class MovieDirector(db.model):
-    __tablename__ = 'Movie_directors'
+    __tablename__ = 'r_movie_directors'
     movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
     person_id = db.Column('person_id', db.Integer(20), db.ForeignKey('Persons.id'))
 
@@ -57,13 +57,13 @@ class MovieDirector(db.model):
         self.person_id = data['person_id']
         
 
-class MovieGenres(db.Model):
-    __tablename__ = 'Movie_genres'
+class MoviesGenres(db.Model):
+    __tablename__ = 'r_movie_genre'
     genre_id = db.Column('genre_id', db.Integer(20), db.ForeignKey('Genres.id'))
     movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
 
     def __repr__(self):
-        return '<Movie id: {} genren id: {}>'.format(self.movie_id, self.id)
+        return '<Movie id: {} genren id: {}>'.format(self.movie_id, self.genre_id)
 
     def __init__(self, data):
         self.id = data['id']
@@ -71,7 +71,7 @@ class MovieGenres(db.Model):
         self.movie_id = data['movie_id']
 
 class MovieImages(db.model):
-    __tablename__ = 'Movie_images'
+    __tablename__ = 'r_movie_images'
     id = db.Column('id', db.Integer(20), primary_key=True)
     movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'))
     file_path = db.Column('file_path', db.String(400))
@@ -89,3 +89,15 @@ class MovieImages(db.model):
         self.height = data['height']
         self.width = data['width']
         self.is_posters = data['is_posters']
+
+class EventMovie(db.Model):
+    __tablename__ = 'r_event_movie'
+    event_id = db.Column('event_id', db.Integer(20), db.ForeignKey('Events.id'), nullable = False, primary_key = True)
+    movie_id = db.Column('movie_id', db.Integer(20), db.ForeignKey('Movies.id'), nullable = False, primary_key = True)
+
+    def __repr__(self):
+        return '<EventMovie movie id: {} event id: {}>'.format(self.movie_id, self.event_id)
+
+    def __init__(self, data):
+        self.movie_id = data['movie_id']
+        self.event_id = data['event_id']
