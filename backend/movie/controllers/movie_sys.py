@@ -5,7 +5,6 @@ from movie import db
 from api_movie import MovieNs
 from movie.models import movie as M
 
-
 @MovieNs.route('/moviedetails')
 class MovieDetailController(Resource):
     @MovieNs.response(200, 'Successfully retrieved movie details')
