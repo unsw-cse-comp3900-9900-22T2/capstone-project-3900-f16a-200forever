@@ -16,3 +16,4 @@ import the data into database
 
 week4:
 write the template of the backend
+write the funtion: register, login, logout, event create, search movie of event, search movie in the home page

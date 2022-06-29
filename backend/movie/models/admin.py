@@ -1,3 +1,4 @@
+from multiprocessing import parent_process
 from movie import db
 
 class Admins(db.Model):

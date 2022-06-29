@@ -1,13 +1,14 @@
 from operator import is_
 from attr import validate
 from numpy import require, str_
+from sqlalchemy import true
 from movie.models import user as User
 from movie import app, request
 from flask import session
 from flask_restx import Resource
 from json import dumps
 from flask_restx import Resource, Api
-from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, user_has_login
+from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, user_has_login, correct_email_format
 from movie import db
 from movie.models import admin as Admin
 
@@ -28,14 +29,17 @@ class LoginController(Resource):
     pw = data['password']
     is_admin = data['is_admin']
 
+    # check email format
+    if not correct_email_format(email):
+      return dumps({"message": "Please enter correct email"}), 400
     # check the user has login or not
     if email in session.keys():
       return dumps({"message": "The user has logined"}), 400
 
     curr_user = None
-    if is_admin == "False":
+    if not is_admin:
       curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
-    elif is_admin == 'True':
+    elif is_admin:
       curr_user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
     else:
       return dumps({"message": "is_admin ust be True or False"}), 400
@@ -49,8 +53,10 @@ class LoginController(Resource):
     token = generate_token(email)
     print(token)
     session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
+
     return dumps({
-        'token': generate_token(email)
+        'token': generate_token(email),
+        'name': curr_user.name
     }), 200
   
 @auth_ns.route('/logout')

@@ -18,3 +18,4 @@ class EventNS:
   
 class MovieNS:
   movie_ns = Namespace('Movie', description="the api for manage movie")
+
