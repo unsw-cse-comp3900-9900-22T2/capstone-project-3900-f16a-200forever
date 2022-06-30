@@ -11,7 +11,8 @@ from flask_restx import Resource, Api
 from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
-                                  email_is_unique, correct_password_format
+                                  email_is_unique, correct_password_format, generateOTP, \
+                                  send_email
 from movie import db
 from movie.models import admin as Admin
 
@@ -28,10 +29,24 @@ class ResetPasswordController(Resource):
   @auth_ns.expect(AuthNS.auth_reset_password, validate=True)
   def post(self):
     data = auth_ns.payload
+    email = data['email']
+    correct_code = data['correct_code']
+    submitted_code = data['submitted_code']
     current_pw = data['current_password']
     new_pw = data['new_password']
     confirm_new_pw = data['confirm_new_password']
-    email = data['email']
+    token = data['token']
+
+    if not user_is_valid(data):
+      return dumps({"message": "Invalid token"}), 400
+
+    # check if user entered the right code
+    if correct_code != submitted_code:
+      return dumps({"message": "Incorrect validation code"}), 400
+
+    curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if curr_user.password != pw_encode(current_pw):
+      return dumps({"message": "Incorrect current password"}), 400
 
     # check password format
     if not correct_password_format(new_pw):
@@ -41,16 +56,14 @@ class ResetPasswordController(Resource):
     if new_pw != confirm_new_pw:
       return dumps({"message": "New passwords are not the same"}), 400
 
-    # check email format
-    if not correct_email_format(email):
-      return dumps({"message": "Email format not correct"}), 400
-
-    #encode pw
+    # encode pw
     data['new_password'] = pw_encode(new_pw)
 
-    # check if user exists
-    if email_is_unique(email):
-      return dumps({"message": "The email is not registered"}), 400
+    # update db
+    curr_user.password = data['new_password']
+    db.session.commit()
+
+    return dumps({"message": "Password updated"}), 200
 
 
 @auth_ns.route('/register')
