@@ -12,10 +12,9 @@ from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
                                   email_is_unique, correct_password_format, generateOTP, \
-                                  send_email
+                                  send_email, verfication_code_correct
 from movie import db
 from movie.models import admin as Admin
-
 from .api_models import AuthNS, AdminNS
 
 
@@ -28,8 +27,12 @@ class ForgetPasswordController(Resource):
   @auth_ns.response(400, "Something wrong")
   @auth_ns.expect(AuthNS.auth_reset_password, validate=True)
   def post(self):
+    code = generateOTP()
     data = auth_ns.payload
     email = data['email']
+
+    send_email(email, code)
+
     correct_code = data['correct_code']
     submitted_code = data['submitted_code']
     new_pw = data['new_password']
@@ -111,6 +114,14 @@ class RegisterController(Resource):
     email = data['email']
     pw = data['password']
 
+    # check email format
+    if not correct_email_format(email):
+      return dumps({"message": "Email format not correct"}), 400
+
+    # check email has been registed or not
+    if email_exits(email):
+      return dumps({"message": "The email is already been registed"}), 400
+
     # check user name format
     if not username_format_valid(name):
       return dumps({"message": "Username must be 6-20 characters"}), 400
@@ -118,14 +129,6 @@ class RegisterController(Resource):
     # check user name has exist or not
     if not username_is_unique(name):
       return dumps({"message": "The username already exists"}), 400
-
-    # check email format
-    if not correct_email_format(email):
-      return dumps({"message": "Email format not correct"}), 400
-
-    # check email has been registed or not
-    if not email_is_unique(email):
-      return dumps({"message": "The email is already been registed"}), 400
 
     # check password format
     if not correct_password_format(pw):
