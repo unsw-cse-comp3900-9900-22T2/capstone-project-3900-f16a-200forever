@@ -8,6 +8,13 @@ login = {
     "is_admin": fields.Boolean(required=True)
 }
 
+forgot_password = {
+  "email": fields.String(required=True),
+  "new_password": fields.String(required=True),
+  "confirm_new_password": fields.String(required=True),
+  "validation_code": fields.String(required=True),
+}
+
 reset_password = {
     "email": fields.String(required=True),
     "current_password": fields.String(required=True),

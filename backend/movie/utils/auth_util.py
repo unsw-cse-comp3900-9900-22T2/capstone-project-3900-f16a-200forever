@@ -63,7 +63,7 @@ def user_is_valid(data):
   return True
 
 def user_is_admin(email):
-  if email in session.key() and session[email]['admin']:
+  if email in session.keys() and session[email]['admin']:
     return True
   user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
   if user != None:
@@ -115,8 +115,8 @@ def correct_password_format(pw):
   return True
 
 def code_is_correct(user, code):
-  if user.validation_code != None and code == user.validation_code:
-    # invlaid the code 
+  if user.validation_code != None and str(code) == str(user.validation_code):
+    # invlaid the code
     user.validation_code = None
     db.session.commit()
     return True

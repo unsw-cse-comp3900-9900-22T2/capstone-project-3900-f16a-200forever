@@ -45,6 +45,7 @@ class SendEmail(Resource):
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     user.validation_code = code
     db.session.commit()
+    print(code)
     return {"message": "code has been send"}, 200
 
 @auth_ns.route('/reset_password')
@@ -201,3 +202,50 @@ class logoutController(Resource):
 
     session.pop(data['email'])
     return {"message": "logout successfully"}, 200
+
+
+@auth_ns.route('/forgot_password')
+class ForgotPassword(Resource):
+  @auth_ns.response(200, "Logout successfullly")
+  @auth_ns.response(400, "Something wrong")
+  @auth_ns.expect(AuthNS.auth_forgot_password, validate=True)
+  def post(self):
+    data = auth_ns.payload
+    email = data['email']
+    pw = data['new_password']
+    code = data['validation_code']
+    confirm_new_pw = data['confirm_new_password']
+
+    # check email format
+    if not correct_email_format(email):
+      return {"message": "Email format not correct"}, 400
+
+    # check is admin
+    if user_is_admin(email):
+      return {"message": "User is admin"}, 400
+
+    # check email exist
+    if not email_exits(email):
+      return {"message": "The email not exist"}, 400
+
+
+    # check password format
+    if not correct_password_format(pw):
+      return {"message": "The password is too short, at least 8 characters"}, 400 
+
+    #check double check pw == pw
+    if pw != confirm_new_pw:
+      return {"message": "New passwords are not the same"}, 400
+
+    # encode pw
+    pw = pw_encode(pw)
+    # update db
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+
+    # check the validation code
+    if not code_is_correct(user, code):
+      return {"message": "Incorrect validation code"}, 400
+
+    user.password = pw
+    db.session.commit()    
+    return {"message": "Password updated"}, 200
