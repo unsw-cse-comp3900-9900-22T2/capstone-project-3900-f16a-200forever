@@ -12,9 +12,10 @@ const tailLayout = {
   },
 };
 
-const Login = ({ updateLoginStatus, updateUserInfo }) => {
+const Login = ({ updateLoginStatus, updateUserInfo, sid, setSid }) => {
   let navigate = useNavigate();
   const { Title } = Typography;
+  const admin_status = false;
   const onFinish = (values) => {
     console.log(values);
     // todo add url
@@ -25,26 +26,32 @@ const Login = ({ updateLoginStatus, updateUserInfo }) => {
       .post("http://127.0.0.1:8080/login", {
         email: values["email"],
         password: values["password"],
-        is_admin: false
+        is_admin: admin_status
       })
       .then(function (response) {
         console.log(response);
+        console.log(admin_status);
         updateLoginStatus(true);
         updateUserInfo({
-          // "username": response["username"],
-          "token": response["token"]
+          "username": response.data.name,
+          "token": response.data.token,
+          "email": values["email"]
         })
+        // console.log(response.data.sid)
+        setSid(response.data.sid)
+        // axios.defaults.headers.post['Cookie'] = "session=session=5b0dc704-3114-465b-a76f-35522701e7d9"
         // todo change url here
-        navigate("/");
+        navigate("/", {
+          sid: sid
+        })
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response.data);
         openNotification({
           "title": "An error occur",
-          "content": error
+          "content": error.response.data.message
         })
       });
-
   };
 
   const onFinishFailed = () => {

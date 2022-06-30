@@ -18,31 +18,62 @@ const SearchResult = () => {
   // console.log(type);
   // console.log(keywords);
   // console.log(order);
-  const [fullList, setFullList] = useState([]);
   const [showList, setShowList] = useState([]);
   const [numItem, setNumItem] = useState(0);
 
   const changePage = (page, pageSize) => {
     // console.log(page);
     // console.log(pageSize);
-    setShowList(fullList.slice(page*pageSize - 12, page*pageSize))
+    getList(page);
+  }
+
+  const getList = (pageNum) => {
+    axios
+    // todo change url here
+    .get("http://127.0.0.1:8080/movie/search", {
+      params: {
+        "type": type_val,
+        "keywords": keywords_val,
+        "order": order_val,
+        "num_per_page": 12,
+        "page": pageNum
+      }
+    })
+    .then(function (response) {
+      console.log(response.data.movies);
+      console.log(response.data.movies[1].backdrop)
+      // setFullList(response.data.result);
+      setNumItem(response.data.total);
+      setShowList(response.data.movies);
+    })
+    // todo handle error
+    .catch(function (error) {
+      console.log(error.response);
+      // openNotification({
+      //   "title": "Search error",
+      //   "content": error
+      // })
+    });
   }
 
   useEffect( () => {
     axios
     // todo change url here
-    .get("http://127.0.0.1:5000/test", {
+    .get("http://127.0.0.1:8080/movie/search", {
       params: {
         "type": type_val,
         "keywords": keywords_val,
-        "order": order_val
+        "order": order_val,
+        "num_per_page": 12,
+        "page": 1
       }
     })
     .then(function (response) {
-      console.log(response.data.result);
-      setFullList(response.data.result);
-      setNumItem(response.data.result.length);
-      setShowList(response.data.result.slice(0, 12));
+      console.log(response.data.movies);
+      console.log(response.data.movies[1].backdrop)
+      // setFullList(response.data.result)
+      setNumItem(response.data.total);
+      setShowList(response.data.movies);
     })
     // todo handle error
     .catch(function (error) {
@@ -62,7 +93,7 @@ const SearchResult = () => {
         background: "white",
       }}
     >
-      <SearchComponent type={type_val} keywords={keywords_val} order={order_val}></SearchComponent>
+      <SearchComponent type={type_val} keywords={keywords_val} order={order_val} showList={showList} setShowList={setShowList} changePage={changePage}></SearchComponent>
 
       <div className="search-card-wrapper">
       <List
@@ -87,8 +118,8 @@ const SearchResult = () => {
                   style={{}}
                   cover={
                     <img
+                      src={item.backdrop}
                       alt="example"
-                      src={item.url}
                     />
                   }
                 >
@@ -104,11 +135,11 @@ const SearchResult = () => {
                   cover={
                     <img
                       alt="example"
-                      src={item.url}
+                      src={item.backdrop}
                     />
                   }
                 >
-                  <Meta title={item.title} description={`rating: ${item.rating}`} />
+                  <Meta title={item.title} description={`rating: 0`} />
                 </Card>
               </Link>
             }

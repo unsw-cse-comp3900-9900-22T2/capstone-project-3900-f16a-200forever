@@ -2,27 +2,34 @@ import { Button, Checkbox, Form, Input, notification } from "antd";
 import { Typography } from "antd";
 import axios from "axios";
 import "../css/Register.css";
+import openNotification from "./Notification";
+import { useNavigate } from "react-router-dom";
 
 const Register = ({ updateLoginStatus, updateUserInfo }) => {
+  let navigate = useNavigate();
   const { Title, Text } = Typography;
   const onFinish = (values) => {
     // console.log("Success:", values);
-    // todo add url
-    // todo handle success
-    // todo handle error
     axios
-      .post("/url", {
-        username: values["username"],
+      .post("http://127.0.0.1:8080/register", {
+        name: values["username"],
         email: values["email"],
         password: values["password"],
       })
       .then(function (response) {
-        console.log(response);
-        updateLoginStatus(true);
+        // console.log(response);
+        navigate("/login");
+        openNotification({
+          "title": "You have registered successfully"
+        })
       })
       .catch(function (error) {
-        console.log(error);
-        // displayError(error);
+        // console.log((error.response.data));
+        // console.log(typeof(error.response.data))
+        openNotification({
+          "title": "Register error",
+          "content": error.response.data.message
+        })
       });
   };
 
@@ -85,8 +92,8 @@ const Register = ({ updateLoginStatus, updateUserInfo }) => {
           username must be 6-20 characters
         </Text> */}
         <Form.Item
-          label="Email"
-          name="Email"
+          label="email"
+          name="email"
           rules={[
             {
               required: true,

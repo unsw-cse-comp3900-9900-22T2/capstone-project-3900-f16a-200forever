@@ -16,9 +16,12 @@ import MovieDetail from "./pages/MovieDetail";
 import AdminLogin from "./components/AdminLogin";
 import AdminControl from "./components/AdminControl";
 import searchResult from "./components/SearchResult";
+import axios from "axios";
+
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({})
+  const [sid, setSid] = useState("")
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
@@ -33,12 +36,16 @@ function App() {
       <Routes>
         <Route path='/' element={
           <>
-            <Header loginStatus={ loginStatus } userInfo={userInfo}/>
+            <Header loginStatus={ loginStatus } 
+                    updateLoginStatus={ updateLoginStatus } 
+                    userInfo={userInfo}
+                    updateUserInfo={ updateUserInfo }
+                    sid={sid}/>
             <Outlet />
           </>
         }>
           <Route path="/" element = {<HomePage/>}/>
-          <Route path="/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path="/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo} sid={sid} setSid={setSid}/>}/>
           <Route path="/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
           <Route path="/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
           <Route path="/search/:type/:keywords/:order" element={<SearchResult/>}/>   
