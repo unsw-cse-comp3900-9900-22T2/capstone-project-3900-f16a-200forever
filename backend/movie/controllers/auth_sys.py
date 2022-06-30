@@ -38,9 +38,6 @@ class SendEmail(Resource):
     if not email_exits(email):
       return dumps({"message": "The email has not been registered"}), 400
 
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-
     # send vertification code
     code = str(generateOTP())
     try:

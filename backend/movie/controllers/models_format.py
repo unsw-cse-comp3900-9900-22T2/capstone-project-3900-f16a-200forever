@@ -12,6 +12,9 @@ validation = {
   'email': fields.String(required=True),
   'token': fields.String(required=True)
 }
+send_email = {
+  'email': fields.String(required=True)
+}
 
 register = {
   'name': fields.String(required=True),
