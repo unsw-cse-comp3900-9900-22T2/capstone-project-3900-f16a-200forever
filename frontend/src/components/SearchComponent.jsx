@@ -1,59 +1,45 @@
-import { Input, Select, Row, Col, Space, Tooltip, Divider } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
+import { Input, Select, Row, Col, Divider } from "antd";
 import "../css/SearchComponent.css";
 import { useNavigate } from "react-router-dom";
 import openNotification from "./Notification";
 import { useState } from "react";
-import axios from "axios";
 
 const { Search } = Input;
 const { Option } = Select;
 
-const SearchComponent = ({ updateLoginStatus }) => {
+const SearchComponent = ({ type, keywords, order }) => {
   let navigate = useNavigate();
-  const [searchTag, setSearchTag] = useState("name");
+  const [searchType, setSearchType] = useState(type);
+  const [searchOrder, setSearchOrder] = useState(order);
 
-  const updateSearchTag = (tag) => {
-    // console.log(tag);
-    setSearchTag(tag);
+  const updateSearchType = (type) => {
+    // console.log(type);
+    setSearchType(type);
+  }
+
+  const updateSearchOrder = (order) => {
+    setSearchOrder(order);
   }
 
   const onSearch = (value) => {
-    console.log(value);
-    if (value === "") {
+    console.log(value)
+    if (value.length === 0 || value === "") {
       openNotification({
-        "title": "Search Error",
-        "content": "Please enter some keywords"
+        "title": "Please enter some keywords"
       })
       return;
     }
-    // todo change url
-    axios
-      .get("/url", {
-        token: "token"
-      })
-      .then(function (response) {
-        console.log(response);
-        // todo change url here
-        // navigate("/");
-      })
-      .catch(function (error) {
-        console.log(error);
-        openNotification({
-          "title": "Search error",
-          "content": error
-        })
-      });
+    navigate(`/search/type=${searchType}/keywords=${value}/order=${searchOrder}`)
   };
 
   return (
     <div className="search-input">
       <Divider orientation="left">Search</Divider>
       <Row>
-        <Col offset = {1}flex="100px">
-          <Select defaultValue="By movie name" onChange={updateSearchTag}>
-            <Option value="name">By movie name</Option>
-            <Option value="genre">By genre</Option>
+        <Col offset={1} flex="100px">
+          <Select className="search-type" defaultValue={`By ${type}`} onChange={updateSearchType}>
+            <Option value="movie name">By movie name</Option>
+            <Option value="description">By description</Option>
             <Option value="director">By director</Option>
           </Select>
         </Col>
@@ -62,11 +48,19 @@ const SearchComponent = ({ updateLoginStatus }) => {
             placeholder="input search text"
             enterButton="Search"
             size="mid"
+            className="search-input-area"
             onSearch={onSearch}
+            defaultValue={keywords}
           />
         </Col>
+        <Col offset={1} flex="100px">
+          <Select className="search-order" defaultValue={`By ${order}`} onChange={updateSearchOrder}>
+            <Option value="descending">Sort: descending</Option>
+            <Option value="ascending">Sort: ascending</Option>
+          </Select>
+        </Col>
       </Row>
-     
+      <Divider className="search-divider" orientation="left"></Divider>
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React from "react";
 import { Affix, Col, Row } from "antd";
-import logo from "../images/logo.png";
+import logo from "../images/new_logo.png";
 import { Button, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header({ loginStatus, userInfo }) {
 
@@ -10,13 +10,16 @@ function Header({ loginStatus, userInfo }) {
   return (
     <Affix>    
     <div className="header">
-      <div className="header-logo">
-        <img src={logo} alt="logo" />
-      </div>
+      <Link to={"/"}>
+        <div className="header-logo">
+          <img src={logo} alt="logo" /> 
+        </div>
+      </Link>
       <div className="header-top-right-wrapper">
         { loginStatus ?
           <div>
             Welcome!
+            <Button> logout</Button>
           </div>
           :
           <div>

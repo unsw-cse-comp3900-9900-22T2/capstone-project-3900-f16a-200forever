@@ -15,6 +15,7 @@ import SearchResult from "./components/SearchResult";
 import MovieDetail from "./pages/MovieDetail";
 import AdminLogin from "./components/AdminLogin";
 import AdminControl from "./components/AdminControl";
+import searchResult from "./components/SearchResult";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({})
@@ -36,13 +37,15 @@ function App() {
             <Outlet />
           </>
         }>
-          <Route path = "/" element = {<HomePage/>}/>
-          <Route path = "/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
-          <Route path = "/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
-          <Route path = "/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
+          <Route path="/" element = {<HomePage/>}/>
+          <Route path="/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path="/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
+          <Route path="/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
+          <Route path="/search/:type/:keywords/:order" element={<SearchResult/>}/>      
         </Route>
       </Routes>
       <Routes>
+        <Route path="/test/:type/:keywords/:order" element ={<SearchResult/>} />
         <Route
           path="/admin/login"
           element={<AdminLogin updateLoginStatus={updateLoginStatus} />}
