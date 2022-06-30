@@ -14,7 +14,7 @@ function HomePage() {
             background:"white"
           }}
         >
-          <SearchComponent>hello world</SearchComponent>
+          <SearchComponent type={"movie name"} order={"descending"}></SearchComponent>
         </Content>
       </div>
     </Layout>

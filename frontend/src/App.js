@@ -19,49 +19,43 @@ import AdminHeader from "./components/AdminHeader";
 import EventControl from "./components/EventControl";
 import CreateEvent from "./pages/CreateEvent";
 import EditEvent from "./pages/EditEvent";
+
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
+  const [userInfo, setUserInfo] = useState({})
+  const [sid, setSid] = useState("")
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
   };
 
+  const updateUserInfo = (userInfo) => {
+    setUserInfo(userInfo);
+  }
+
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Header loginStatus={loginStatus} />
-              <Outlet />
-            </>
-          }
-        >
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/login"
-            element={<Login updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/register"
-            element={<Register updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/forgetpassword"
-            element={<ForgetPassword updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/searchresult"
-            element={<SearchResult updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/moviedetail"
-            element={<MovieDetail updateLoginStatus={updateLoginStatus} />}
-          />
+        <Route path='/' element={
+          <>
+            <Header loginStatus={ loginStatus } 
+                    updateLoginStatus={ updateLoginStatus } 
+                    userInfo={userInfo}
+                    updateUserInfo={ updateUserInfo }
+                    sid={sid}/>
+            <Outlet />
+          </>
+        }>
+          <Route path="/" element = {<HomePage/>}/>
+          <Route path="/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo} sid={sid} setSid={setSid}/>}/>
+          <Route path="/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
+          <Route path="/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
+          <Route path="/search/:type/:keywords/:order" element={<SearchResult/>}/>   
+          <Route path="/movie/detail/:id" element={<MovieDetail/>}/>   
         </Route>
       </Routes>
       <Routes>
+        <Route path="/test/:type/:keywords/:order" element ={<SearchResult/>} />
         <Route
           path="/admin"
           element={

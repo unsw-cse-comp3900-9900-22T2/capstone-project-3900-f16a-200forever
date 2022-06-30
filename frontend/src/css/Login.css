@@ -1,23 +1,25 @@
 .login-form {
   margin: auto;
-  width: 50%;
+  margin-top: 180px;
+  width: 500px;
   border: 2px solid grey;
   padding: 10px;
-  position: absolute;
+  display: block;
   flex-direction: row;
-  margin-left: 350px;
-  max-width: 450px;
   border-radius: "30px";
   justify-content: "space-between";
 }
+
+.login-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .login-form-button {
     padding: 0%;
     position: relative;
 }
-.login-title {
-  margin-left: 450px;
-  padding-top: 70px;
-}
+
 .login-forget-button {
   margin-left: 20px;
   position: relative;

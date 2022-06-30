@@ -1,7 +1,15 @@
-.search-input {
-  /* margin-top: 80px;
-  margin-left: 500px;
-    
-  flex-direction: row;
-  align-items: flex-start; */
+.search-divider {
+  background-color: gray;
+}
+
+.search-type {
+  width: 150px;
+}
+
+.search-input-area {
+  width: 400px;
+}
+
+.search-order {
+  width: 160px;
 }

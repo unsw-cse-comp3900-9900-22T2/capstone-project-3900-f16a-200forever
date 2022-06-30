@@ -3,6 +3,7 @@ import { Typography } from "antd";
 import axios from "axios";
 import "../css/Login.css";
 import { useNavigate } from "react-router-dom";
+import openNotification from "./Notification";
 
 const tailLayout = {
   wrapperCol: {
@@ -11,48 +12,58 @@ const tailLayout = {
   },
 };
 
-const Login = ({ updateLoginStatus }) => {
+const Login = ({ updateLoginStatus, updateUserInfo, sid, setSid }) => {
   let navigate = useNavigate();
   const { Title } = Typography;
+  const admin_status = false;
   const onFinish = (values) => {
-    // console.log("Success:", values);
+    console.log(values);
     // todo add url
     // todo handle success
     // todo handle error
     // todo forget password?
     axios
-      .post("/url", {
+      .post("http://127.0.0.1:8080/login", {
         email: values["email"],
         password: values["password"],
+        is_admin: admin_status
       })
       .then(function (response) {
         console.log(response);
+        console.log(admin_status);
         updateLoginStatus(true);
+        updateUserInfo({
+          "username": response.data.name,
+          "token": response.data.token,
+          "email": values["email"]
+        })
+        // console.log(response.data.sid)
+        setSid(response.data.sid)
+        // axios.defaults.headers.post['Cookie'] = "session=session=5b0dc704-3114-465b-a76f-35522701e7d9"
+        // todo change url here
+        navigate("/", {
+          sid: sid
+        })
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response.data);
+        openNotification({
+          "title": "An error occur",
+          "content": error.response.data.message
+        })
       });
   };
 
-  const onFinishFailed = (errorInfo) => {
+  const onFinishFailed = () => {
     // console.log("Failed:", errorInfo);
     // todo change the error msg
-    notification.open({
-      message: `Notification`,
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-      placement: "top",
-      duration: 3,
-      onClick: () => {
-        console.log("Notification Clicked!");
-      },
-    });
+    openNotification({
+      "title": "Please enter all info"
+    })
   };
 
   return (
-    <div>
-      <Title className="login-title">Please log in </Title>
-
+    <div className="login-body">
       <Form
         className="login-form"
         name="basic"
@@ -66,6 +77,7 @@ const Login = ({ updateLoginStatus }) => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Title>Please log in here</Title>
         <Form.Item
           label="Email"
           name="email"
@@ -91,7 +103,6 @@ const Login = ({ updateLoginStatus }) => {
         >
           <Input.Password placeholder="Please enter your password!" />
         </Form.Item>
-
         <Form.Item {...tailLayout}>
           <Button
             classname="login-form-button"
