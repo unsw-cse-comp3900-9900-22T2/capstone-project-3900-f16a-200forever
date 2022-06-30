@@ -22,6 +22,12 @@ def generateOTP():
  
   return OTP
 
+
+def verfication_code_correct(real_code, enter_code):
+  if real_code == enter_code:
+    return True
+  return False
+
 def send_email(email, code):
   msg = MIMEText(str(code))
   msg['Subject'] = 'The verfication code from Movie Forever' 

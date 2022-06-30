@@ -8,6 +8,11 @@ login = {
     "is_admin": fields.Boolean(required=True)
 }
 
+
+send_email = {
+  'email': fields.String(required=True)
+}
+
 validation = {
   'email': fields.String(required=True),
   'token': fields.String(required=True)

@@ -21,6 +21,28 @@ from .api_models import AuthNS, AdminNS
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
 
+@auth_ns.route('/sendemail')
+class SendEmail(Resource):
+  @auth_ns.response(200, "Send Email Successfully")
+  @auth_ns.response(400, "Something wrong")
+  @auth_ns.expect(AuthNS.auth_send_email, validate=True) 
+  def post(self):
+    data = auth_ns.payload
+    email = data['email']
+
+    # check email format
+    if not correct_email_format(email):
+      return dumps({"message": "Email format not correct"}), 400
+
+    # send vertification code
+    code = generateOTP()
+    #try:
+    send_email(email, code)
+    #except:
+      #return dumps({"message": "Send email failed, try again pls"}), 400
+    
+    return dumps({"code": code}), 200
+
 @auth_ns.route('/register')
 class RegisterController(Resource):
   @auth_ns.response(200, "Login Successfully")
@@ -52,8 +74,7 @@ class RegisterController(Resource):
     if not correct_password_format(pw):
       return dumps({"message": "The password is too short, at least 8 characters"}), 400
 
-    code = generateOTP()
-    send_email(email, code)
+
     #encode pw
     data['password'] = pw_encode(pw)
     # commit into db
