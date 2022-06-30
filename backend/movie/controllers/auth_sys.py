@@ -48,13 +48,9 @@ class ResetPasswordController(Resource):
     #encode pw
     data['new_password'] = pw_encode(new_pw)
 
-    # if unable to find email in users db then check admin
-    curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
-    if curr_user == None:
-      curr_user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
-      if curr_user == None:
-        return dumps({"message": "Email not registered"}), 400
-    
+    # check if user exists
+    if email_is_unique(email):
+      return dumps({"message": "The email is not registered"}), 400
 
 
 @auth_ns.route('/register')
