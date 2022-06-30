@@ -1,6 +1,6 @@
 from attr import field
 from flask_restx import Namespace
-from .models_format import login, validation, event_create, register, reset_password
+from .models_format import login, validation, event_create, register, reset_password, forget_password
 from numpy import require
 
 class AuthNS:
@@ -9,6 +9,7 @@ class AuthNS:
   auth_logout = auth_ns.model('Auth logout', validation)
   auth_register = auth_ns.model('Auth register', register)
   auth_reset_password = auth_ns.model('Auth reset_password', reset_password)
+  auth_forget_password = auth_ns.model('Auth forget_password', forget_password)
 
 class AdminNS:
   admin_ns = Namespace("Admin", description="the api of admin authentication")

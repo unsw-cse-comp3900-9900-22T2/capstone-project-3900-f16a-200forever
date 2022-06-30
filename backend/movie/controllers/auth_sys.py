@@ -22,8 +22,8 @@ from .api_models import AuthNS, AdminNS
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
 
-@auth_ns.route('/reset_password')
-class ResetPasswordController(Resource):
+@auth_ns.route('/forget_password')
+class ForgetPasswordController(Resource):
   @auth_ns.response(200, "Password reset")
   @auth_ns.response(400, "Something wrong")
   @auth_ns.expect(AuthNS.auth_reset_password, validate=True)
@@ -32,7 +32,6 @@ class ResetPasswordController(Resource):
     email = data['email']
     correct_code = data['correct_code']
     submitted_code = data['submitted_code']
-    current_pw = data['current_password']
     new_pw = data['new_password']
     confirm_new_pw = data['confirm_new_password']
     token = data['token']
@@ -43,6 +42,41 @@ class ResetPasswordController(Resource):
     # check if user entered the right code
     if correct_code != submitted_code:
       return dumps({"message": "Incorrect validation code"}), 400
+
+    curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
+
+    # check password format
+    if not correct_password_format(new_pw):
+      return dumps({"message": "The password is too short, at least 8 characters"}), 400
+
+    # check if confirm password is the same as the new password
+    if new_pw != confirm_new_pw:
+      return dumps({"message": "New passwords are not the same"}), 400
+
+    # encode pw
+    data['new_password'] = pw_encode(new_pw)
+
+    # update db
+    curr_user.password = data['new_password']
+    db.session.commit()
+
+    return dumps({"message": "Password updated"}), 200
+
+@auth_ns.route('/reset_password')
+class ResetPasswordController(Resource):
+  @auth_ns.response(200, "Password reset")
+  @auth_ns.response(400, "Something wrong")
+  @auth_ns.expect(AuthNS.auth_reset_password, validate=True)
+  def post(self):
+    data = auth_ns.payload
+    email = data['email']
+    current_pw = data['current_password']
+    new_pw = data['new_password']
+    confirm_new_pw = data['confirm_new_password']
+    token = data['token']
+
+    if not user_is_valid(data):
+      return dumps({"message": "Invalid token"}), 400
 
     curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if curr_user.password != pw_encode(current_pw):
