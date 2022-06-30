@@ -3,6 +3,10 @@ import { Image, Layout, Rate } from "antd";
 import React, { Component, useState } from "react";
 import { Typography } from "antd";
 import "../css/MovieDetail.css";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
+
 const { Header, Content, Footer } = Layout;
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const { Title, Text } = Typography;
@@ -30,6 +34,30 @@ function MovieDetail() {
       },
     ],
   };
+
+  const { id } = useParams();
+  const [movieInfo, setMovieInfo] = useState({})
+  useEffect (() => {
+    axios
+    // todo change url here
+    .get("http://127.0.0.1:5000/test2", {
+      params: {
+        "id": id.replace("id=", "")
+      }
+    })
+    .then(function (response) {
+      console.log(response.data.result);
+    })
+    // todo handle error
+    .catch(function (error) {
+      console.log(error.response);
+      // openNotification({
+      //   "title": "Search error",
+      //   "content": error
+      // })
+    });
+  }, [])
+
 
   const { movies } = state;
   return (

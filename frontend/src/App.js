@@ -41,7 +41,8 @@ function App() {
           <Route path="/login" element = {<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
           <Route path="/register" element = {<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/> 
           <Route path="/forgetpassword" element = {<ForgetPassword updateLoginStatus={updateLoginStatus}/>}/>             
-          <Route path="/search/:type/:keywords/:order" element={<SearchResult/>}/>      
+          <Route path="/search/:type/:keywords/:order" element={<SearchResult/>}/>   
+          <Route path="/movie/detail/:id" element={<MovieDetail/>}/>   
         </Route>
       </Routes>
       <Routes>
