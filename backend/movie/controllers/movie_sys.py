@@ -113,4 +113,4 @@ class SearchMovie(Resource):
       print(data)
       movies.append(data)
 
-    return dumps({"movies": movies, "total": total_num}), 200
+    return {"movies": movies, "total": total_num}, 200

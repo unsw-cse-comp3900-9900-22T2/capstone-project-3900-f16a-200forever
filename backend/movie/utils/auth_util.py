@@ -63,7 +63,10 @@ def user_is_valid(data):
   return True
 
 def user_is_admin(email):
-  if session[email]['admin']:
+  if email in session.key() and session[email]['admin']:
+    return True
+  user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
+  if user != None:
     return True
   return False
 

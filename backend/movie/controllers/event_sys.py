@@ -31,11 +31,11 @@ class EventCreate(Resource):
 
     # check the user is valid or not
     if not user_is_valid(data):
-      return dumps({"message": "the token is incorrect"}), 400
+      return {"message": "the token is incorrect"}, 400
     
     # check the user is admin
     if not user_is_admin(data['email']):
-      return dumps({"message": "the user is not the admin, no permission"}), 400
+      return {"message": "the user is not the admin, no permission"}, 400
 
     event = event_ns.payload
     event_id = uuid.uuid4()
@@ -76,10 +76,10 @@ class EventCreate(Resource):
       
     except:
       db.session.rollback()
-      return dumps({"message": "Create Event Failed"}), 400
+      return {"message": "Create Event Failed"}, 400
 
 
-    return dumps({"message": "Create Event Successfully"}), 200
+    return {"message": "Create Event Successfully"}, 200
 
 @event_ns.route("/search")
 class Search(Resource):
@@ -93,7 +93,7 @@ class Search(Resource):
 
     # check empty string
     if kw == '':
-      return dumps({"message": "Please do not enter empty string"}), 400
+      return {"message": "Please do not enter empty string"}, 400
     # get all the match results
     matched_movies = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')).all()
     # get the best match use fuzzywuzzy
@@ -101,4 +101,4 @@ class Search(Resource):
 
     movies = format_movie_return_list(best)
 
-    return dumps({"result": movies}), 200
+    return {"result": movies}, 200

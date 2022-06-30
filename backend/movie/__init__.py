@@ -11,11 +11,11 @@ from config import EMAIL, SMTP_SERVER, MAIL_PASS
 def defaultHandler(err):
     response = err.get_response()
     print('response', err, err.get_response())
-    response.data = dumps({
+    response.data = {
         "code": err.code,
         "name": "System Error",
         "message": err.get_description(),
-    })
+    }
     response.content_type = 'application/json'
     return response
 

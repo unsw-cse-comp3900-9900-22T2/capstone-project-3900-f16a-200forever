@@ -4,7 +4,7 @@ from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
 from movie import app, request
-from flask import session
+from flask import session, jsonify
 from flask_restx import Resource
 from json import dumps
 from flask_restx import Resource, Api
@@ -12,7 +12,7 @@ from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
                                   email_exits, correct_password_format, generateOTP, \
-                                  send_email, code_is_correct, get_user, password_is_correct
+                                  send_email, code_is_correct, get_user, password_is_correct, user_is_admin
 from movie import db
 from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
@@ -32,24 +32,20 @@ class SendEmail(Resource):
 
     # check email format
     if not correct_email_format(email):
-      return dumps({"message": "Email format not correct"}), 400
-
-    # check email has been registed or not
-    if not email_exits(email):
-      return dumps({"message": "The email has not been registered"}), 400
+      return {"message": "Email format not correct"}, 400
 
     # send vertification code
     code = str(generateOTP())
     try:
       send_email(email, code)
     except:
-      return dumps({"message": "Send email failed, try again pls"}), 400
+      return {"message": "Send email failed, try again pls"}, 400
 
     # update validation code
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     user.validation_code = code
     db.session.commit()
-    return dumps({"message": "code has been send"}), 200
+    return {"message": "code has been send"}, 200
 
 @auth_ns.route('/reset_password')
 class ResetPasswordController(Resource):
@@ -66,29 +62,29 @@ class ResetPasswordController(Resource):
 
     # check the user has login or not
     if email not in session.keys():
-      return dumps({"message": "The user has not logined"}), 400
+      return {"message": "The user has not logined"}, 400
 
     #check the token
     if not user_is_valid(data):
-      return dumps({"message": "Invalid token"}), 400
+      return {"message": "Invalid token"}, 400
 
     # check the user old password
     user = get_user(email, session[email]["admin"])
 
     if password_is_correct(user, current_pw):
-      return dumps({"message": "Incorrect current password"}), 400
+      return {"message": "Incorrect current password"}, 400
 
     # check the validation code
     if not code_is_correct(user, code):
-      return dumps({"message": "Incorrect validation code"}), 400
+      return {"message": "Incorrect validation code"}, 400
 
     # check password format
     if not correct_password_format(new_pw):
-      return dumps({"message": "The password is too short, at least 8 characters"}), 400
+      return {"message": "The password is too short, at least 8 characters"}, 400
 
     # check if confirm password is the same as the new password
     if new_pw != confirm_new_pw:
-      return dumps({"message": "New passwords are not the same"}), 400
+      return {"message": "New passwords are not the same"}, 400
 
     # encode pw
     data['new_password'] = pw_encode(new_pw)
@@ -97,7 +93,7 @@ class ResetPasswordController(Resource):
     user.password = data['new_password']
     db.session.commit()
 
-    return dumps({"message": "Password updated"}), 200
+    return {"message": "Password updated"}, 200
 
 
 @auth_ns.route('/register')
@@ -113,23 +109,23 @@ class RegisterController(Resource):
 
     # check email format
     if not correct_email_format(email):
-      return dumps({"message": "Email format not correct"}), 400
+      return {"message": "Email format not correct"}, 400
 
     # check email has been registed or not
     if email_exits(email):
-      return dumps({"message": "The email is already been registed"}), 400
+      return {"message": "The email is already been registed"}, 400
 
     # check user name format
     if not username_format_valid(name):
-      return dumps({"message": "Username must be 6-20 characters"}), 400
+      return {"message": "Username must be 6-20 characters"}, 400
   
     # check user name has exist or not
     if not username_is_unique(name):
-      return dumps({"message": "The username already exists"}), 400
+      return {"message": "The username already exists"}, 400
 
     # check password format
     if not correct_password_format(pw):
-      return dumps({"message": "The password is too short, at least 8 characters"}), 400
+      return {"message": "The password is too short, at least 8 characters"}, 400
 
     #encode pw
     data['id'] = uuid.uuid4()
@@ -144,10 +140,10 @@ class RegisterController(Resource):
     print(token)
     session[email] = {'token': token, "id": new_user.id, "admin": False}
 
-    return dumps({
+    return {
         'token': generate_token(email),
         'name': new_user.name
-    }), 200
+    }, 200
 
 @auth_ns.route('/login')
 class LoginController(Resource):
@@ -161,33 +157,33 @@ class LoginController(Resource):
     is_admin = data['is_admin']
     # check email format
     if not correct_email_format(email):
-      return dumps({"message": "Please enter correct email"}), 400
+      return {"message": "Please enter correct email"}, 400
 
     curr_user = get_user(email, is_admin)
     # check the user is valid or not
     if curr_user == None:
-      return dumps({"message": "The user not registered"}), 400
+      return {"message": "The user not registered"}, 400
       
     # check the user has login or not
     if email in session.keys():
-      return dumps({"message": "The user has logined"}), 400
+      return {"message": "The user has logined"}, 400
 
     curr_user = get_user(email, is_admin)
     # check the user is valid or not
     if curr_user == None:
-      return dumps({"message": "The user not registered"}), 400
+      return {"message": "The user not registered"}, 400
     
     if password_is_correct(curr_user, pw):
-      return dumps({"message": "Wrong password"}), 400
+      return {"message": "Wrong password"}, 400
 
     token = generate_token(email)
     print(token)
     session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
 
-    return dumps({
+    return {
         'token': token,
         'name': curr_user.name
-    }), 200
+    }, 200
   
 @auth_ns.route('/logout')
 class logoutController(Resource):

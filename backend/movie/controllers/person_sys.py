@@ -24,7 +24,7 @@ class PersonDetail(Resource):
     person = db.session.query(Person.Persons).filter(Person.Persons.id == id).first()
 
     if person == None:
-      return dumps({"message": f"Person {id} not found"})
+      return {"message": f"Person {id} not found"}
     data = convert_object_to_dict(person)
     data["gender"] = get_gender(data["gender"])
-    return dumps(data), 200
+    return data, 200

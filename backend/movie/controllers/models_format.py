@@ -31,12 +31,6 @@ register = {
   'password': fields.String(required=True)
 }
 
-register = {
-  'name': fields.String(required=True),
-  'email': fields.String(required=True),
-  'password': fields.String(required=True)
-}
-
 class Question_Form(fields.Raw):
   def format(self, value):
     return {
