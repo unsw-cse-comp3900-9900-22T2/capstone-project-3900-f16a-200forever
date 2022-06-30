@@ -63,8 +63,8 @@ const AdminEvent = () => {
   return (
     <div className="admin-event-control-form">
       <Form
-        labelCol={{ span: 7 }}
-        wrapperCol={{ span: 10 }}
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 15 }}
         layout="horizontal"
       >
         <Form.Item label="Topic">
@@ -93,23 +93,25 @@ const AdminEvent = () => {
             </Upload>
           </ImgCrop>
         </Form.Item>
+        <Form.Item label="Movie">
+          <Select
+            mode="multiple"
+            allowClear
+            style={{
+              width: "100%",
+            }}
+            placeholder="Please select"
+            defaultValue={["Harry potter", "lalaland"]}
+          >
+            {}
+          </Select>
+          <br />
+        </Form.Item>
         {/* description */}
         <Form.Item label="Description">
           <TextArea rows={4} />
         </Form.Item>
-
-        {/* question and correct answer */}
-        {/* <Form.Item wrapperCol={{span: 10, offset:10}} labelCol={{span: 10, offset:8}}>
-          
-        </Form.Item> */}
-      </Form>
-      <center>
-        {" "}
-        <Form
-          name="dynamic_form_nest_item"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
+        <Form.Item label="Add question">
           <Form.List name="question">
             {(fields, { add, remove }) => (
               <>
@@ -122,7 +124,7 @@ const AdminEvent = () => {
                     }}
                     align="baseline"
                   >
-                    <Form.Item {...restField} label="question descriotion">
+                    <Form.Item {...restField} label="Question Descriotion">
                       <TextArea rows={4} />
                     </Form.Item>
                     <Form.Item>
@@ -179,8 +181,18 @@ const AdminEvent = () => {
               </>
             )}
           </Form.List>
-        </Form>
-      </center>
+        </Form.Item>
+
+        {/* question and correct answer */}
+        {/* <Form.Item wrapperCol={{span: 10, offset:10}} labelCol={{span: 10, offset:8}}>
+          
+        </Form.Item> */}
+      </Form>{" "}
+      <Form
+        name="dynamic_form_nest_item"
+        onFinish={onFinish}
+        autoComplete="off"
+      ></Form>
     </div>
   );
 };
