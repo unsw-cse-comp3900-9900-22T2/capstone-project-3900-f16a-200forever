@@ -38,12 +38,13 @@ smptyserver.login(EMAIL, MAIL_PASS)
 from movie import controllers
 from movie import models
 from movie import error
-from movie.controllers import auth_bp, admin_bp, event_bp, movie_bp
+from movie.controllers import auth_bp, admin_bp, event_bp, movie_bp, person_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(event_bp)
 app.register_blueprint(movie_bp)
+app.register_blueprint(person_bp)
 
 db.create_all()
 db.session.commit()
