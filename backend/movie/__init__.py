@@ -4,6 +4,9 @@ from flask_cors import CORS
 from flask_session import Session
 from json import dumps
 import redis
+import smtplib
+from email.mime.text import MIMEText
+from config import EMAIL, SMTP_SERVER, MAIL_PASS
 
 def defaultHandler(err):
     response = err.get_response()
@@ -26,6 +29,10 @@ app.config['SESSION_REDIS'] = redis.from_url('redis://localhost:6379')
 db = SQLAlchemy(app)
 Session(app)
 
+# smtp
+smptyserver = smtplib.SMTP(SMTP_SERVER)
+smptyserver.login(EMAIL, MAIL_PASS)
+
 
 from movie import controllers
 from movie import models
@@ -36,7 +43,6 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(event_bp)
 app.register_blueprint(movie_bp)
-
 
 db.create_all()
 db.session.commit()

@@ -9,6 +9,7 @@ from movie.models import user as User
 import smtplib
 from email.mime.text import MIMEText
 import math, random
+from movie import smptyserver
  
 def generateOTP():
   """
@@ -22,15 +23,11 @@ def generateOTP():
   return OTP
 
 def send_email(email, code):
-  print(2)
   msg = MIMEText(str(code))
   msg['Subject'] = 'The verfication code from Movie Forever' 
   msg['From'] = EMAIL
   msg['To'] = email
-  server = smtplib.SMTP('smtp.163.com')
-  server.login("19167640706@163.com", 'Iverson123aj')
-  server.sendmail(EMAIL, [email], msg.as_string())
-  server.quit()
+  smptyserver.sendmail(EMAIL, [email], msg.as_string())
 
 def generate_token(email):
   d = {
