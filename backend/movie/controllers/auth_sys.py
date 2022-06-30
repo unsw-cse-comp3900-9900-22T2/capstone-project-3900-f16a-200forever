@@ -16,6 +16,7 @@ from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
 from movie import db
 from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
+import uuid
 
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
@@ -126,6 +127,7 @@ class RegisterController(Resource):
       return dumps({"message": "The password is too short, at least 8 characters"}), 400
 
     #encode pw
+    data['id'] = uuid.uuid4()
     data['password'] = pw_encode(pw)
     # commit into db
     new_user = User.Users(data)
@@ -152,10 +154,14 @@ class LoginController(Resource):
     email = data['email']
     pw = data['password']
     is_admin = data['is_admin']
-
     # check email format
     if not correct_email_format(email):
       return dumps({"message": "Please enter correct email"}), 400
+
+    curr_user = get_user(email, is_admin)
+    # check the user is valid or not
+    if curr_user == None:
+      return dumps({"message": "The user not registered"}), 400
       
     # check the user has login or not
     if email in session.keys():

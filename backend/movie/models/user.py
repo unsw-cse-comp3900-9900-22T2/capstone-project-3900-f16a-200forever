@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 
 class Users(db.Model):
   __tablename__ = 't_users'
-  id = db.Column('id', db.Integer, primary_key=True)
+  id = db.Column('id', db.String(32), primary_key=True)
   name = db.Column('name', db.String(256), nullable=False)
   email = db.Column('email', db.String(256), unique=True, nullable=False)
   public_status = db.Column('public_status', db.Boolean)
@@ -23,6 +23,7 @@ class Users(db.Model):
     return '<User {} {}>'.format(self.name, self.email)
 
   def __init__(self, data):
+    self.id = data['id']
     self.name = data['name']
     self.email = data['email']
     self.password = data['password']

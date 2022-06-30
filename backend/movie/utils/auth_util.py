@@ -37,7 +37,7 @@ def generate_token(email):
       'timestamp': time.time()
     }
   }
-  token = jwt.encode(d, SECRET, algorithm='HS256')
+  token = jwt.encode(d, SECRET, algorithm='HS256').decode('utf-8')
 
   return token
 
