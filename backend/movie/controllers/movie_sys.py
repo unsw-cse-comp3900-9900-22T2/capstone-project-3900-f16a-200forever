@@ -1,4 +1,5 @@
 from audioop import reverse
+from email import parser
 from json import dumps
 from numpy import require
 import movie
@@ -8,6 +9,7 @@ from flask import session
 from movie import db
 from movie.models import movie as Movie
 from movie.models import person as Person
+from movie.models import genre as Genre
 from movie.utils.movie_until import format_movie_return_list
 from operator import attrgetter
  
@@ -19,29 +21,32 @@ class MovieDetails(Resource):
     @movie_ns.response(200, 'Successfully retrieved movie details')
     @movie_ns.response(400, 'Something went wrong')
     def get(self):
-        data = movie_ns.payload
-        movie_id = data['movie_id']
-        select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
-        # genres
-        movie_genre_id = db.session.query(Movie.MoviesGenres).filter(Movie.MoviesGenres.movie_id == movie_id).all()
-        movie_genre = []
-        for i in movie_genre_id:
-            genre_id = i['genre_id']
-            genre = db.session.query(Movie.Genres).filter(Movie.Genres.id == genre_id).first()['name']
-            movie_genre.append(genre)
+        parser = reqparse.RequestParser()
+        parser.add_argument('movie_id', type=int, required=True)
+        args = parser.parse_args()
+        movie_id = args['movie_id']
 
+        select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
         if select_movie == None:
             return dumps({'message': 'Cannot find movie'}), 400
-        
+		
+        # # genres
+        # movie_genre_id = db.session.query(Movie.MovieGenre).filter(Movie.MovieGenre.movie_id == movie_id).all()
+        movie_genre = []
+        # for genre_id in movie_genre_id:
+        #     # genre_id = i['genre_id']
+        #     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == genre_id).first()['name']
+        #     movie_genre.append(genre)
+
         # title, backdrop, rating
-        movie_title = select_movie['title']
-        movie_backdrop = select_movie['backdrop']
-        rating_count = select_movie['rating_count']
-        total_rating = select_movie['total_rating']
-        description = select_movie['description']
-        runtime = select_movie['runtime']
-        release_time = select_movie['release_time']
-        release_status = select_movie['release_status']
+        movie_title = select_movie.title
+        movie_backdrop = select_movie.backdrop
+        rating_count = select_movie.rating_count
+        total_rating = select_movie.total_rating
+        description = select_movie.description
+        runtime = select_movie.runtime
+        release_time = str(select_movie.release_time)
+        release_status = select_movie.release_status
         '''
         # if the movie has no rating, set it to -1 which will be displayed as no rating
         if rating_count != 0 and total_rating != 0:
@@ -50,23 +55,23 @@ class MovieDetails(Resource):
         else:
             final_rating = -1
         '''
-        # actors and director
-        movie_actors_id = db.session.query(Movie.MovieActor).filter(Movie.MovieActor.movie_id == movie_id).all()
-        movie_directors_id = db.session.query(Movie.MovieDirector).filter(Movie.MovieDirector.movie_id == movie_id).all()
+        # # actors and director
+        # movie_actors_id = db.session.query(Person.MovieActor).filter(Person.MovieActor.movie_id == movie_id).all()
+        # movie_directors_id = db.session.query(Person.MovieDirector).filter(Person.MovieDirector.movie_id == movie_id).all()
         movie_actors = []
         movie_directors = []
-        # actors [{'actor_name': sample, 'actor_character': sample}, {}...]
-        for i in movie_actors_id:
-            actor_id = i['person_id']
-            actor_name = db.session.query(Person.Persons).filter(Person.Persons.id == actor_id).first()['name']
-            actor_character = i['character']
-            movie_actors.append({'actor_name': actor_name, 'actor_character': actor_character})
+        # # actors [{'actor_name': sample, 'actor_character': sample}, {}...]
+        # for i in movie_actors_id:
+        #     actor_id = i['person_id']
+        #     actor_name = db.session.query(Person.Persons).filter(Person.Persons.id == actor_id).first()['name']
+        #     actor_character = i['character']
+        #     movie_actors.append({'actor_name': actor_name, 'actor_character': actor_character})
 
-        # directors [name]
-        for i in movie_directors_id:
-            director_id = i['person_id']
-            director_name = db.session.query(Person.Persons).filter(Person.Persons.id == director_id).first()['name']
-            movie_directors.append(director_name)
+        # # directors [name]
+        # for i in movie_directors_id:
+        #     director_id = i['person_id']
+        #     director_name = db.session.query(Person.Persons).filter(Person.Persons.id == director_id).first()['name']
+        #     movie_directors.append(director_name)
 
         movie_details = {
             'id': movie_id, #str
