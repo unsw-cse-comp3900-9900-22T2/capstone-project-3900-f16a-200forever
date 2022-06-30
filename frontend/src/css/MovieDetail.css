@@ -1,8 +1,9 @@
 .movie-detail-page {
   max-width: 1200px;
   width: 100%;
-  /* margin: 100px auto; */
+  margin: 100px 50px;
   box-shadow: 0 0 5px #ccc;
+  display: inline-block;
 }
 .movie-detail {
   display: flex;
@@ -40,4 +41,3 @@
   text-transform: uppercase;
   letter-spacing: 2px;
 }
-
