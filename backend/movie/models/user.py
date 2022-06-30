@@ -20,10 +20,10 @@ class Users(db.Model):
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
 
-
-  def __init__(self, email, password):
-    self.email = email
-    self.password = password
+  def __init__(self, data):
+    self.name = data['name']
+    self.email = data['email']
+    self.password = data['password']
     
   """
     @email.setter
@@ -38,5 +38,3 @@ class Users(db.Model):
   """
 
       
-
-

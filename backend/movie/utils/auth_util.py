@@ -3,17 +3,20 @@ import jwt
 from config import SECRET
 import hashlib
 from flask import session
+import re
+from movie import db
+from movie.models import user as User
 
 def generate_token(email):
   d = {
-    'iat': time.time(),
-    'iss': 'Issuer',
     'data': {
       'email': email,
       'timestamp': time.time()
     }
   }
-  return jwt.encode(d, SECRET, algorithm='HS256')
+  token = jwt.encode(d, SECRET, algorithm='HS256')
+
+  return token
 
 
 def pw_encode(password):
@@ -36,9 +39,9 @@ def user_is_valid(data):
   return True
 
 def user_is_admin(email):
-  if session[email]['admin'] == "False":
-    return False
-  return True
+  if session[email]['admin']:
+    return True
+  return False
 
 def check_correct_answer(value):
   if value != 1 and value != 2 and value != 3:
@@ -50,3 +53,32 @@ def user_has_login(email, session):
     return False
   return True
 
+def correct_email_format(email):
+  pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+  if re.fullmatch(pattern, email):
+    return True
+  return False
+
+def email_is_unique(email):
+  user = db.session.query(User.Users).filter(User.Users.email == email).first()
+  if user == None:
+    return True
+  return False
+
+def username_format_valid(name):
+  if len(name) < 6:
+    return False
+  if len(name) > 20:
+    return False
+  return True
+
+def username_is_unique(name):
+  user = db.session.query(User.Users).filter(User.Users.name == name).first()
+  if user == None:
+    return True
+  return False
+
+def correct_password_format(pw):
+  if len(pw) < 8:
+    return False
+  return True

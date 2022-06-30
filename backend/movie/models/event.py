@@ -1,3 +1,4 @@
+from locale import T_FMT
 from sqlalchemy import true
 from movie import db
 from movie.models.movie import Movies
@@ -27,7 +28,6 @@ class Events(db.Model):
   questions = db.relationship('Questions', back_populates="event", lazy=True)
   movies = db.relationship('Movies', secondary='r_event_movie', back_populates='events', lazy=True)
   
-
   def __repr__(self):
     return '<Event id:{} admin id:{}>'.format(self.id, self.admin_id)
   
@@ -72,10 +72,13 @@ class EventMovie(db.Model):
   __tablename__ = 'r_event_movie'
   movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), nullable=False, primary_key=True)
   event_id = db.Column('event_id', db.String(32), db.ForeignKey('t_events.id'), nullable=False, primary_key=True)
-  
+
   def __repr__(self):
     return '<EventMovie movie id:{} event id:{}>'.format(self.movie_id, self.event_id)
 
   def __init__(self, data):
     self.movie_id = data['movie_id']
     self.event_id = data['event_id']
+
+
+  

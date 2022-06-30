@@ -1,4 +1,5 @@
 
+from audioop import add
 from datetime import datetime
 from json import dumps
 from attr import validate
@@ -6,10 +7,10 @@ from flask_restx import Resource, reqparse
 import datetime
 from movie.models import event as Event
 from movie.models import movie as Movie
-from numpy import require
+from numpy import character, require
 from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
-from movie.utils.movie_until import movie_id_valid
+from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -61,11 +62,10 @@ class EventCreate(Resource):
         new_que = Event.Questions(que)
         db.session.add(new_que)
         db.session.flush()
-    
         # add movie
       movieid_set = event['movies']
       for movie in list(movieid_set):
-        if not movie_id_valid(session, movie):
+        if not movie_id_valid(movie):
           raise
         data['movie_id'] = movie
         data['event_id'] = event['id']
@@ -73,6 +73,7 @@ class EventCreate(Resource):
         db.session.add(new_rel)
         db.session.flush()
       db.session.commit()
+      
     except:
       db.session.rollback()
       return dumps({"message": "Create Event Failed"}), 400
@@ -80,40 +81,24 @@ class EventCreate(Resource):
 
     return dumps({"message": "Create Event Successfully"}), 200
 
-
-
 @event_ns.route("/search")
 class Search(Resource):
-  @event_ns.response(200, "Login Successfully")
+  @event_ns.response(200, "Search successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):   
     parser = reqparse.RequestParser()
     parser.add_argument('keyword', type=str, location='args', required=True)
-    """
-    parser.add_argument('description', type=str, location='args', required=True)
-    parser.add_argument('genre', type=str, location='args', required=True)
-    parser.add_argument('director', type=str, location='args', required=True)
-    parser.add_argument('actor', type=str, location='args', required=True)
-    """
     args = parser.parse_args()
     kw = args['keyword']
 
     # check empty string
     if kw == '':
       return dumps({"message": "Please do not enter empty string"}), 400
-
     # get all the match results
     matched_movies = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')).all()
     # get the best match use fuzzywuzzy
-    best =  process.extract(kw, matched_movies, limit=15)
+    best = process.extract(kw, matched_movies, limit=15)
 
-    result = []
-    for movie in best:
-      movie = movie[0]
-      data = {}
-      data['id'] = movie.id
-      data['title'] = movie.title
-      data['relese_time'] = movie.release_time.year
-      result.append(data)
+    movies = format_movie_return_list(best)
 
-    return dumps({"result": result}), 200
+    return dumps({"result": movies}), 200

@@ -1,15 +1,11 @@
+from xml.dom.minidom import Element
 from attr import field
 from flask_restx import fields
 
 login = {
     "email": fields.String(required=True),
     "password": fields.String(required=True),
-    "is_admin": fields.String(required=True)
-}
-
-validation = {
-  'email': fields.String(required=True),
-  'token': fields.String(required=True)
+    "is_admin": fields.Boolean(required=True)
 }
 
 reset_password = {
@@ -17,6 +13,17 @@ reset_password = {
     "new_password": fields.String(required=True),
     "confirm_new_password": fields.String(required=True),
     "email": fields.String(required=True)
+}
+
+validation = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+register = {
+  'name': fields.String(required=True),
+  'email': fields.String(required=True),
+  'password': fields.String(required=True)
 }
 
 class Question_Form(fields.Raw):
@@ -40,6 +47,7 @@ event_create = {
   'image_description': fields.String(required=True),
   'description': fields.String(required=True),
   'require_correctness_amt': fields.Integer(required=True),
-  'questions': fields.List(Question_Form(required=True)),
+  'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
 }
+    
