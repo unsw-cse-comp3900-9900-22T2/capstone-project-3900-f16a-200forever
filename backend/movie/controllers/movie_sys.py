@@ -29,14 +29,14 @@ class MovieDetails(Resource):
         select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
         if select_movie == None:
             return dumps({'message': 'Cannot find movie'}), 400
-		
+        
         # # genres
         # movie_genre_id = db.session.query(Movie.MovieGenre).filter(Movie.MovieGenre.movie_id == movie_id).all()
         movie_genre = []
-        # for genre_id in movie_genre_id:
-        #     # genre_id = i['genre_id']
-        #     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == genre_id).first()['name']
-        #     movie_genre.append(genre)
+        genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies).with_entities(Genre.Genres.name).filter(Movie.Movies.id == movie_id).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
+        for genre in genre_result:
+            genre_name = genre.name
+            movie_genre.append(genre_name)
 
         # title, backdrop, rating
         movie_title = select_movie.title
@@ -47,31 +47,25 @@ class MovieDetails(Resource):
         runtime = select_movie.runtime
         release_time = str(select_movie.release_time)
         release_status = select_movie.release_status
-        '''
-        # if the movie has no rating, set it to -1 which will be displayed as no rating
-        if rating_count != 0 and total_rating != 0:
-            final_rating = total_rating / rating_count
-            final_rating = round(final_rating, 1)
-        else:
-            final_rating = -1
-        '''
+
         # # actors and director
         # movie_actors_id = db.session.query(Person.MovieActor).filter(Person.MovieActor.movie_id == movie_id).all()
         # movie_directors_id = db.session.query(Person.MovieDirector).filter(Person.MovieDirector.movie_id == movie_id).all()
+        
         movie_actors = []
         movie_directors = []
-        # # actors [{'actor_name': sample, 'actor_character': sample}, {}...]
-        # for i in movie_actors_id:
-        #     actor_id = i['person_id']
-        #     actor_name = db.session.query(Person.Persons).filter(Person.Persons.id == actor_id).first()['name']
-        #     actor_character = i['character']
-        #     movie_actors.append({'actor_name': actor_name, 'actor_character': actor_character})
-
-        # # directors [name]
-        # for i in movie_directors_id:
-        #     director_id = i['person_id']
-        #     director_name = db.session.query(Person.Persons).filter(Person.Persons.id == director_id).first()['name']
-        #     movie_directors.append(director_name)
+        actor_result = db.session.query(Person.MovieActor, Person.Persons, Movie.Movies).with_entities(Person.Persons.name, Person.MovieActor.character).filter(Person.MovieActor.movie_id == movie_id).filter(Person.Persons.id == Person.MovieActor.person_id).filter(Movie.Movies.id == Person.MovieActor.movie_id).all()
+        director_result = db.session.query(Person.MovieDirector, Person.Persons, Movie.Movies).with_entities(Person.Persons.name).filter(Person.MovieDirector.movie_id == movie_id).filter(Person.Persons.id == Person.MovieDirector.person_id).filter(Movie.Movies.id == Person.MovieDirector.movie_id).all()
+        for actor in actor_result:
+            actor_info = {}
+            actor_info['name'] = actor.name
+            actor_info['character'] = actor.character
+            movie_actors.append(actor_info)
+        
+        for director in director_result:
+            director_info = {}
+            director_info['name'] = director.name
+            movie_directors.append(director_info)
 
         movie_details = {
             'id': movie_id, #str
