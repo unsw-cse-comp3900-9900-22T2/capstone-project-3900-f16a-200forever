@@ -32,8 +32,6 @@ class MovieDetails(Resource):
         if select_movie == None:
             return dumps({'message': 'Cannot find movie'}), 400
         
-        # # genres
-        # movie_genre_id = db.session.query(Movie.MovieGenre).filter(Movie.MovieGenre.movie_id == movie_id).all()
         movie_genre = []
         genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies).with_entities(Genre.Genres.name).filter(Movie.Movies.id == movie_id).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
         for genre in genre_result:
@@ -50,10 +48,6 @@ class MovieDetails(Resource):
         release_time = str(select_movie.release_time)
         release_status = select_movie.release_status
 
-        # # actors and director
-        # movie_actors_id = db.session.query(Person.MovieActor).filter(Person.MovieActor.movie_id == movie_id).all()
-        # movie_directors_id = db.session.query(Person.MovieDirector).filter(Person.MovieDirector.movie_id == movie_id).all()
-        
         movie_actors = []
         movie_directors = []
         actor_result = db.session.query(Person.MovieActor, Person.Persons, Movie.Movies).with_entities(Person.Persons.name, Person.MovieActor.character).filter(Person.MovieActor.movie_id == movie_id).filter(Person.Persons.id == Person.MovieActor.person_id).filter(Movie.Movies.id == Person.MovieActor.movie_id).all()
@@ -81,7 +75,7 @@ class MovieDetails(Resource):
             'rating count': rating_count, #int
             'actors': movie_actors, #list of dict
             'directors': movie_directors, #list of str
-            'genres': movie_genre,  #list of dict
+            'genres': movie_genre,  #list of str
             'reviews': [] #list of dict
         }
         return dumps(movie_details), 200
