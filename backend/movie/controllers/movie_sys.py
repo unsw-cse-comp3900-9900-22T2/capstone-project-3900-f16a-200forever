@@ -8,8 +8,8 @@ from flask import session
 from movie import db
 from movie.models import movie as Movie
 from movie.models import person as Person
-from movie.utils.movie_until import format_movie_return_list, paging, convert_model_to_dict, \
-                                    convert_object_to_dict
+from movie.utils.movie_until import format_movie_return_list
+from movie.utils.other_until import convert_object_to_dict, convert_model_to_dict, paging
 from operator import attrgetter
 from sqlalchemy import and_, or_
  
