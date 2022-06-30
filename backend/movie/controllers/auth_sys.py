@@ -11,8 +11,8 @@ from flask_restx import Resource, Api
 from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
-                                  email_is_unique, correct_password_format, generateOTP, \
-                                  send_email
+                                  email_exits, correct_password_format, generateOTP, \
+                                  send_email, verfication_code_correct
 from movie import db
 from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
@@ -34,14 +34,26 @@ class SendEmail(Resource):
     if not correct_email_format(email):
       return dumps({"message": "Email format not correct"}), 400
 
+    # check email has been registed or not
+    if not email_exits(email):
+      return dumps({"message": "The email has not been registered"}), 400
+
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+
     # send vertification code
-    code = generateOTP()
-    #try:
-    send_email(email, code)
-    #except:
-      #return dumps({"message": "Send email failed, try again pls"}), 400
-    
-    return dumps({"code": code}), 200
+    code = str(generateOTP())
+    try:
+      send_email(email, code)
+    except:
+      return dumps({"message": "Send email failed, try again pls"}), 400
+
+    # update validation code
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    user.validation_code = code
+    db.session.commit()
+
+    return dumps({"message": "code has been send"}), 200
 
 @auth_ns.route('/register')
 class RegisterController(Resource):
@@ -54,6 +66,14 @@ class RegisterController(Resource):
     email = data['email']
     pw = data['password']
 
+    # check email format
+    if not correct_email_format(email):
+      return dumps({"message": "Email format not correct"}), 400
+
+    # check email has been registed or not
+    if email_exits(email):
+      return dumps({"message": "The email is already been registed"}), 400
+
     # check user name format
     if not username_format_valid(name):
       return dumps({"message": "Username must be 6-20 characters"}), 400
@@ -62,18 +82,9 @@ class RegisterController(Resource):
     if not username_is_unique(name):
       return dumps({"message": "The username already exists"}), 400
 
-    # check email format
-    if not correct_email_format(email):
-      return dumps({"message": "Email format not correct"}), 400
-
-    # check email has been registed or not
-    if not email_is_unique(email):
-      return dumps({"message": "The email is already been registed"}), 400
-
     # check password format
     if not correct_password_format(pw):
       return dumps({"message": "The password is too short, at least 8 characters"}), 400
-
 
     #encode pw
     data['password'] = pw_encode(pw)

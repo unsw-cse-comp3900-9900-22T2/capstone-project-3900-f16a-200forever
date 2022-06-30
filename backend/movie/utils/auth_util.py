@@ -87,11 +87,11 @@ def correct_email_format(email):
     return True
   return False
 
-def email_is_unique(email):
+def email_exits(email):
   user = db.session.query(User.Users).filter(User.Users.email == email).first()
   if user == None:
-    return True
-  return False
+    return False
+  return True
 
 def username_format_valid(name):
   if len(name) < 6:
