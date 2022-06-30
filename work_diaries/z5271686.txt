@@ -16,4 +16,8 @@ import the data into database
 
 week4:
 write the template of the backend
-write the funtion: register, login, logout, event create, search movie of event, search movie in the home page
+write the route: sendemail, register, login, logout, searchmovie, eventsearchmovie, createevent
+write the models: Admins, Events, EventMovie, Questions, Movies, MovieImage, MovieGenre, Persons, MovieDirector, MovieActor
+write the helpfuntion in auth_utils, movie_utils
+init the smtpserver in __init__
+add .gitignore
