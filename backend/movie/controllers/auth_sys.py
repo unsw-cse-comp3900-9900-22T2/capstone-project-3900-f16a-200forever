@@ -11,10 +11,10 @@ from flask_restx import Resource, Api
 from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
-                                  email_is_unique, correct_password_format
+                                  email_is_unique, correct_password_format, generateOTP, \
+                                  send_email
 from movie import db
 from movie.models import admin as Admin
-
 from .api_models import AuthNS, AdminNS
 
 
@@ -52,6 +52,8 @@ class RegisterController(Resource):
     if not correct_password_format(pw):
       return dumps({"message": "The password is too short, at least 8 characters"}), 400
 
+    code = generateOTP()
+    send_email(email, code)
     #encode pw
     data['password'] = pw_encode(pw)
     # commit into db

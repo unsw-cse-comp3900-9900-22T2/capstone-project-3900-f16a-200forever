@@ -27,11 +27,8 @@ def send_email(email, code):
   msg['Subject'] = 'The verfication code from Movie Forever' 
   msg['From'] = EMAIL
   msg['To'] = email
-  print(3)
   server = smtplib.SMTP('smtp.163.com')
-  print(4)
   server.login("19167640706@163.com", 'Iverson123aj')
-  print(1)
   server.sendmail(EMAIL, [email], msg.as_string())
   server.quit()
 
