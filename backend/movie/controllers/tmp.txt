@@ -1,3 +1,5 @@
 admin: 123, 123456789
 
 user: 1111, 123456789
+      admin@gmail.com  123456789
+{"email": "1234@gmail.com", "name": "123456", "password":"12345678"}

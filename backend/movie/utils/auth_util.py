@@ -84,9 +84,13 @@ def correct_email_format(email):
 
 def email_exits(email):
   user = db.session.query(User.Users).filter(User.Users.email == email).first()
-  if user == None:
-    return False
-  return True
+  if user != None:
+    return True
+  user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
+  if user != None:
+    return True
+  return False
+  
 
 def username_format_valid(name):
   if len(name) < 6:
