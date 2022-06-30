@@ -3,7 +3,7 @@ from sqlalchemy import *
 
 class Genres(db.Model):
   __tablename__ = 't_genres'
-  id = db.Column('id', db.String(32), primary_key=True)
+  id = db.Column('id', db.String(256), primary_key=True)
   name = db.Column('name', db.String(256), nullable=False)
   genre_movie = db.relationship('Movies', secondary='r_movie_genre', back_populates='movie_genre', lazy=True)
 

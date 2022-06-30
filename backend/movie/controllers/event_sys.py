@@ -38,7 +38,7 @@ class EventCreate(Resource):
       return {"message": "the user is not the admin, no permission"}, 400
 
     event = event_ns.payload
-    event_id = uuid.uuid4()
+    event_id = str(uuid.uuid4())
     # add event
     try:
       event['id'] = event_id
@@ -56,7 +56,7 @@ class EventCreate(Resource):
         que = dict(que)
         if not check_correct_answer(int(que['correct_answer'])):
           return {'message': 'correct_answer must be 1 or 2 or 3'}, 400
-        que_id = uuid.uuid4()
+        que_id = str(uuid.uuid4())
         que['id'] = que_id
         que['event_id'] = event['id']
         new_que = Event.Questions(que)

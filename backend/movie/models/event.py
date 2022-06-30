@@ -15,7 +15,7 @@ event_movie_relationship = db.Table(
 
 class Events(db.Model):
   __tablename__ = 't_events'
-  id = db.Column('id', db.String(32), primary_key=True)
+  id = db.Column('id', db.String(256), primary_key=True)
   event_status = db.Column('event_status', db.String(256))
   topic = db.Column('topic', db.String(256))
   duration = db.Column('duration', db.Integer)
@@ -43,15 +43,15 @@ class Events(db.Model):
 
 class Questions(db.Model):
   __tablename__ = 't_questions'
-  id = db.Column('id', db.String(32), primary_key=True)
-  content = db.Column('content', db.String(32), nullable=False)
+  id = db.Column('id', db.String(256), primary_key=True)
+  content = db.Column('content', db.String(256), nullable=False)
   choice_1 = db.Column('choice_1', db.String(256), nullable=False)
   choice_2 = db.Column('choice_2', db.String(256), nullable=False)
   choice_3 = db.Column('choice_3', db.String(256), nullable=False)
   correct_answer = db.Column('correct_answer', db.Integer, nullable=False)
   db.CheckConstraint('correct_answer>=1 and correct_answer<=3', name='check_correct_answer')
   event = db.relationship("Events", back_populates="questions", lazy=True)
-  event_id = db.Column('event_id', db.String(32), db.ForeignKey('t_events.id'), nullable=False)
+  event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), nullable=False)
 
 
   def __repr__(self):
@@ -71,7 +71,7 @@ class Questions(db.Model):
 class EventMovie(db.Model):
   __tablename__ = 'r_event_movie'
   movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), nullable=False, primary_key=True)
-  event_id = db.Column('event_id', db.String(32), db.ForeignKey('t_events.id'), nullable=False, primary_key=True)
+  event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), nullable=False, primary_key=True)
 
   def __repr__(self):
     return '<EventMovie movie id:{} event id:{}>'.format(self.movie_id, self.event_id)

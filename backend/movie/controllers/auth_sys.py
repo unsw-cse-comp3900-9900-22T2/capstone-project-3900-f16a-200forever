@@ -18,6 +18,7 @@ from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
 import uuid
 
+
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
 
@@ -129,12 +130,15 @@ class RegisterController(Resource):
       return {"message": "The password is too short, at least 8 characters"}, 400
 
     #encode pw
-    data['id'] = uuid.uuid4()
+    data['id'] = str(uuid.uuid4())
+
+    print(data['id'])
     data['password'] = pw_encode(pw)
     # commit into db
     new_user = User.Users(data)
     db.session.add(new_user)
     db.session.commit()
+    print(new_user)
 
     # generate token, save to redis
     token = generate_token(email)
