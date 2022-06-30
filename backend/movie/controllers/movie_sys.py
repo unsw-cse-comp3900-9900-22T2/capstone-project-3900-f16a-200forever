@@ -51,7 +51,7 @@ class MovieDetails(Resource):
         movie_actors = []
         movie_directors = []
         actor_result = db.session.query(Person.MovieActor, Person.Persons, Movie.Movies).with_entities(Person.Persons.name, Person.MovieActor.character).filter(Person.MovieActor.movie_id == movie_id).filter(Person.Persons.id == Person.MovieActor.person_id).filter(Movie.Movies.id == Person.MovieActor.movie_id).all()
-        director_result = db.session.query(Person.MovieDirector, Person.Persons, Movie.Movies).with_entities(Person.Persons.name).filter(Person.MovieDirector.movie_id == movie_id).filter(Person.Persons.id == Person.MovieDirector.person_id).filter(Movie.Movies.id == Person.MovieDirector.movie_id).all()
+        director_result = db.session.query(Person.MovieDirector, Person.Persons, Movie.Movies).with_entities(Person.Persons.id, Person.Persons.name).filter(Person.MovieDirector.movie_id == movie_id).filter(Person.Persons.id == Person.MovieDirector.person_id).filter(Movie.Movies.id == Person.MovieDirector.movie_id).all()
         for actor in actor_result:
             actor_info = {}
             actor_info['name'] = actor.name
@@ -60,6 +60,7 @@ class MovieDetails(Resource):
         
         for director in director_result:
             director_info = {}
+            director_info['id'] = director.id
             director_info['name'] = director.name
             movie_directors.append(director_info)
 
