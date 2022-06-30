@@ -16,6 +16,8 @@ class Users(db.Model):
   signature = db.Column('signature', db.String)
   image = db.Column('image', db.String)
   password = db.Column('password', db.String, nullable=False)
+  validation_code = db.Column('validation_code', db.String)
+  code_expriy_time = db.Column('code_expriy_time', db.DateTime)
   
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
