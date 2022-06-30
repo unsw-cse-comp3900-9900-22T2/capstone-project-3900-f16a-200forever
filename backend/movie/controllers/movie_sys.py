@@ -44,15 +44,24 @@ class SearchMovie(Resource):
     if args['num_per_page'] == None:
       args['num_per_page'] = 12
 
+    if args['order'] == None:
+      args['order'] = 'ascending'
+
     matched_movies = []
     #search by title
     # if args['by_title'] != None and args['by_title'] != '':
     if args['type'] == "movie name":
       # kw = args['by_title']
       kw = args["keywords"]
-      result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')
-      ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
-      ).all()
+      result = []
+      if args['order'] == 'descending':
+        result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
+        ).all()
+      else:
+        result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
+        ).all()
       matched_movies += result
       
     # search by description 
@@ -60,9 +69,15 @@ class SearchMovie(Resource):
     elif args['type'] == 'description':
       # kw = args['by_description']
       kw = args["keywords"]
-      result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')
-      ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
-      ).all()
+      result = []
+      if args['order'] == 'descending':
+        result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
+        ).all()
+      else:
+        result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
+        ).all()
       matched_movies += result
 
     # search by director
@@ -70,16 +85,29 @@ class SearchMovie(Resource):
     elif args['type'] == 'director':
       # kw = args['by_director']
       kw = args["keywords"]
-      result = db.session.query(
-        Person.MovieDirector, Person.Persons, Movie.Movies, 
-      ).filter(
-        Person.MovieDirector.movie_id == Movie.Movies.id,
-      ).filter(
-        Person.MovieDirector.person_id == Person.Persons.id,
-      ).filter(
-        Person.Persons.name.ilike(f'%{kw}%')
-      ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
-      ).all()
+      result = []
+      if args['order'] == 'descending':
+        result = db.session.query(
+          Person.MovieDirector, Person.Persons, Movie.Movies, 
+        ).filter(
+          Person.MovieDirector.movie_id == Movie.Movies.id,
+        ).filter(
+          Person.MovieDirector.person_id == Person.Persons.id,
+        ).filter(
+          Person.Persons.name.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
+        ).all()
+      else:
+        result = db.session.query(
+          Person.MovieDirector, Person.Persons, Movie.Movies, 
+        ).filter(
+          Person.MovieDirector.movie_id == Movie.Movies.id,
+        ).filter(
+          Person.MovieDirector.person_id == Person.Persons.id,
+        ).filter(
+          Person.Persons.name.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
+        ).all()
       matched_movies += result
 
     # search by actor
@@ -102,10 +130,6 @@ class SearchMovie(Resource):
     # sort 
     #TODO: current sort not consider the banned
     
-    if len(matched_movies) != 0 and args['order'] == 'descending':
-      matched_movies.reverse()
-      #matched_movies.sort(key=attrgetter('total_rating'), reverse=True)
-
 
     total_num = len(matched_movies)
     # paging
@@ -129,7 +153,6 @@ class SearchMovie(Resource):
         year = movie.Movies.release_time.year
       data = convert_object_to_dict(movie.Movies)
       data['release_time'] = year
-      print(movie.MovieActor)
       #data['actors'] = convert_model_to_dict(movie.MovieActor)
       #data['directors'] = convert_model_to_dict(movie.MovieDirector)
       print(data)
