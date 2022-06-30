@@ -57,6 +57,7 @@ def user_is_valid(data):
   token = data['token']
   real_token = session[email]["token"]
   print(real_token)
+  print(token)
   if real_token != token:
     return False
   return True
@@ -110,8 +111,7 @@ def correct_password_format(pw):
     return False
   return True
 
-def code_is_correct(email, code):
-  user = db.session.query(User.Users).filter(User.Users.email == email).first()
+def code_is_correct(user, code):
   if user.validation_code != None and code == user.validation_code:
     # invlaid the code 
     user.validation_code = None

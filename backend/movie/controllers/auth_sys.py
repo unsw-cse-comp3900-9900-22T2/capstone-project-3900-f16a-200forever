@@ -63,19 +63,24 @@ class ResetPasswordController(Resource):
     current_pw = data['current_password']
     new_pw = data['new_password']
     confirm_new_pw = data['confirm_new_password']
-    
+
+    # check the user has login or not
+    if email not in session.keys():
+      return dumps({"message": "The user has not logined"}), 400
+
     #check the token
     if not user_is_valid(data):
       return dumps({"message": "Invalid token"}), 400
 
-    # check the validation code
-    if code_is_correct(email, code):
-      return dumps({"message": "Incorrect validation code"}), 400
-
     # check the user old password
-    user = get_user(email, session[email]["is_admin"])
+    user = get_user(email, session[email]["admin"])
+
     if password_is_correct(user, current_pw):
       return dumps({"message": "Incorrect current password"}), 400
+
+    # check the validation code
+    if not code_is_correct(user, code):
+      return dumps({"message": "Incorrect validation code"}), 400
 
     # check password format
     if not correct_password_format(new_pw):

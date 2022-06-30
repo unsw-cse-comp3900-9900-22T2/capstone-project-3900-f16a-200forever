@@ -1,5 +1,6 @@
 admin: 123, 123456789
-
+  admin@gmail.com  123456789
 user: 1111, 123456789
       admin@gmail.com  123456789
-{"email": "1234@gmail.com", "name": "123456", "password":"12345678"}
+      1234@gmail.com 12345678
+      z5271686@      12345678
