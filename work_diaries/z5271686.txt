@@ -21,3 +21,4 @@ write the models: Admins, Events, EventMovie, Questions, Movies, MovieImage, Mov
 write the helpfuntion in auth_utils, movie_utils
 init the smtpserver in __init__
 add .gitignore
+merge the backend, and test all the margin case, also test the normal functionality
