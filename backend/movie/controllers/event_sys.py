@@ -10,7 +10,7 @@ from movie.models import movie as Movie
 from numpy import character, require
 from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
-from movie.utils.movie_until import movie_id_valid
+from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -83,17 +83,11 @@ class EventCreate(Resource):
 
 @event_ns.route("/search")
 class Search(Resource):
-  @event_ns.response(200, "Login Successfully")
+  @event_ns.response(200, "Search successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):   
     parser = reqparse.RequestParser()
     parser.add_argument('keyword', type=str, location='args', required=True)
-    """
-    parser.add_argument('description', type=str, location='args', required=True)
-    parser.add_argument('genre', type=str, location='args', required=True)
-    parser.add_argument('director', type=str, location='args', required=True)
-    parser.add_argument('actor', type=str, location='args', required=True)
-    """
     args = parser.parse_args()
     kw = args['keyword']
 
@@ -105,13 +99,6 @@ class Search(Resource):
     # get the best match use fuzzywuzzy
     best = process.extract(kw, matched_movies, limit=15)
 
-    result = []
-    for movie in best:
-      movie = movie[0]
-      data = {}
-      data['id'] = movie.id
-      data['title'] = movie.title
-      data['relese_time'] = movie.release_time.year
-      result.append(data)
+    movies = format_movie_return_list(best)
 
-    return dumps({"result": result}), 200
+    return dumps({"result": movies}), 200

@@ -79,6 +79,3 @@ class EventMovie(db.Model):
   def __init__(self, data):
     self.movie_id = data['movie_id']
     self.event_id = data['event_id']
-
-
-  
