@@ -12,6 +12,13 @@ validation = {
   'token': fields.String(required=True)
 }
 
+reset_password = {
+    "current_password": fields.String(required=True),
+    "new_password": fields.String(required=True),
+    "confirm_new_password": fields.String(required=True),
+    "email": fields.String(required=True)
+}
+
 class Question_Form(fields.Raw):
   def format(self, value):
     return {
