@@ -1,0 +1,14 @@
+.admin-control-card-wrapper {
+  margin: 100px auto;
+}
+
+.event-control-table {
+  margin: 75px auto;
+}
+
+.admin-event-control-form {
+  max-width: 1200px;
+  width: 100%;
+  margin: 100px auto;
+
+}

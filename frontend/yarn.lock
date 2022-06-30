@@ -2505,7 +2505,14 @@
   "resolved" "https://registry.npmjs.org/ansi-styles/-/ansi-styles-5.2.0.tgz"
   "version" "5.2.0"
 
-"antd@^4.21.3":
+"antd-img-crop@^4.2.3":
+  "integrity" "sha512-YZgsUdfHnkBCOQ1sLXTwfVRgBdMRM//joddFnSlWe/QU52m8PPbBxtgt0YdEf+UTPXOAx6RQJp1gUjAmMU2knA=="
+  "resolved" "https://registry.npmjs.org/antd-img-crop/-/antd-img-crop-4.2.3.tgz"
+  "version" "4.2.3"
+  dependencies:
+    "react-easy-crop" "^4.1.5"
+
+"antd@^4.21.3", "antd@>=4.0.0":
   "integrity" "sha512-TETxAqqkgzpmQl/74kG2JiY6cd6E7LmrXjU7PN3Kxs8oPfQk7CGxez4smCMdpbTI2NU2qvOw0ugnvqzES82VJQ=="
   "resolved" "https://registry.npmjs.org/antd/-/antd-4.21.3.tgz"
   "version" "4.21.3"
@@ -6399,6 +6406,11 @@
   "resolved" "https://registry.npmjs.org/normalize-url/-/normalize-url-6.1.0.tgz"
   "version" "6.1.0"
 
+"normalize-wheel@^1.0.1":
+  "integrity" "sha512-1OnlAPZ3zgrk8B91HyRj+eVv+kS5u+Z0SCsak6Xil/kmgEia50ga7zfkumayonZrImffAxPU/5WcyGhzetHNPA=="
+  "resolved" "https://registry.npmjs.org/normalize-wheel/-/normalize-wheel-1.0.1.tgz"
+  "version" "1.0.1"
+
 "npm-run-path@^4.0.1":
   "integrity" "sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw=="
   "resolved" "https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz"
@@ -7852,13 +7864,21 @@
     "strip-ansi" "^6.0.1"
     "text-table" "^0.2.0"
 
-"react-dom@*", "react-dom@^18.0.0", "react-dom@^18.1.0", "react-dom@>=16.0.0", "react-dom@>=16.11.0", "react-dom@>=16.8", "react-dom@>=16.9.0":
+"react-dom@*", "react-dom@^18.0.0", "react-dom@^18.1.0", "react-dom@>=16.0.0", "react-dom@>=16.11.0", "react-dom@>=16.4.0", "react-dom@>=16.8", "react-dom@>=16.8.0", "react-dom@>=16.9.0":
   "integrity" "sha512-fU1Txz7Budmvamp7bshe4Zi32d0ll7ect+ccxNu9FlObT605GOEB8BfO4tmRJ39R5Zj831VCpvQ05QPBW5yb+w=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-18.1.0.tgz"
   "version" "18.1.0"
   dependencies:
     "loose-envify" "^1.1.0"
     "scheduler" "^0.22.0"
+
+"react-easy-crop@^4.1.5":
+  "integrity" "sha512-fR1+rU9wSSloton0RwATI/CMVa04Ox0mufc+bgwA4LY8NAhNgGQdO/tZukrijYnaaFTF4AzcnBNKOIwJWTR3wg=="
+  "resolved" "https://registry.npmjs.org/react-easy-crop/-/react-easy-crop-4.4.0.tgz"
+  "version" "4.4.0"
+  dependencies:
+    "normalize-wheel" "^1.0.1"
+    "tslib" "2.0.1"
 
 "react-error-overlay@^6.0.11":
   "integrity" "sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg=="
@@ -7966,6 +7986,7 @@
     "fsevents" "^2.3.2"
 
 "react@*", "react@^18.0.0", "react@^18.1.0", "react@>= 16", "react@>= 16.3.0", "react@>=16.0.0", "react@>=16.11.0", "react@>=16.8", "react@>=16.9.0":
+
   "integrity" "sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.1.0.tgz"
   "version" "18.1.0"
@@ -9014,6 +9035,11 @@
   "integrity" "sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz"
   "version" "2.4.0"
+
+"tslib@2.0.1":
+  "integrity" "sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ=="
+  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.0.1.tgz"
+  "version" "2.0.1"
 
 "tsutils@^3.21.0":
   "integrity" "sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA=="

@@ -83,7 +83,7 @@ const ForgetPassword = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-      >
+      >  
         <Form.Item
           wrapperCol={{
             offset: 4,
@@ -106,6 +106,7 @@ const ForgetPassword = () => {
           ]}
         >
           <Input onChange={updateEmail}/>
+          <Input />
         </Form.Item>
         <Form.Item
           label="Verfication code"
