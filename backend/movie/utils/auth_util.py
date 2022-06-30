@@ -6,6 +6,7 @@ from flask import session
 import re
 from movie import db
 from movie.models import user as User
+from movie.models import admin as Admin
 import smtplib
 from email.mime.text import MIMEText
 import math, random
@@ -21,12 +22,6 @@ def generateOTP():
     OTP += digits[math.floor(random.random() * 10)]
  
   return OTP
-
-
-def verfication_code_correct(real_code, enter_code):
-  if real_code == enter_code:
-    return True
-  return False
 
 def send_email(email, code):
   msg = MIMEText(str(code))
@@ -110,3 +105,26 @@ def correct_password_format(pw):
   if len(pw) < 8:
     return False
   return True
+
+def code_is_correct(email, code):
+  user = db.session.query(User.Users).filter(User.Users.email == email).first()
+  if user.validation_code != None and code == user.validation_code:
+    # invlaid the code 
+    user.validation_code = None
+    db.session.commit()
+    return True
+  return False
+
+
+def get_user(email, is_admin):
+  curr_user = None
+  if not is_admin:
+    curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
+  elif is_admin:
+    curr_user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
+  return curr_user
+
+def password_is_correct(user, pw):
+  if pw_encode(pw) != user.password:
+    return True
+  return False

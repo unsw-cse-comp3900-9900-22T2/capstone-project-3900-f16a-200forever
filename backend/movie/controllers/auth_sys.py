@@ -12,11 +12,10 @@ from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
                                   email_exits, correct_password_format, generateOTP, \
-                                  send_email, verfication_code_correct
+                                  send_email, code_is_correct, get_user, password_is_correct
 from movie import db
 from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
-
 
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
@@ -49,8 +48,8 @@ class SendEmail(Resource):
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     user.validation_code = code
     db.session.commit()
-
     return dumps({"message": "code has been send"}), 200
+
 @auth_ns.route('/reset_password')
 class ResetPasswordController(Resource):
   @auth_ns.response(200, "Password reset")
@@ -59,22 +58,22 @@ class ResetPasswordController(Resource):
   def post(self):
     data = auth_ns.payload
     email = data['email']
-    correct_code = data['correct_code']
-    submitted_code = data['submitted_code']
+    code = data['validation_code']
     current_pw = data['current_password']
     new_pw = data['new_password']
     confirm_new_pw = data['confirm_new_password']
-    token = data['token']
-
+    
+    #check the token
     if not user_is_valid(data):
       return dumps({"message": "Invalid token"}), 400
 
-    # check if user entered the right code
-    if correct_code != submitted_code:
+    # check the validation code
+    if code_is_correct(email, code):
       return dumps({"message": "Incorrect validation code"}), 400
 
-    curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
-    if curr_user.password != pw_encode(current_pw):
+    # check the user old password
+    user = get_user(email, session[email]["is_admin"])
+    if password_is_correct(user, current_pw):
       return dumps({"message": "Incorrect current password"}), 400
 
     # check password format
@@ -89,7 +88,7 @@ class ResetPasswordController(Resource):
     data['new_password'] = pw_encode(new_pw)
 
     # update db
-    curr_user.password = data['new_password']
+    user.password = data['new_password']
     db.session.commit()
 
     return dumps({"message": "Password updated"}), 200
@@ -162,18 +161,12 @@ class LoginController(Resource):
     if email in session.keys():
       return dumps({"message": "The user has logined"}), 400
 
-    curr_user = None
-    if not is_admin:
-      curr_user = db.session.query(User.Users).filter(User.Users.email == email).first()
-    elif is_admin:
-      curr_user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
-    else:
-      return dumps({"message": "is_admin ust be True or False"}), 400
+    curr_user = get_user(email, is_admin)
     # check the user is valid or not
     if curr_user == None:
       return dumps({"message": "The user not registered"}), 400
     
-    if pw_encode(pw) != curr_user.password:
+    if password_is_correct(curr_user, pw):
       return dumps({"message": "Wrong password"}), 400
 
     token = generate_token(email)
