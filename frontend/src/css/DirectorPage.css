@@ -1,0 +1,32 @@
+.director-page {
+  max-width: 1200px;
+  width: 100%;
+  margin: 100px 50px;
+  box-shadow: 0 0 5px #ccc;
+  display: inline-block;
+}
+
+.director-detail {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 30px 0;
+}
+
+.director-detail .director-image {
+  max-width: 500px;
+  min-width: 290px;
+  overflow: hidden;
+  margin: 25px;
+  padding: 30px 30px;
+  justify-content: flex-start;
+}
+
+.director-box {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.director-related-movies{
+    margin:25px auto;
+    padding: 30px 30px
+}
