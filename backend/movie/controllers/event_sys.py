@@ -12,6 +12,7 @@ from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
+from movie.utils.event_util import create_event
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -38,48 +39,10 @@ class EventCreate(Resource):
     if not user_is_admin(data['email']):
       return {"message": "the user is not the admin, no permission"}, 400
 
-    event = event_ns.payload
     event_id = str(uuid.uuid4())
     # add event
-    try:
-      event['id'] = event_id
-      admin_id = session[data['email']]["id"]
-      event['admin_id'] = admin_id
-      new_event  = Event.Events(event)
-      db.session.add(new_event)
-      db.session.flush()
-
-      # add question
-      questions = event['questions']
-      del event['questions']
-
-      for que in list(questions):
-        que = dict(que)
-        if not check_correct_answer(int(que['correct_answer'])):
-          return {'message': 'correct_answer must be 1 or 2 or 3'}, 400
-        que_id = str(uuid.uuid4())
-        que['id'] = que_id
-        que['event_id'] = event['id']
-        new_que = Event.Questions(que)
-        db.session.add(new_que)
-        db.session.flush()
-        # add movie
-      movieid_set = event['movies']
-      for movie in list(movieid_set):
-        if not movie_id_valid(movie):
-          raise
-        data['movie_id'] = movie
-        data['event_id'] = event['id']
-        new_rel = Event.EventMovie(data)
-        db.session.add(new_rel)
-        db.session.flush()
-      db.session.commit()
-      
-    except:
-      db.session.rollback()
+    if not create_event(event_id, data):
       return {"message": "Create Event Failed"}, 400
-
-
     return {"message": "Create Event Successfully"}, 200
 
 
@@ -129,3 +92,58 @@ class GetEventDetail(Resource):
     if event == None:
       return {"message": f'Event {id} not found'}
     return convert_object_to_dict(event), 200
+
+@event_ns.route('/edit')
+class EditEvent(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  @event_ns.expect(EventNS.event_edit_form, validate=True)
+  def post(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('id', type=str, location='args', required=True)
+    args = parser.parse_args()
+    id = args['id']
+    data = event_ns.payload
+
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # check the user is valid or not
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+
+    # check the user is admin
+    if not user_is_admin(data['email']):
+      return {"message": "the user is not the admin, no permission"}, 400
+      
+    # get the id
+    event = db.session.query(Event.Events).filter(Event.Events.id == id).first()
+    if event == None:
+      return {"message": "The event not found"}, 400
+    
+    try:
+      # detele question
+      db.session.query(Event.Questions).filter(Event.Questions.event_id == id).delete()
+      # delete movie
+      db.session.query(Event.EventMovie).filter(Event.EventMovie.event_id == id).delete()
+      # delet event
+      db.session.delete(event)
+      db.session.flush()
+
+      if not create_event(id, data):
+        raise
+      db.session.commit()
+    except:
+      db.session.rollback()
+
+      return {"message": "Update false"}, 400
+    return {"message": "Updated"}, 200
+
+      
+
+    
+
+  
+
+
+
