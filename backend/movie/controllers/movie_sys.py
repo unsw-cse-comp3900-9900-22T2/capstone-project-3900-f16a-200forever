@@ -159,3 +159,17 @@ class SearchMovie(Resource):
       movies.append(data)
 
     return {"movies": movies, "total": total_num}, 200
+
+@movie_ns.route('/moviedetails')
+class MovieDetailController(Resource):
+  @movie_ns.response(200, 'Successfully retrieved movie details')
+  @movie_ns.response(400, 'Something went wrong')
+  # @movie_ns.response(404, 'Movie not found')
+  def get(self):
+    data = movie_ns.payload
+    movie_id = data['movie_id']
+    movie_details = db.session.query(M.Movies).filter(M.Movies.id == movie_id).first()
+    if movie_details != None:
+      return movie_details.to_dict()
+    else:
+      return {'message': 'Movie not found'}, 404
