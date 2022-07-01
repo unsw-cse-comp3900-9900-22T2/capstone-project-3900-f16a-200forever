@@ -7,16 +7,16 @@ import "../css/AdminHeader.css";
 import axios from "axios";
 import openNotification from "./Notification";
 
-function AdminHeader({ loginStatus, userInfo }) {
+function AdminHeader({ loginStatus, updateLoginStatus }) {
   let navigate = useNavigate();
   const do_logout = () => {
     axios
       .post("http://127.0.0.1:8080/logout", {
-        email: userInfo["email"],
-        token: userInfo["token"],
+        // email: userInfo["email"],
+        // token: userInfo["token"],
       })
       .then(function (response) {
-        console.log(userInfo);
+        // console.log(userInfo);
         console.log(response);
         // todo change url here
         navigate("/");

@@ -49,10 +49,9 @@ const SearchResult = () => {
     // todo handle error
     .catch(function (error) {
       console.log(error.response);
-      // openNotification({
-      //   "title": "Search error",
-      //   "content": error
-      // })
+      openNotification({
+        "title": "Search error",
+      })
     });
   }
 
@@ -78,10 +77,9 @@ const SearchResult = () => {
     // todo handle error
     .catch(function (error) {
       console.log(error.response);
-      // openNotification({
-      //   "title": "Search error",
-      //   "content": error
-      // })
+      openNotification({
+        "title": "Search error",
+      })
     });
   }, [])
 

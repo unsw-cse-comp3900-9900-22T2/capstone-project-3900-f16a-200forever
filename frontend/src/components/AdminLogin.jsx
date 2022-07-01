@@ -3,6 +3,7 @@ import { Typography } from "antd";
 import axios from "axios";
 import "../css/Login.css";
 import { useNavigate } from "react-router-dom";
+import openNotification from "./Notification";
 
 const tailLayout = {
   wrapperCol: {
@@ -11,7 +12,7 @@ const tailLayout = {
   },
 };
 
-const Login = ({ updateLoginStatus }) => {
+const Login = ({ loginStatus, updateLoginStatus }) => {
   let navigate = useNavigate();
   const { Title } = Typography;
   const onFinish = (values) => {
@@ -21,16 +22,20 @@ const Login = ({ updateLoginStatus }) => {
     // todo handle error
     // todo forget password?
     axios
-      .post("/url", {
+      .post("http://127.0.0.1:8080/login", {
         email: values["email"],
         password: values["password"],
+        is_admin: true
       })
       .then(function (response) {
-        console.log(response);
-        updateLoginStatus(true);
+        navigate("/admin/control")
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.response);
+        openNotification({
+          "title": "An error occur",
+          "content": error.response["data"]["message"]
+        })
       });
   };
 

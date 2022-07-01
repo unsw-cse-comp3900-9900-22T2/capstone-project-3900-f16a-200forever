@@ -50,7 +50,6 @@ const AdminEvent = () => {
       src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj);
-
         reader.onload = () => resolve(reader.result);
       });
     }
