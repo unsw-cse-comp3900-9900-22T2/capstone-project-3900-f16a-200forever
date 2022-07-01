@@ -7,3 +7,8 @@ Initialized the git repo with some start codes. Discussed about the functionalie
 Week3
 Worked on the proposal. Initialized Jira backlog. Draw some UI diagram. Finalized the proposal.
 
+Week4
+Worked on coding. Mainly Initializing project and some auth frontend.
+
+Week5
+Worked on coding. Auth, movie, event part

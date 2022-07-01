@@ -10,3 +10,6 @@ finilise proposal drafts, start coding
 
 Week4
 code frontend page(login/register)
+
+Week5
+code frontend page(homepage/admin/movie details/search) --->sprint1

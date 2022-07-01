@@ -1,3 +1,4 @@
+
 from .auth_sys import auth_ns 
 from .admin_sys import admin_ns
 from .event_sys import event_ns
@@ -31,3 +32,4 @@ movie_api.add_namespace(movie_ns, path='/movie')
 person_bp = Blueprint("person", __name__)
 person_api = Api(person_bp, version='1.0', title="Person API", description="Movie Forever api.")
 person_api.add_namespace(person_ns, path='/person')
+
