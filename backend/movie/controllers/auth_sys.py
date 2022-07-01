@@ -65,12 +65,15 @@ class ResetPasswordController(Resource):
     #  return {"message": "The user has not logined"}, 400
 
     #check the token
-    if not user_is_valid(data):
-      return {"message": "Invalid token"}, 400
+    #if not user_is_valid(data):
+    #  return {"message": "Invalid token"}, 400
 
     # check the user old password
-    user = get_user(email, session[email]["admin"])
-
+    #user = get_user(email, session[email]["admin"])
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if user == None:
+      return {"message": "Invalid user"}, 400
+      
     # check the validation code
     if not code_is_correct(user, code):
       return {"message": "Incorrect validation code"}, 400
