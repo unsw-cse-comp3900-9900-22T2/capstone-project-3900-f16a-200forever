@@ -11,3 +11,6 @@ working diaries
   Decide some new functions.
 
 -Week 4
+  write the draft models for the movie
+  implement function: movie detail
+  test functionality
