@@ -1,36 +1,17 @@
-import { Button, Space, Table, Tag } from "antd";
+import { Button, Space, Table, Tag, List } from "antd";
 import "../css/AdminPages.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import AdminHeader from "./AdminHeader";
-const columns = [
-  {
-    title: "event",
-    dataIndex: "event",
-    key: "event",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "status",
-    dataIndex: "status",
-    key: "status",
-  },
-];
+
 const data = [
-  {
-    key: "1",
-    event: "Harry Potter",
-    status: "Open",
-  },
-  { key: "2", event: "La La Land", status: "Closed" },
-  { key: "3", event: "La La Land", status: "Closed" },
-  { key: "4", event: "La La Land", status: "Closed" },
-  { key: "5", event: "La La Land", status: "Closed" },
-  { key: "6", event: "La La Land", status: "Closed" },
-  { key: "7", event: "La La Land", status: "Closed" },
-  { key: "8", event: "La La Land", status: "Closed" },
+  'Racing car sprays burning fuel into crowd.',
+  'Japanese princess to wed commoner.',
+  'Australian walks 100km after outback crash.',
+  'Man charged over missing wedding girl.',
+  'Los Angeles battles huge wildfires.',
 ];
 const EventControl = () => {
   let navigate = useNavigate();
@@ -50,20 +31,18 @@ const EventControl = () => {
 
   return (
     <span>
-      {" "}
       <div className="event-control-table">
-        <Table
-          columns={columns}
+        <List
+          size="large"
+          header={<div>All Events</div>}
+          bordered
           dataSource={data}
-          scroll={{
-            x: 1500,
-            y: 300,
-          }}
+          renderItem={(item) => <List.Item>{item}</List.Item>}
         />
       </div>
       <div className="event-control-create-button">
         <center>
-          <Button onClick={() => navigate("/forgetpassword")}>
+          <Button onClick={() => navigate("/admin/event/create")}>
             create new event
           </Button>
         </center>
