@@ -18,16 +18,18 @@ import "../css/AdminPages.css";
 import { useState } from "react";
 import { Upload } from "antd";
 import ImgCrop from "antd-img-crop";
-const { RangePicker } = DatePicker;
+import { useEffect } from "react";
 
+const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const onChange = (time, timeString) => {
   console.log(time, timeString);
 };
 
-const AdminEvent = () => {
+const AdminEvent = (detail, setDetail) => {
   const onFinish = (values) => {
     console.log("Received values of form:", values);
+    setDetail(values)
   };
   const [fileList, setFileList] = useState([
     {
@@ -40,8 +42,6 @@ const AdminEvent = () => {
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
-
-  const [value, setValue] = useState(1);
 
   const onPreview = async (file) => {
     let src = file.url;
@@ -72,7 +72,8 @@ const AdminEvent = () => {
           </Form.Item>
           {/* duration */}
           <Form.Item label="Duration">
-            <TimePicker onChange={onChange} />
+            <Input></Input>
+            <span>min(s)</span>
           </Form.Item>
           <Form.Item label="Deadline">
           
@@ -101,7 +102,7 @@ const AdminEvent = () => {
                 width: "100%",
               }}
               placeholder="Please select"
-              defaultValue={["Harry potter", "lalaland"]}
+              defaultValue={["harry"]}
             >
               {}
             </Select>

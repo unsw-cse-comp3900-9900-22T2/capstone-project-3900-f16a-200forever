@@ -126,7 +126,7 @@ function App() {
             element={<CreateEvent></CreateEvent>}
           ></Route>
           <Route
-            path="/admin/event/edit"
+            path="/admin/event/edit/:id"
             element={<EditEvent></EditEvent>}
           ></Route>
         </Route>
