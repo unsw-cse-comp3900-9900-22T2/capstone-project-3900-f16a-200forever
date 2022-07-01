@@ -1,56 +1,63 @@
-import { Button, Space, Table, Tag } from "antd";
+import { Button, Space, Table, Tag, List } from "antd";
 import "../css/AdminPages.css";
-import { useNavigate } from "react-router-dom";
-const columns = [
-  {
-    title: "event",
-    dataIndex: "event",
-    key: "event",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "status",
-    dataIndex: "status",
-    key: "status",
-  },
-];
-const data = [
-  {
-    key: "1",
-    event: "Harry Potter",
-    status: "Open",
-  },
-  { key: "2", event: "La La Land", status: "Closed" },
-  { key: "3", event: "La La Land", status: "Closed" },
-  { key: "4", event: "La La Land", status: "Closed" },
-  { key: "5", event: "La La Land", status: "Closed" },
-  { key: "6", event: "La La Land", status: "Closed" },
-  { key: "7", event: "La La Land", status: "Closed" },
-  { key: "8", event: "La La Land", status: "Closed" },
-];
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import AdminHeader from "./AdminHeader";
+
 const EventControl = () => {
   let navigate = useNavigate();
+  const [eventList, setEventList] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8080/event")
+      .then(function (response) {
+        console.log(response.data);
+        setEventList(response.data.events)
+        // console.log(response.data.movies[1].backdrop)
+      })
+      // todo handle error
+      .catch(function (error) {
+        console.log(error.response);
+      });
+  }, []);
+
   return (
-    <span>
-      {" "}
+    <div className="event-hold-page">
       <div className="event-control-table">
-        <Table
-          columns={columns}
-          dataSource={data}
-          scroll={{
-            x: 1500,
-            y: 300,
+        <List
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 4,
+            lg: 4,
+            xl: 6,
+            xxl: 10,
           }}
+          size="large"
+          header={<div>All Events</div>}
+          bordered
+          dataSource={eventList}
+          renderItem={(item) =>
+          <List.Item>
+            <Link to={`/admin/event/edit/id=${item.id}`}>
+            {/* {item} */}
+            <h4>Title: {item.topic}</h4>
+            <h4>Status: {item.event_status}</h4>
+            </Link>
+          </List.Item>}
         />
       </div>
       <div className="event-control-create-button">
         <center>
-          <Button onClick={() => navigate("/forgetpassword")}>
+          <Button onClick={() => navigate("/admin/event/create")}>
             create new event
           </Button>
         </center>
       </div>
-    </span>
+    </div>
   );
 };
 export default EventControl;

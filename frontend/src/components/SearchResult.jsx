@@ -49,10 +49,9 @@ const SearchResult = () => {
     // todo handle error
     .catch(function (error) {
       console.log(error.response);
-      // openNotification({
-      //   "title": "Search error",
-      //   "content": error
-      // })
+      openNotification({
+        "title": "Search error",
+      })
     });
   }
 
@@ -78,10 +77,9 @@ const SearchResult = () => {
     // todo handle error
     .catch(function (error) {
       console.log(error.response);
-      // openNotification({
-      //   "title": "Search error",
-      //   "content": error
-      // })
+      openNotification({
+        "title": "Search error",
+      })
     });
   }, [])
 
@@ -93,7 +91,7 @@ const SearchResult = () => {
         background: "white",
       }}
     >
-      <SearchComponent type={type_val} keywords={keywords_val} order={order_val} showList={showList} setShowList={setShowList} changePage={changePage}></SearchComponent>
+      <SearchComponent type={type_val} keywords={keywords_val} order={order_val} changePage={changePage}></SearchComponent>
 
       <div className="search-card-wrapper">
       <List

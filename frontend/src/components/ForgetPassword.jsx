@@ -20,10 +20,10 @@ const ForgetPassword = () => {
     console.log(values);
     // todo change the url
     axios
-      .post("/url", {
+      .post("http://127.0.0.1:8080/reset_password", {
         email: values["email"],
-        password: values["password"],
-        code: values["code"]
+        new_password: values["password"],
+        validation_code: values["code"],
       })
       .then(function (response) {
         console.log(response);
@@ -33,7 +33,7 @@ const ForgetPassword = () => {
         console.log(error);
         openNotification({
           "title": "An error occur",
-          "content": error
+          "content": error.response.data.message
         })
       });
   };
@@ -48,7 +48,7 @@ const ForgetPassword = () => {
     console.log(email);
     // todo change url
     axios
-      .post("/url", {
+      .post("http://127.0.0.1:8080/sendemail", {
         email: email
       })
       .then(function (response) {
@@ -61,7 +61,7 @@ const ForgetPassword = () => {
         console.log(error);
         openNotification({
           "title": "An error occur",
-          "content": error
+          "content": error.response.data.message
         })
       });
   }

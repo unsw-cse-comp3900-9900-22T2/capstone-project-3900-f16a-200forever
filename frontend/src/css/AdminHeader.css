@@ -28,3 +28,7 @@
   height: 100%;
   object-fit: contain;
 }
+
+.admin-header-area{
+  margin-top: 10px;
+}
