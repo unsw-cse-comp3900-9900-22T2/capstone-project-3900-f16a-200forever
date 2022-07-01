@@ -24,13 +24,15 @@ class MovieDetails(Resource):
     @movie_ns.response(400, 'Something went wrong')
     def get(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('movie_id', type=int, required=True)
+        parser.add_argument('movie_id', type=int, required=True, location="args")
         args = parser.parse_args()
+        print(args)
         movie_id = args['movie_id']
 
         select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
         if select_movie == None:
-            return dumps({'message': 'Cannot find movie'}), 400
+            print("fjdklas")
+            return {'message': 'Cannot find movie'}, 400
         
         movie_genre = []
         genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies).with_entities(Genre.Genres.name).filter(Movie.Movies.id == movie_id).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
@@ -79,8 +81,7 @@ class MovieDetails(Resource):
             'genres': movie_genre,  #list of str
             'reviews': [] #list of dict
         }
-        return dumps(movie_details), 200
-
+        return movie_details, 200
 
 @movie_ns.route("/search")
 class SearchMovie(Resource):
