@@ -1,8 +1,8 @@
-import { Image, Layout, Rate } from "antd";
+import { Image, Layout, Rate, List } from "antd";
 import React, { useState } from "react";
 import { Typography } from "antd";
 import "../css/MovieDetail.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 
@@ -16,9 +16,9 @@ function MovieDetail() {
   useEffect (() => {
     axios
     // todo change url here
-    .get("http://127.0.0.1:5000/test2", {
+    .get("http://127.0.0.1:8080/movie/moviedetails", {
       params: {
-        "id": id.replace("id=", "")
+        "movie_id": id.replace("id=", ""),
       }
     })
     .then(function (response) {
@@ -34,6 +34,9 @@ function MovieDetail() {
       // })
     });
   }, [])
+  // const test = [{
+  //   "name": "name1"
+  // }];
 
   return (
     <div className="movie-detail-page">
@@ -41,26 +44,53 @@ function MovieDetail() {
         <div className="movie-image">
           <Image
             className="image"
-            src={movieInfo.img}
+            src={movieInfo.backdrop}
             alt="movie-image"
           ></Image>
         </div>
         <div className="movie-box">
           <div className="movie-title">
-            <Title level={3}>Movie Name:{movieInfo.title}</Title>
+            <Title level={3}>Movie Name:{movieInfo.name}</Title>
             <span>
-              <Text strong>Director: {movieInfo.director}</Text>
+              <Text strong>Director: 
+                <List
+                  dataSource={movieInfo.directors}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <Link to={"/"}>
+                        <span> {item.name}</span>
+                      </Link>
+                    </List.Item>
+                  )}/>
+              </Text>
             </span>
           </div>
           <div className="runtime">
-            <Text>Runtime:{movieInfo.runtime}</Text>
+            <Text>Runtime:{movieInfo.runtime} min(s)</Text>
           </div>
-
           <div className="genres">
-            <Text>Genres: {movieInfo.genres}</Text>
+            <Text>Genres:
+              <List
+                dataSource={movieInfo.genres}
+                renderItem={(item) => (
+                  <List.Item>
+                    <Link to={"/"}>
+                      <span> {item}</span>
+                    </Link>
+                  </List.Item>
+                )}/>
+            </Text>
           </div>
           <div className="actors">
-            <Text>Actors: {movieInfo.actor}</Text>
+            <Text>Actors:
+              <List
+                dataSource={movieInfo.actors}
+                renderItem={(item) => (
+                  <List.Item>
+                      <span>{item.name}  ({item.character})</span>
+                  </List.Item>
+                )}/>
+            </Text>
           </div>
           <div className="release-time">
             <Text>release time: {movieInfo.release_time}</Text>

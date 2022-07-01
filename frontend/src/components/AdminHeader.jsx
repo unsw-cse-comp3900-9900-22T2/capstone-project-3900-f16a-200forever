@@ -2,39 +2,53 @@ import React from "react";
 import { Affix, Col, Row } from "antd";
 import logo from "../images/logo.png";
 import { Button, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/AdminHeader.css"
-function AdminHeader({ loginStatus }) {
-  let navigate = useNavigate();
-  return (
-    <Affix>
-      <Row>
-        <div className="admin-header">
-          {/* {logo} */}
-          <Col offset={1}>
-            <div className="admin-header-logo">
-              <img src={logo} alt="logo" />
-            </div>
-          </Col>
+import axios from "axios";
+import openNotification from "./Notification";
 
-          <Col flex="auto">
-            {loginStatus ? (
-              // todo modify welcome msg and layout
-              <div>
-                Welcome!
-                {/* todo add profile and logout button */}
-              </div>
-            ) : (
-              <div>
-                <Space size={"middle"} align={"end"}>
-                  <Button className="admin-header-logout">logout</Button>
-                </Space>
-              </div>
-            )}
-          </Col>
+
+function AdminHeader({ loginStatus, userInfo }) {
+  let navigate = useNavigate();
+  const do_logout = () => {
+    axios
+      .post("http://127.0.0.1:8080/logout", {
+        email: userInfo["email"],
+        token: userInfo["token"]
+      })
+      .then(function (response) {
+        console.log(userInfo)
+        console.log(response);
+        // todo change url here
+        navigate("/");
+      })
+      .catch(function (error) {
+        console.log(error);
+        openNotification({
+          "title": "An error occur",
+          // "content": error.response.data.message
+        })
+      });
+  }
+  return (
+    <Affix>    
+    <div className="header">
+      <Link to={"/"}>
+        <div className="header-logo">
+          <img src={logo} alt="logo" /> 
         </div>
-      </Row>
-    </Affix>
+      </Link>
+      <div className="header-top-right-wrapper">
+        { loginStatus ?
+          <div>
+            <span>Welcome!</span>
+            <Button onClick={do_logout}>logout</Button>
+          </div>
+          : <div></div>
+        }
+      </div>
+    </div>
+  </Affix>
   );
 }
 export default AdminHeader;

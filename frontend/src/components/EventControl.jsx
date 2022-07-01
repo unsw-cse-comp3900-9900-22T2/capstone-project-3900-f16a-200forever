@@ -1,6 +1,9 @@
 import { Button, Space, Table, Tag } from "antd";
 import "../css/AdminPages.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 const columns = [
   {
     title: "event",
@@ -30,6 +33,20 @@ const data = [
 ];
 const EventControl = () => {
   let navigate = useNavigate();
+  const [eventList, setEventList] = useState([]);
+  useEffect(() => {
+    axios
+    .get("http://127.0.0.1:8080/")
+    .then(function (response) {
+      console.log(response.data);
+      // console.log(response.data.movies[1].backdrop)
+    })
+    // todo handle error
+    .catch(function (error) {
+      console.log(error.response);
+    });
+  })
+
   return (
     <span>
       {" "}

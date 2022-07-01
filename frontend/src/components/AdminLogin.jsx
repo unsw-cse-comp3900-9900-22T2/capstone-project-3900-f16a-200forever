@@ -50,9 +50,7 @@ const Login = ({ updateLoginStatus }) => {
   };
 
   return (
-    <div>
-      <Title className="login-title">Please log in </Title>
-
+      <div className="login-body">
       <Form
         className="login-form"
         name="basic"
@@ -66,6 +64,7 @@ const Login = ({ updateLoginStatus }) => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
+        <Title>Admin log in here</Title>
         <Form.Item
           label="Email"
           name="email"

@@ -93,7 +93,7 @@ const SearchResult = () => {
         background: "white",
       }}
     >
-      <SearchComponent type={type_val} keywords={keywords_val} order={order_val} showList={showList} setShowList={setShowList} changePage={changePage}></SearchComponent>
+      <SearchComponent type={type_val} keywords={keywords_val} order={order_val} changePage={changePage}></SearchComponent>
 
       <div className="search-card-wrapper">
       <List

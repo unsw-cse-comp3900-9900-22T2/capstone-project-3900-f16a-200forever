@@ -182,11 +182,6 @@ const AdminEvent = () => {
             )}
           </Form.List>
         </Form.Item>
-
-        {/* question and correct answer */}
-        {/* <Form.Item wrapperCol={{span: 10, offset:10}} labelCol={{span: 10, offset:8}}>
-          
-        </Form.Item> */}
       </Form>{" "}
       <Form
         name="dynamic_form_nest_item"

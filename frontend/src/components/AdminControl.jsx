@@ -3,6 +3,7 @@ import "../css/AdminPages.css";
 import { useNavigate } from "react-router-dom";
 const AdminControl = () => {
   let navigate = useNavigate();
+
   return (
     <div className="admin-control-card-wrapper">
       <Row gutter={16}>
@@ -11,7 +12,7 @@ const AdminControl = () => {
             hoverable
             title="EVENT"
             onClick={() => navigate("/admin/event/control")}
-            bordered={false}
+            bordered={true}
           >
             Click to manage events
           </Card>

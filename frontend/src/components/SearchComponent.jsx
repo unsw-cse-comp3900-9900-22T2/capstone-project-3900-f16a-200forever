@@ -8,7 +8,7 @@ import axios from "axios";
 const { Search } = Input;
 const { Option } = Select;
 
-const SearchComponent = ({ type, keywords, order, setShowList, setNumItem, changePage }) => {
+const SearchComponent = ({ type, keywords, order, changePage }) => {
   let navigate = useNavigate();
   const [searchType, setSearchType] = useState(type);
   const [searchOrder, setSearchOrder] = useState(order);
@@ -29,7 +29,12 @@ const SearchComponent = ({ type, keywords, order, setShowList, setNumItem, chang
       })
       return;
     }
-    changePage(1)
+    // 
+    try {
+      changePage(1)
+    } catch (err) {
+      console.log(err)
+    }
     navigate(`/search/type=${searchType}/keywords=${value}/order=${searchOrder}`)   
   };
 

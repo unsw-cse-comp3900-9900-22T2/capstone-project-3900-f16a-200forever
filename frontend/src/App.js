@@ -22,6 +22,7 @@ import EditEvent from "./pages/EditEvent";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
+  const [adminStatus, setAdminStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({})
   const [sid, setSid] = useState("")
 
@@ -60,7 +61,7 @@ function App() {
           path="/admin"
           element={
             <>
-              <AdminHeader loginStatus={loginStatus} />
+              <AdminHeader adminStatus={adminStatus} />
               <Outlet />
             </>
           }
