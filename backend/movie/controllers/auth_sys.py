@@ -61,8 +61,8 @@ class ResetPasswordController(Resource):
     new_pw = data['new_password']
 
     # check the user has login or not
-    if email not in session.keys():
-      return {"message": "The user has not logined"}, 400
+    #if email not in session.keys():
+    #  return {"message": "The user has not logined"}, 400
 
     #check the token
     if not user_is_valid(data):
