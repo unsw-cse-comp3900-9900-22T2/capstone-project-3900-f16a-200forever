@@ -71,9 +71,6 @@ class ResetPasswordController(Resource):
     # check the user old password
     user = get_user(email, session[email]["admin"])
 
-    if password_is_correct(user, current_pw):
-      return {"message": "Incorrect current password"}, 400
-
     # check the validation code
     if not code_is_correct(user, code):
       return {"message": "Incorrect validation code"}, 400
@@ -81,10 +78,6 @@ class ResetPasswordController(Resource):
     # check password format
     if not correct_password_format(new_pw):
       return {"message": "The password is too short, at least 8 characters"}, 400
-
-    # check if confirm password is the same as the new password
-    if new_pw != confirm_new_pw:
-      return {"message": "New passwords are not the same"}, 400
 
     # encode pw
     data['new_password'] = pw_encode(new_pw)
