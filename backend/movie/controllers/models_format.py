@@ -40,7 +40,8 @@ register = {
 
 class Question_Form(fields.Raw):
   def format(self, value):
-    return {
+    return {  
+      'id': fields.String(),
       'content': fields.String(required=True),
       'choice_1': fields.String(required=True),
       'choice_2': fields.String(required=True),
@@ -49,7 +50,7 @@ class Question_Form(fields.Raw):
       }
 
 #TODO: check the required
-event_create = {
+event_detail = {
   'email': fields.String(required=True),
   'token': fields.String(required=True),
   'topic': fields.String(required=True),
