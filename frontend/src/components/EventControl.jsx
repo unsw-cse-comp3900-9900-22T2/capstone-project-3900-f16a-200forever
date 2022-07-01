@@ -7,30 +7,30 @@ import axios from "axios";
 import AdminHeader from "./AdminHeader";
 
 const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
+  "Racing car sprays burning fuel into crowd.",
+  "Japanese princess to wed commoner.",
+  "Australian walks 100km after outback crash.",
+  "Man charged over missing wedding girl.",
+  "Los Angeles battles huge wildfires.",
 ];
 const EventControl = () => {
   let navigate = useNavigate();
   const [eventList, setEventList] = useState([]);
   useEffect(() => {
     axios
-    .get("http://127.0.0.1:8080/event")
-    .then(function (response) {
-      console.log(response.data);
-      // console.log(response.data.movies[1].backdrop)
-    })
-    // todo handle error
-    .catch(function (error) {
-      console.log(error.response);
-    });
-  }, [])
+      .get("http://127.0.0.1:8080/event")
+      .then(function (response) {
+        console.log(response.data);
+        // console.log(response.data.movies[1].backdrop)
+      })
+      // todo handle error
+      .catch(function (error) {
+        console.log(error.response);
+      });
+  }, []);
 
   return (
-    <span>
+    <div className="event-hold-page">
       <div className="event-control-table">
         <List
           size="large"
@@ -47,7 +47,7 @@ const EventControl = () => {
           </Button>
         </center>
       </div>
-    </span>
+    </div>
   );
 };
 export default EventControl;
