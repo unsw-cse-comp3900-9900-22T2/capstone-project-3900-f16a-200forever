@@ -5,6 +5,7 @@ const CreateEvent = () => {
   return (
     <div className="admin-create-event">
       <AdminEvent></AdminEvent>
+
       <center>
         <Button type="primary" ghost>
           create a new event
