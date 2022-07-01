@@ -11,7 +11,7 @@ from numpy import character, require
 from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
-from movie.utils.other_until import convert_model_to_dict
+from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -113,3 +113,19 @@ class GetAllEvents(Resource):
     events = db.session.query(Event.Events).all()
     events = convert_model_to_dict(events)
     return {"events": events}, 200
+
+
+@event_ns.route('/detail')
+class GetEventDetail(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('id', type=str, location='args', required=True)
+    args = parser.parse_args()
+    id = args['id']
+    event = db.session.query(Event.Events).filter(Event.Events.id == id).first()
+
+    if event == None:
+      return {"message": f'Event {id} not found'}
+    return convert_object_to_dict(event), 200
