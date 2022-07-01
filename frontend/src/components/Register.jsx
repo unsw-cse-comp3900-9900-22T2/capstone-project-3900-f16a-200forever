@@ -33,23 +33,13 @@ const Register = ({ updateLoginStatus, updateUserInfo }) => {
       });
   };
 
-  const displayError = (errorMsg) => {
-    // todo modify this msg
-    notification.open({
-      message: `Notification`,
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-      placement: "top",
-      duration: 3,
-      onClick: () => {
-        console.log("Notification Clicked!");
-      },
-    });
-  };
 
   const onFinishFailed = (errorInfo) => {
     // console.log("Failed:", errorInfo);
-    displayError("Please finish all");
+    // displayError("Please finish all");
+    openNotification({
+      "title": "Please finish all"
+    })
   };
 
   // todo modify the layout for comfirm password

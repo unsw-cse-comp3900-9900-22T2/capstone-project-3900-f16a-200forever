@@ -22,7 +22,6 @@ import EditEvent from "./pages/EditEvent";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
-  const [adminStatus, setAdminStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({})
   const [sid, setSid] = useState("")
 
@@ -61,22 +60,22 @@ function App() {
           path="/admin"
           element={
             <>
-              <AdminHeader adminStatus={adminStatus} />
+              <AdminHeader loginStatus={ loginStatus } updateLoginStatus={ updateLoginStatus } />
               <Outlet />
             </>
           }
         >
           <Route
             path="/admin/login"
-            element={<AdminLogin updateLoginStatus={updateLoginStatus} />}
+            element={<AdminLogin loginStatus={ loginStatus } updateLoginStatus={ updateLoginStatus } />}
           ></Route>
           <Route
             path="/admin/control"
-            element={<AdminControl updateLoginStatus={updateLoginStatus} />}
+            element={<AdminControl loginStatus={ loginStatus } updateLoginStatus={ updateLoginStatus }  />}
           ></Route>
           <Route
             path="/admin/event/control"
-            element={<EventControl updateLoginStatus={updateLoginStatus} />}
+            element={<EventControl loginStatus={ loginStatus } updateLoginStatus={ updateLoginStatus }/>}
           ></Route>
           <Route
             path="/admin/event/create"

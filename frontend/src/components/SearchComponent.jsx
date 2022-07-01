@@ -1,4 +1,4 @@
-import { Input, Select, Row, Col, Divider } from "antd";
+import { Input, Select, Row, Col, Divider, Space } from "antd";
 import "../css/SearchComponent.css";
 import { useNavigate } from "react-router-dom";
 import openNotification from "./Notification";
@@ -42,29 +42,31 @@ const SearchComponent = ({ type, keywords, order, changePage }) => {
     <div className="search-input">
       <Divider orientation="left">Search</Divider>
       <Row>
-        <Col offset={1} flex="100px">
-          <Select className="search-type" defaultValue={`By ${type}`} onChange={updateSearchType}>
-            <Option value="movie name">By movie name</Option>
-            <Option value="description">By description</Option>
-            <Option value="director">By director</Option>
-          </Select>
-        </Col>
-        <Col span={8} flex="auto">
-          <Search
-            placeholder="input search text"
-            enterButton="Search"
-            size="mid"
-            className="search-input-area"
-            onSearch={onSearch}
-            defaultValue={keywords}
-          />
-        </Col>
-        <Col offset={1} flex="100px">
-          <Select className="search-order" defaultValue={`By ${order}`} onChange={updateSearchOrder}>
-            <Option value="descending">Sort: descending</Option>
-            <Option value="ascending">Sort: ascending</Option>
-          </Select>
-        </Col>
+        <Space>
+          <Col offset={1} flex="100px">
+            <Select className="search-type" defaultValue={`By ${type}`} onChange={updateSearchType}>
+              <Option value="movie name">By movie name</Option>
+              <Option value="description">By description</Option>
+              <Option value="director">By director</Option>
+            </Select>
+          </Col>
+          <Col span={8} flex="auto">
+            <Search
+              placeholder="input search text"
+              enterButton="Search"
+              size="mid"
+              className="search-input-area"
+              onSearch={onSearch}
+              defaultValue={keywords}
+            />
+          </Col>
+          <Col offset={1} flex="100px">
+            <Select className="search-order" defaultValue={`By ${order}`} onChange={updateSearchOrder}>
+              <Option value="descending">Sort: descending</Option>
+              <Option value="ascending">Sort: ascending</Option>
+            </Select>
+          </Col>
+        </Space>
       </Row>
       <Divider className="search-divider" orientation="left"></Divider>
     </div>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
+import AdminHeader from "./AdminHeader";
 const columns = [
   {
     title: "event",
@@ -36,7 +37,7 @@ const EventControl = () => {
   const [eventList, setEventList] = useState([]);
   useEffect(() => {
     axios
-    .get("http://127.0.0.1:8080/")
+    .get("http://127.0.0.1:8080/event")
     .then(function (response) {
       console.log(response.data);
       // console.log(response.data.movies[1].backdrop)
@@ -45,7 +46,7 @@ const EventControl = () => {
     .catch(function (error) {
       console.log(error.response);
     });
-  })
+  }, [])
 
   return (
     <span>
