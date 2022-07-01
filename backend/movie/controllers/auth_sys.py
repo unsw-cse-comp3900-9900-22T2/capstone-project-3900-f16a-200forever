@@ -58,9 +58,7 @@ class ResetPasswordController(Resource):
     data = auth_ns.payload
     email = data['email']
     code = data['validation_code']
-    current_pw = data['current_password']
     new_pw = data['new_password']
-    confirm_new_pw = data['confirm_new_password']
 
     # check the user has login or not
     if email not in session.keys():
