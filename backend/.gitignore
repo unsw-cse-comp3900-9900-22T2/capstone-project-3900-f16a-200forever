@@ -1,0 +1,5 @@
+__pycache__
+movie/utils/__pycache__
+movie/models/__pycache__/
+movie/controllers/__pycache__/
+movie/__pycache__/

@@ -1,1 +1,3 @@
-from movie.utils import auth_util
+
+from movie.utils import *
+
