@@ -198,13 +198,15 @@ class logoutController(Resource):
   def post(self):
     data = auth_ns.payload
 
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+    # if not user_has_login(data['email'], session):
+    #   return {"message": "the user has not logined"}, 400
     
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-
-    session.pop(data['email'])
+    # if not user_is_valid(data):
+    #   return {"message": "the token is incorrect"}, 400
+    try:
+      session.pop(data['email'])
+    except:
+      pass
     return {"message": "logout successfully"}, 200
 
 

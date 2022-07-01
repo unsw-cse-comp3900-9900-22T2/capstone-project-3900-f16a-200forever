@@ -19,7 +19,7 @@ class Events(db.Model):
   event_status = db.Column('event_status', db.String(256))
   topic = db.Column('topic', db.String(256))
   duration = db.Column('duration', db.Integer)
-  deadline = db.Column('deadline', db.DateTime)
+  deadline = db.Column('deadline', db.String(256))
   image_description = db.Column('image_description', db.String(256))
   image = db.Column('image', db.String(256))
   description = db.Column('description', db.String(256))

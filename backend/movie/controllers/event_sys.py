@@ -11,6 +11,7 @@ from numpy import character, require
 from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
+from movie.utils.other_until import convert_model_to_dict
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -81,6 +82,7 @@ class EventCreate(Resource):
 
     return {"message": "Create Event Successfully"}, 200
 
+
 @event_ns.route("/search")
 class Search(Resource):
   @event_ns.response(200, "Search successfully")
@@ -102,3 +104,12 @@ class Search(Resource):
     movies = format_movie_return_list(best)
 
     return {"result": movies}, 200
+
+@event_ns.route('')
+class GetAllEvents(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  def get(self):
+    events = db.session.query(Event.Events).all()
+    events = convert_model_to_dict(events)
+    return {"events": events}, 200
