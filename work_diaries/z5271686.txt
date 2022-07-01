@@ -13,3 +13,17 @@ week3:
 draw the ui diagram, double check the ER diagram and rewrite the ER diagram
 wrote the description how some of the defined user stories to be implemented provied novel functionality
 import the data into database
+
+week4:
+write the template of the backend
+write the models: Admins, Events, EventMovie, Questions, Movies, MovieImage, MovieGenre, Persons, MovieDirector, MovieActor
+write the bluepoint, and namespacd of the ruote, writ the model_format
+write the route: sendemail, register, login, logout, searchmovie, eventsearchmovie, createevent
+
+write the helpfuntion in auth_utils, movie_utils
+write the route that show all the events
+write the route that show the detail of the given event
+write the route that can update the event
+init the smtpserver in __init__
+add .gitignore
+merge the backend, and test all the margin case, also test the normal functionality
