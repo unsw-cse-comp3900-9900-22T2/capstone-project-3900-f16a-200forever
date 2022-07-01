@@ -12,6 +12,7 @@ from movie.utils.movie_until import format_movie_return_list
 from movie.utils.other_until import convert_object_to_dict, convert_model_to_dict, paging
 from operator import attrgetter
 from sqlalchemy import and_, or_
+from movie.models import genre as Genre
  
 movie_ns = MovieNS.movie_ns
 
@@ -160,16 +161,68 @@ class SearchMovie(Resource):
 
     return {"movies": movies, "total": total_num}, 200
 
+# show the details of the movie
 @movie_ns.route('/moviedetails')
-class MovieDetailController(Resource):
+class MovieDetails(Resource):
   @movie_ns.response(200, 'Successfully retrieved movie details')
   @movie_ns.response(400, 'Something went wrong')
-  # @movie_ns.response(404, 'Movie not found')
   def get(self):
-    data = movie_ns.payload
-    movie_id = data['movie_id']
-    movie_details = db.session.query(M.Movies).filter(M.Movies.id == movie_id).first()
-    if movie_details != None:
-      return movie_details.to_dict()
-    else:
-      return {'message': 'Movie not found'}, 404
+    parser = reqparse.RequestParser()
+    parser.add_argument('movie_id', type=int, required=True, location="args")
+    args = parser.parse_args()
+    print(args)
+    movie_id = args['movie_id']
+
+    select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
+    if select_movie == None:
+      print("fjdklas")
+      return {'message': 'Cannot find movie'}, 400
+  
+    movie_genre = []
+    genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies).with_entities(Genre.Genres.name).filter(Movie.Movies.id == movie_id).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
+    for genre in genre_result:
+      genre_name = genre.name
+      movie_genre.append(genre_name)
+
+    # title, backdrop, rating
+    movie_title = select_movie.title
+    movie_backdrop = select_movie.backdrop
+    rating_count = select_movie.rating_count
+    total_rating = select_movie.total_rating
+    description = select_movie.description
+    runtime = select_movie.runtime
+    release_time = str(select_movie.release_time)
+    release_status = select_movie.release_status
+
+    movie_actors = []
+    movie_directors = []
+    actor_result = db.session.query(Person.MovieActor, Person.Persons, Movie.Movies).with_entities(Person.Persons.name, Person.MovieActor.character).filter(Person.MovieActor.movie_id == movie_id).filter(Person.Persons.id == Person.MovieActor.person_id).filter(Movie.Movies.id == Person.MovieActor.movie_id).all()
+    director_result = db.session.query(Person.MovieDirector, Person.Persons, Movie.Movies).with_entities(Person.Persons.id, Person.Persons.name).filter(Person.MovieDirector.movie_id == movie_id).filter(Person.Persons.id == Person.MovieDirector.person_id).filter(Movie.Movies.id == Person.MovieDirector.movie_id).all()
+    for actor in actor_result:
+      actor_info = {}
+      actor_info['name'] = actor.name
+      actor_info['character'] = actor.character
+      movie_actors.append(actor_info)
+    
+    for director in director_result:
+      director_info = {}
+      director_info['id'] = director.id
+      director_info['name'] = director.name
+      movie_directors.append(director_info)
+
+    movie_details = {
+      'id': movie_id, #str
+      'name': movie_title, #str
+      'backdrop': movie_backdrop, #str
+      'description': description, #str
+      'runtime': runtime, #int
+      'release_time': release_time, #str
+      'release_status': release_status, #str
+      'total rating': total_rating, #int
+      'rating count': rating_count, #int
+      'actors': movie_actors, #list of dict
+      'directors': movie_directors, #list of str
+      'genres': movie_genre,  #list of str
+      'reviews': [] #list of dict
+    }
+    return movie_details, 200
