@@ -1,12 +1,11 @@
 import React from "react";
 import { Affix, Col, Row } from "antd";
-import logo from "../images/logo.png";
+import logo from "../images/new_logo.png";
 import { Button, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import "../css/AdminHeader.css"
+import "../css/AdminHeader.css";
 import axios from "axios";
 import openNotification from "./Notification";
-
 
 function AdminHeader({ loginStatus, userInfo }) {
   let navigate = useNavigate();
@@ -14,10 +13,10 @@ function AdminHeader({ loginStatus, userInfo }) {
     axios
       .post("http://127.0.0.1:8080/logout", {
         email: userInfo["email"],
-        token: userInfo["token"]
+        token: userInfo["token"],
       })
       .then(function (response) {
-        console.log(userInfo)
+        console.log(userInfo);
         console.log(response);
         // todo change url here
         navigate("/");
@@ -25,30 +24,34 @@ function AdminHeader({ loginStatus, userInfo }) {
       .catch(function (error) {
         console.log(error);
         openNotification({
-          "title": "An error occur",
+          title: "An error occur",
           // "content": error.response.data.message
-        })
+        });
       });
-  }
+  };
   return (
-    <Affix>    
-    <div className="header">
-      <Link to={"/"}>
-        <div className="header-logo">
-          <img src={logo} alt="logo" /> 
+    <Affix>
+      <div className="header">
+        <div className="admin-header-area">
+          <Link to={"/"}>
+            <div className="header-logo">
+              <img src={logo} alt="logo" />
+            </div>
+          </Link>
         </div>
-      </Link>
-      <div className="header-top-right-wrapper">
-        { loginStatus ?
-          <div>
-            <span>Welcome!</span>
-            <Button onClick={do_logout}>logout</Button>
-          </div>
-          : <div></div>
-        }
+
+        <div className="header-top-right-wrapper">
+          {loginStatus ? (
+            <div>
+              <span>Welcome!</span>
+              <Button onClick={do_logout}>logout</Button>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
       </div>
-    </div>
-  </Affix>
+    </Affix>
   );
 }
 export default AdminHeader;

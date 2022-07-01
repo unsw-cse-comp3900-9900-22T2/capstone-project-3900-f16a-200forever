@@ -56,7 +56,7 @@ function App() {
         </Route>
       </Routes>
       <Routes>
-        <Route path="/test/:type/:keywords/:order" element ={<SearchResult/>} />
+        {/* <Route path="/test/:type/:keywords/:order" element ={<SearchResult/>} /> */}
         <Route
           path="/admin"
           element={

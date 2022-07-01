@@ -1,5 +1,12 @@
+.admin-control-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
 .admin-control-card-wrapper {
   margin: 100px auto;
+  
 }
 
 .event-control-table {
@@ -9,6 +16,5 @@
 .admin-event-control-form {
   max-width: 1200px;
   width: 100%;
-  margin: 100px auto;
-
+  margin: 100px 100px;
 }
