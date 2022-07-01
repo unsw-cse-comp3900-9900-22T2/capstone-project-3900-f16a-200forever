@@ -1,0 +1,21 @@
+.register-form {
+  margin: auto;
+  margin-top: 180px;
+  width: 500px;
+  border: 2px solid grey;
+  padding: 10px;
+  display: block;
+  flex-direction: row;
+  border-Radius: "30px";
+  justify-content: "space-between";
+}
+
+.register-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form-button {
+  width: 200%;
+  margin-left: 20px;
+}
