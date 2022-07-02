@@ -18,16 +18,3 @@ def paging(page, num, data):
   
   data = data[start:end]
   return data
-
-def movie_sort(movies_lst, strategy):
-  for movie in movies_lst:
-    if movie['rating_count'] == None:
-        movie['rating'] = 0
-    else:
-        movie['rating'] = round(movie['total_rating'] / movie['rating_count'], 1)
-  
-  if strategy == 'descending':
-    movies_lst.sort(key=lambda x:(x.get('rating', 0)), reverse=True)
-  elif strategy == 'ascending':
-    movies_lst.sort(key=lambda x:(x.get('rating', 0)))
-  return movies_lst
