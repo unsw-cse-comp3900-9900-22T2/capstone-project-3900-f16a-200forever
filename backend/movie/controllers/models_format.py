@@ -60,4 +60,3 @@ event_detail = {
   'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
 }
-    

@@ -18,6 +18,7 @@ class Users(db.Model):
   password = db.Column('password', db.String, nullable=False)
   validation_code = db.Column('validation_code', db.String)
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
+  events = db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
@@ -41,3 +42,53 @@ class Users(db.Model):
   """
 
       
+class UserEvent(db.Model):
+  __tablename__ = 'r_user_event'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key=True)
+  event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), nullable=False, primary_key=True)
+
+  def __repr__(self):
+    return '<UserEvent user id:{} event id:{}>'.format(self.user_id, self.event_id)
+
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.event_id = data['event_id']
+
+
+class WishlistMovie(db.Model):
+  __tablename__ = 'r_wishlist_movie'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key=True)
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
+
+  def __repr__(self):
+    return '<WishlistMovie user id:{} movie id:{}>'.format(self.user_id, self.movie_id)
+
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.movie_id = data['movie_id']
+
+
+class WatchedlistMovie(db.Model):
+  __tablename__ = 'r_WatchedList_movie'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key=True)
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
+
+  def __repr__(self):
+    return '<WatchedListMovie user id:{} movie id:{}>'.format(self.user_id, self.movie_id)
+
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.movie_id = data['movie_id']
+
+
+class DroppedlistMovie(db.Model):
+  __tablename__ = 'r_DroppedList_movie'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key=True)
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
+
+  def __repr__(self):
+    return '<DroppedListMovie user id:{} movie id:{}>'.format(self.user_id, self.movie_id)
+
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.movie_id = data['movie_id']

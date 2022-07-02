@@ -4,6 +4,7 @@ from .admin_sys import admin_ns
 from .event_sys import event_ns
 from .movie_sys import movie_ns
 from .person_sys import person_ns
+from .user_sys import user_ns
 from flask_restx import Api
 from flask import Blueprint
 
@@ -33,3 +34,8 @@ person_bp = Blueprint("person", __name__)
 person_api = Api(person_bp, version='1.0', title="Person API", description="Movie Forever api.")
 person_api.add_namespace(person_ns, path='/person')
 
+
+# user profile
+user_bp = Blueprint("user", __name__)
+user_api = Api(user_bp, version='1.0', title="User API", description="Movie Forever api.")
+user_api.add_namespace(user_ns, path='/user')
