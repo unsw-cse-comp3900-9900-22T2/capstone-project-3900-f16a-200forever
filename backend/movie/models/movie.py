@@ -34,6 +34,10 @@ class Movies(db.Model):
         #overlaps="movie_director_rel, actot_movie_rel"
         overlaps="movie_director_rel"
   )
+
+  # relationships from reviews
+  reviews = db.relationship('Reviews', back_populates='movies', lazy=True)
+
   def __repr__(self):
     return '<Movie: {} {}>'.format(self.id, self.title)
 

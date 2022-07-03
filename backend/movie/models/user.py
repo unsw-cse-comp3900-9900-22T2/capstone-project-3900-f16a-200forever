@@ -18,6 +18,11 @@ class Users(db.Model):
   password = db.Column('password', db.String, nullable=False)
   validation_code = db.Column('validation_code', db.String)
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
+
+  # relationships from reviews
+  reviews = db.relationship('Reviews', back_populates='users', lazy=True)
+  #review_likes = db.relationship('ReviewLikes', back_populates='users', lazy=True)
+  #review_unlikes = db.relationship('ReviewUnlikes', back_populates='users', lazy=True)
   
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
