@@ -26,4 +26,7 @@ class MovieNS:
 
 class PersonNs:
   person_ns = Namespace('Person', description="the api for person")
+
+class GenreNS:
+  genre_ns = Namespace('Genre', description="the api for genre")
   
