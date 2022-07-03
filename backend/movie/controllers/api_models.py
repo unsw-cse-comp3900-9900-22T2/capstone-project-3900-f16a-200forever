@@ -24,7 +24,7 @@ class EventNS:
 class MovieNS:
   movie_ns = Namespace('Movie', description="the api for manage movie")
 
-class PersonNs:
+class PersonNS:
   person_ns = Namespace('Person', description="the api for person")
 
 class GenreNS:
