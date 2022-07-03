@@ -20,9 +20,9 @@ class Users(db.Model):
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
 
   # relationships from reviews
-  reviews = db.relationship('Reviews', back_populates='users', lazy=True)
-  #review_likes = db.relationship('ReviewLikes', back_populates='users', lazy=True)
-  #review_unlikes = db.relationship('ReviewUnlikes', back_populates='users', lazy=True)
+  reviews = db.relationship('Reviews', backref='users', lazy=True)
+  review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
+  review_unlikes = db.relationship('ReviewUnlikes', backref='users', lazy=True)
   
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
