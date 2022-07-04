@@ -27,7 +27,8 @@ class Events(db.Model):
   admin_id = db.Column(db.Integer, db.ForeignKey('t_admins.id'), nullable=False)
   questions = db.relationship('Questions', back_populates="event", lazy=True)
   movies = db.relationship('Movies', secondary='r_event_movie', back_populates='events', lazy=True)
-  
+  users =  db.relationship('Users', secondary='r_user_event', back_populates='events', lazy=True)
+
   def __repr__(self):
     return '<Event id:{} admin id:{}>'.format(self.id, self.admin_id)
   
