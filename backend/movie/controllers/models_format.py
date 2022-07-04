@@ -60,4 +60,12 @@ event_detail = {
   'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
 }
+"""
+user_profile = {
+  'id': fields.String(required=True),
+  'username': fields.String(required=True),
+  'p'
+}
+"""
+
     

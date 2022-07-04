@@ -20,7 +20,8 @@ class User(db.Model):
                                 primaryjoin=user_id==follow_relationship.c.user_id,
                                 secondaryjoin=user_id==follow_relationship.c.follower_user_id,
                                 backref="followings")
-
+    image = db.Column('image', db.String(256))
+    signature = db.Column('signature', db.String(256))
     def __init__(self, username, email, password):
         self.username   = username
         self.email      = email
