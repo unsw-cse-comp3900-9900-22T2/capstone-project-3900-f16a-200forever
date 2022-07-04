@@ -18,4 +18,3 @@ def paging(page, num, data):
   
   data = data[start:end]
   return data
-

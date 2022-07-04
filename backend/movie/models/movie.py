@@ -1,6 +1,7 @@
 from movie import db
 from sqlalchemy import *
 from movie.models.genre import Genres
+from movie.models.review import Reviews
 
 class Movies(db.Model):
   __tablename__ = 't_movies'
@@ -34,6 +35,10 @@ class Movies(db.Model):
         #overlaps="movie_director_rel, actot_movie_rel"
         overlaps="movie_director_rel"
   )
+
+  # relationships from reviews
+  reviews = db.relationship('Reviews', backref='movies', lazy=True)
+
   def __repr__(self):
     return '<Movie: {} {}>'.format(self.id, self.title)
 
