@@ -5,11 +5,8 @@ from .admin_sys import admin_ns
 from .event_sys import event_ns
 from .movie_sys import movie_ns
 from .person_sys import person_ns
-<<<<<<< HEAD
 from .user_sys import user_ns
-=======
 from .genre_sys import genre_ns
->>>>>>> dd329e19a4b4405ca2b299143d0de805e7b0c118
 from flask_restx import Api
 from flask import Blueprint
 
