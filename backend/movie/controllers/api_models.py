@@ -29,4 +29,7 @@ class PersonNS:
 
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
+
+class ReviewNs:
+  review_ns = Namespace('Review', description="the api for review")
   

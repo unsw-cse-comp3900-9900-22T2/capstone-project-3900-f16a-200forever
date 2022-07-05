@@ -13,17 +13,19 @@ class Reviews(db.Model):
     # relationships
     # review_likes = db.ralationship('ReviewLikes', backref='reviews', lazy=True)
     # review_unlikes = db.relationship('ReviewUnlikes', backref='reviews', lazy=True)
-    review_likes_rel = db.relationship(
+    review_user_likes_rel = db.relationship(
         "ReviewLikes",
-        backref="reviews",
+        secondary = 'r_review_likes',
+        back_populates="user_review_likes_rel",
         lazy=True,
-        overlaps="review_unlikes_rel"
+        overlaps="review_user_unlikes_rel"
     )
-    review_unlikes_rel = db.relationship(
+    review_user_unlikes_rel = db.relationship(
         "ReviewUnlikes",
-        backref="reviews",
+        secondary = 'r_review_unlikes',
+        back_populates="user_review_unlikes_rel",
         lazy=True,
-        overlaps="review_likes_rel"
+        overlaps="review_user_likes_rel"
     )
 
     def __repr__(self):
