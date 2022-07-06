@@ -22,7 +22,20 @@ class Users(db.Model):
   #reviews = db.relationship('Reviews', backref='users', lazy=True)
   #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
   #review_unlikes = db.relationship('ReviewUnlikes', backref='users', lazy=True)
-
+  user_review_likes_rel = db.relationship(
+      "Reviews",
+      secondary='r_review_likes',
+      back_populates="review_user_likes_rel",
+      lazy=True,
+      overlaps="user_review_unlikes_rel"
+  )
+  user_review_unlikes_rel = db.relationship(
+      "Reviews",
+      secondary='r_review_unlikes',
+      back_populates="review_user_unlikes_rel",
+      lazy=True,
+      overlaps="user_review_likes_rel"
+  )
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   
   def __repr__(self):
@@ -46,5 +59,3 @@ class UserEevnt(db.Model):
   def __init__(self, data):
     self.user_id = data['user_id']
     self.movie_id = data['event_id']
-
-      

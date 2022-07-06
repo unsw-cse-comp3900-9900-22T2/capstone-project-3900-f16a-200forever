@@ -14,7 +14,7 @@ class Reviews(db.Model):
     # review_likes = db.ralationship('ReviewLikes', backref='reviews', lazy=True)
     # review_unlikes = db.relationship('ReviewUnlikes', backref='reviews', lazy=True)
     review_user_likes_rel = db.relationship(
-        "ReviewLikes",
+        "Users",
         secondary='r_review_likes',
         back_populates="user_review_likes_rel",
         lazy=True,
@@ -22,8 +22,8 @@ class Reviews(db.Model):
     )
 
     review_user_unlikes_rel = db.relationship(
-        "ReviewUnlikes",
-        secondary='r_review_likes',
+        "Users",
+        secondary='r_review_unlikes',
         back_populates="user_review_unlikes_rel",
         lazy=True,
         overlaps="review_user_likes_rel"
