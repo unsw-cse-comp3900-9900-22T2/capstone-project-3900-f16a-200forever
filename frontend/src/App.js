@@ -23,6 +23,7 @@ import UserProfile from "./components/UserProfile";
 import UserProfileEditPage from "./components/UserProfileEditPage";
 import GuessWhatYouLikePage from "./components/GuessWhatYouLikePage";
 import GenresPage from "./pages/GenresPage";
+import SetAdmin from "./components/SetAdmin";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -136,6 +137,7 @@ function App() {
             path="/admin/event/edit/:id"
             element={<EditEvent></EditEvent>}
           ></Route>
+          <Route path="/admin/setadmin" element={<SetAdmin></SetAdmin>}></Route>
         </Route>
       </Routes>
 
