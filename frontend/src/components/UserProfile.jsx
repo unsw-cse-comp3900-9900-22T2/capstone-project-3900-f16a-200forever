@@ -8,6 +8,7 @@ import {
   Typography,
   Upload,
   Image,
+  Card,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
@@ -16,6 +17,7 @@ import ImgCrop from "antd-img-crop";
 import { useInsertionEffect } from "react";
 import axios from "axios";
 const { Title, Text } = Typography;
+const { Meta } = Card;
 const UserProfile = () => {
   let navigate = useNavigate();
   const onFinish = (values) => {
@@ -85,18 +87,68 @@ const UserProfile = () => {
           </div>
         </div>
         <div className="user-profile-movie-list">
-          <div className="blacklist">
-            <Text>BlackList</Text>
-          </div>
-          <div className="watched">
-            <Text>watched list</Text>
-          </div>
-          <div className="droppedlist"></div>
+          <Row>
+            <Col span={8}>
+              <div className="blacklist">
+                <Text>BlackList</Text>
+
+                <Card
+                  hoverable
+                  style={{ width: 100 }}
+                  cover={
+                    <img
+                      alt="example"
+                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                    />
+                  }
+                >
+                  <Meta title="Europe Street beat" />
+                </Card>
+              </div>
+            </Col>
+
+            <Col span={8}>
+              <div className="watched">
+                <Text>watched list</Text>
+                <Card
+                  hoverable
+                  style={{ width: 100 }}
+                  cover={
+                    <img
+                      alt="example"
+                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                    />
+                  }
+                >
+                  <Meta title="Europe Street beat" />
+                </Card>
+              </div>
+            </Col>
+            <Col span={8}>
+              <div className="droppedlist">
+                <Text>dropped list</Text>
+                <Card
+                  hoverable
+                  style={{ width: 100 }}
+                  cover={
+                    <img
+                      alt="example"
+                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                    />
+                  }
+                >
+                  <Meta title="Europe Street beat" />
+                </Card>
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
 
       <div className="user-profile-btn-group">
-        <Button>Guess what you like</Button>
+        <Button onClick={() => navigate(`/userprofile/guesswhatyoulike/id=1`)}>
+          Guess what you like
+        </Button>
         <Button>Friend List</Button>
         <Button>Edit banned list</Button>
         <Button onClick={() => navigate(`/userprofile/edit/id=1`)}>

@@ -79,7 +79,7 @@ const SearchComponent = ({ type, keywords, order, changePage }) => {
           </Col>
         </Space>
       </Row>
-      <Divider className="search-divider" orientation="left"></Divider>
+      
     </div>
   );
 };

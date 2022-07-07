@@ -22,6 +22,7 @@ import EditEvent from "./pages/EditEvent";
 import UserProfile from "./components/UserProfile";
 import UserProfileEditPage from "./components/UserProfileEditPage";
 import GuessWhatYouLikePage from "./components/GuessWhatYouLikePage";
+import GenresPage from "./pages/GenresPage";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -85,6 +86,7 @@ function App() {
           <Route path="/movie/detail/:id" element={<MovieDetail />} />
           <Route path="/userprofile/:id" element={<UserProfile />} />
           <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
+          <Route path="/genres/:id" element={<GenresPage/>}/>
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
         </Route>
         <Route

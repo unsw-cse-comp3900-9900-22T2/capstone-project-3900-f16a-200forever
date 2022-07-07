@@ -55,12 +55,13 @@
   margin-top: -30px;
 }
 .user-profile-movie-list {
-  background-color: blueviolet;
   flex-direction: row;
   width: 100%;
+  flex-wrap: wrap;
 }
+
 .blacklist {
-  background-color: azure;
+    margin-left: 2%;
 }
 
 .user-profile-edit-page {
@@ -71,6 +72,16 @@
 .user-profile-edit-form {
   width: 100%;
   margin: 100px 50px;
+}
+
+.guess-what-you-like-title {
+  padding: 30px;
+  font-size: x-large;
+  text-transform: uppercase;
+}
+.guess-you-like-card-wrap {
+  box-shadow: 0 0 5px red;
+  padding: 20px;
 }
 /* .user-profile-button-group {
   display: inline;
