@@ -34,7 +34,9 @@ class PersonNS:
 class UserNs:
   user_ns = Namespace('User', escription="the api for user")
 
-
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
+
+class ReviewNS:
+  review_ns = Namespace('Review', description="the api for review")
   
