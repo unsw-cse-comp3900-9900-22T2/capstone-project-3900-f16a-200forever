@@ -39,4 +39,7 @@ class GenreNS:
 
 class ReviewNS:
   review_ns = Namespace('Review', description="the api for review")
+
+class RecommendationNS:
+  recommendation_ns = Namespace('Recommendation', description="the api for recommendation")
   
