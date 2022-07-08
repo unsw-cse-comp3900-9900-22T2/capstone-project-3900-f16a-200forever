@@ -26,3 +26,5 @@ class UserEvent(Resource):
       return {"message": "the user not exist"},400
 
     return {"events": convert_model_to_dict(user.events)}, 200
+
+    

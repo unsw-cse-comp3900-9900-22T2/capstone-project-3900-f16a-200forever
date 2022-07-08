@@ -1,10 +1,10 @@
 
-from audioop import add
 from datetime import datetime
 from json import dumps
 from attr import validate
 from flask_restx import Resource, reqparse
-import datetime
+from datetime import datetime
+from movie.models import user as User
 from movie.models import event as Event
 from movie.models import movie as Movie
 from numpy import character, require
@@ -137,12 +137,99 @@ class EditEvent(Resource):
 
       return {"message": "Update false"}, 400
     return {"message": "Updated"}, 200
-
-      
-
-    
-
   
+@event_ns.route('/attemp')
+class AttempEvent(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  @event_ns.expect(EventNS.attemp_event_form, validate=True)
+  def post(self):
+    now = datetime.now()
+    data = event_ns.payload
+    # login or not
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
 
+    # check the user is valid or not
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    
+    # attemp the event
+    user_id = session[data['email']]['id']
+    data['user_id'] = user_id
+    data['stat_time'] = now
+    new = Event.UserEevnt(data)
+    try:
+      db.session.add(new)
+      db.session.commit()
+    except:
+      db.session.rollback()
+      return {"message": "cannot enter twice"}, 400
 
+    return {"message": "sucessfull"}, 200
 
+@event_ns.route('/finish')
+class AttempEvent(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  @event_ns.expect(EventNS.finish_event_form, validate=True)
+  def post(self):
+    now = datetime.now()
+    data = event_ns.payload
+    # login or not
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # check the user is valid or not
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+
+    event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id'])
+    duration = event.duration
+    user_id = session[data['email']]['id']
+
+    # check the user have attemped the event or not
+    event_attemp = db.session.query(User.UserEevnt).filter(User.UserEevnt.event_id == data['event_id'], \
+      User.UserEevnt.user_id == user_id).first()
+    if event_attemp == None:
+      return {"message", "The user haven't attemp the user before"}, 400
+
+    # check the time 
+    diff = now - event_attemp.start_time
+    if diff > duration:
+      # update the db
+      event_attemp.end_time = now
+      event_attemp.event_status = 'failed'
+      db.session.commit()
+      return {"message": "Time out"}, 400
+
+    # check the answer
+    questions = event.questions
+    answers = list(data['answers'])
+    num = 0
+    correctness = 0
+    
+    if len(questions) != len(answers):
+      # update the db
+      event_attemp.end_time = now
+      event_attemp.event_status = 'failed'
+      db.session.commit()
+      return {"message": "Fales"}, 400
+
+    for que in questions:
+      if que.correct_answer == int(answers[num]):
+        correctness+=1
+      num+=1
+
+    if correctness < event.require_correctness_amt:
+      # update the db
+      event_attemp.end_time = now
+      event_attemp.event_status = 'failed'
+      db.session.commit()
+      return {"message": "Fales"}, 400
+
+    # user get the event
+    event_attemp.end_time = now
+    event_attemp.event_status = 'passed'
+    db.session.commit()
+    return {"message": "Passed"}, 200

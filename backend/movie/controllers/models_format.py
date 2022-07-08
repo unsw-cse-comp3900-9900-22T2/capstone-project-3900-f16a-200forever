@@ -35,6 +35,19 @@ register = {
   'password': fields.String(required=True)
 }
 
+attemp_event = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'event_id': fields.String(required=True)
+}
+
+finish_event = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'event_id': fields.String(required=True),
+  'answers': fields.List(fields.Integer(required=True))
+}
+
 class Question_Form(fields.Raw):
   def format(self, value):
     return {  
@@ -43,7 +56,7 @@ class Question_Form(fields.Raw):
       'choice_1': fields.String(required=True),
       'choice_2': fields.String(required=True),
       'choice_3': fields.String(required=True),
-      'correct_answer': fields.Integer,
+      'correct_answer': fields.Integer(required=True),
       }
 
 #TODO: check the required

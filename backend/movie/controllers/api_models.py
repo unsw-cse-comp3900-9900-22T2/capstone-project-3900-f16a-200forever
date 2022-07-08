@@ -1,6 +1,7 @@
 from attr import field
 from flask_restx import Namespace
-from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password
+from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
+  attemp_event, finish_event
 from numpy import require
 
 class AuthNS:
@@ -20,7 +21,10 @@ class EventNS:
   event_create_form = event_ns.model('Create event', event_detail)
   event_edit_form = event_ns.model('Create event', event_detail)
   validation_form = event_ns.model("Validate", validation)
-  
+  attemp_event_form = event_ns.model('Attemp Event', attemp_event)
+  finish_event_form = event_ns.model('Attemp Event', finish_event)
+
+
 class MovieNS:
   movie_ns = Namespace('Movie', description="the api for manage movie")
 
@@ -29,6 +33,7 @@ class PersonNS:
   
 class UserNs:
   user_ns = Namespace('User', escription="the api for user")
+
 
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
