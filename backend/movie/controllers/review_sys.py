@@ -9,8 +9,8 @@ from sqlalchemy import func
 review_ns = ReviewNS.review_ns
 
 @review_ns.route('/sort')
-class Genres(Resource):
-  @review_ns.response(200, 'Successfully retrieved genres')
+class ReviewSort(Resource):
+  @review_ns.response(200, 'Successfully')
   @review_ns.response(400, 'Something went wrong')
   def get(self):
     parser = reqparse.RequestParser()
