@@ -50,10 +50,10 @@ class Users(db.Model):
 
 class UserEevnt(db.Model):
   __tablename__ = 'r_user_event'
-  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True)
-  event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), primary_key=True)
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+  event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), primary_key=True, nullable=False)
   event_status = db.Column('event_status', db.String(256), nullable=False)
-  stat_time = db.Column('stat_time', db.DateTime, nullable=False)
+  start_time = db.Column('start_time', db.DateTime, nullable=False)
   end_time = db.Column('end_time', db.DateTime)
 
   def __repr__(self):
@@ -61,5 +61,7 @@ class UserEevnt(db.Model):
 
   def __init__(self, data):
     self.user_id = data['user_id']
-    self.movie_id = data['event_id']
-    self.stat_time = data['stat_time']
+    self.event_id = data['event_id']
+    self.event_status = 'attemping'
+    self.start_time = data['start_time']
+ 

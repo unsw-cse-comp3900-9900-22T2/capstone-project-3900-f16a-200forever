@@ -7,7 +7,7 @@ from movie.utils.other_until import convert_model_to_dict
 
 user_ns = UserNs.user_ns
 
-@user_ns.route("/event")
+@user_ns.route("/events")
 class UserEvent(Resource):
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")

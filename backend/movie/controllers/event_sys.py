@@ -157,8 +157,8 @@ class AttempEvent(Resource):
     # attemp the event
     user_id = session[data['email']]['id']
     data['user_id'] = user_id
-    data['stat_time'] = now
-    new = Event.UserEevnt(data)
+    data['start_time'] = now
+    new = User.UserEevnt(data)
     try:
       db.session.add(new)
       db.session.commit()
@@ -184,7 +184,9 @@ class AttempEvent(Resource):
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
 
-    event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id'])
+    event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
+    if event == None:
+      return {"message": "The event not exists"}, 400
     duration = event.duration
     user_id = session[data['email']]['id']
 
@@ -192,11 +194,15 @@ class AttempEvent(Resource):
     event_attemp = db.session.query(User.UserEevnt).filter(User.UserEevnt.event_id == data['event_id'], \
       User.UserEevnt.user_id == user_id).first()
     if event_attemp == None:
-      return {"message", "The user haven't attemp the user before"}, 400
+      return {"message": "The user haven't attemp the event before"}, 400
+
+    # check the status
+    if event_attemp.event_status != 'attemping':
+      return {"messagr": "Have finished the event"}, 400
 
     # check the time 
-    diff = now - event_attemp.start_time
-    if diff > duration:
+    diff = (now - event_attemp.start_time).seconds
+    if diff > duration*60:
       # update the db
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
@@ -208,25 +214,24 @@ class AttempEvent(Resource):
     answers = list(data['answers'])
     num = 0
     correctness = 0
-    
+    print(questions)
     if len(questions) != len(answers):
       # update the db
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"message": "Fales"}, 400
+      return {"message": "Failed"}, 400
 
     for que in questions:
       if que.correct_answer == int(answers[num]):
         correctness+=1
       num+=1
-
     if correctness < event.require_correctness_amt:
       # update the db
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"message": "Fales"}, 400
+      return {"message": "Failed"}, 400
 
     # user get the event
     event_attemp.end_time = now
