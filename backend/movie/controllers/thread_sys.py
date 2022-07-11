@@ -6,6 +6,8 @@ from movie.utils.auth_util import user_has_login, user_is_valid
 from movie.models import thread as Thread
 from movie.models import user as User
 from movie import db
+import uuid
+from datetime import datetime
 
 thread_ns = ThreadNS.thread_ns
 
@@ -40,6 +42,39 @@ class ThreadManager(Resource):
     db.session.commit()
     return {"message": 'Delete thread successfully'}, 200
 
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.post_thread_form, validate=True)
+  def post(self):
+    data = thread_ns.payload
+    data['created_time'] = datetime.now()
+
+    # check user login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # check user valid
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+
+    # check category valid
+    category = db.session.query(Thread.Categories).filter(Thread.Categories.id == data['category_id'])
+    if category == None:
+      return {"message": "Category id invalid"}, 400
+    
+    # check is_anonymous
+    if data['is_anonymous'] != 0 or data['is_anonymous'] != 1:
+      return {"message": "Invalid is_anonymous value"}, 400
+
+    # post
+    data['user_id'] = session[data['email']]['id']
+    data['id'] = str(uuid.uuid4())
+    thread = Thread.Threads(data)
+    db.session.add(thread)
+    db.session.commit()
+    return {"message": "Successfully"}, 200
+
+
 @thread_ns.route('/admin')
 class ThreadAdmin(Resource):
   @thread_ns.response(200, "Successfully")
@@ -68,6 +103,7 @@ class ThreadAdmin(Resource):
     user.is_forum_admin = 1
     db.session.commit()
     return {'message': "Successfully"}, 200
+
 
 
 

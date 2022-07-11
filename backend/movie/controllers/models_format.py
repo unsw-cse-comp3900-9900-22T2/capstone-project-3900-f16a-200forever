@@ -54,11 +54,19 @@ delete_thread = {
   'token': fields.String(required=True)
 }
 
-
 forum_admin = {
   'user_email': fields.String(required=True),
   'admin_id': fields.String(required=True),
   'admin_token': fields.String(required=True)
+}
+
+post_thread = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'category_id': fields.Integer(required=True),
+  'is_anonymous': fields.Integer(required=True),
+  'title': fields.String(required=True), 
+  'content': fields.String(required=True)
 }
 
 class Question_Form(fields.Raw):
