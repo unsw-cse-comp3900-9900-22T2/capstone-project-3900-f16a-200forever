@@ -28,9 +28,6 @@ class RCMGenre(Resource):
     # get movie genre
     genres = movie.movie_genre
     ids = [ge.id for ge in genres]
-    offset = randint(0, 25899)
-    #movies_id = db.session.query(Movie.MovieGenre).filter(Movie.MovieGenre.genre_id.in_(ids)).all()
-    #movies_id = [mo.movie_id for mo in movies_id]
-    #print(movies_id)
+    offset = randint(0, 25799)
     movies = db.session.query(Movie.Movies).filter(Movie.MovieGenre.genre_id.in_(ids)).join(Movie.MovieGenre).order_by(Movie.Movies.total_rating.desc()).limit(100).offset(offset).all()
     return {"movies": convert_model_to_dict(movies)}, 200    
