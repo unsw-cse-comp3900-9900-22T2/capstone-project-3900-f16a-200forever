@@ -12,7 +12,7 @@ review_ns = ReviewNS.review_ns
 # user profile page
 @review_ns.route('/review')
 class ReviewController(Resource):
-  @review_ns.response(200, "Add review success")
+  @review_ns.response(200, "Create review success")
   @review_ns.response(400, "Something wrong")
   @review_ns.expect(ReviewNS.review_create_form, validate=True)
   def post(self):
@@ -34,5 +34,5 @@ class ReviewController(Resource):
     db.session.commit()
 
     return {
-        "Review success"
+        "Create review success"
     }, 200
