@@ -4,7 +4,7 @@ import re
 from sqlalchemy import *
 from movie import db
 from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
-
+from sqlalchemy.orm import backref
 
 
 class Users(db.Model):
@@ -41,11 +41,10 @@ class Users(db.Model):
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   threads = db.relationship('Threads', backref='user', lazy=True)
   thread_comments = db.relationship('ThreadComment', backref='user', lazy=True)
-  follow_list = db.relationship('FollowList', back_populates='user_id', lazy=True)
-  follower_list = db.relationship('FollowList', back_populates='follow_id', lazy=True)
-  banned_list = db.relationship('BannedList', back_populates='user_id', lazy=True)
-  be_banned_list = db.relationship('BannedList', back_populates='banned_user_id', lazy=True)
-
+  user_follow_list = db.relationship('FollowList', foreign_keys="FollowList.user_id", backref='follow_own', lazy=True)
+  user_follower_list = db.relationship('FollowList', foreign_keys="FollowList.follow_id", backref='follower', lazy=True)
+  user_banned_list = db.relationship('BannedList', foreign_keys="BannedList.user_id", backref='banned_own', lazy=True)
+  user_be_banned_list = db.relationship('BannedList',foreign_keys="BannedList.banned_user_id",  backref='banner', lazy=True)
 
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
