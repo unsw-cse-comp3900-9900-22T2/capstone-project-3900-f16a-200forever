@@ -94,12 +94,18 @@ class ThreadAdmin(Resource):
   def post(self):
     data = thread_ns.payload
     # check admin has login
-    if not user_has_login(data['email'], session):
+    if not user_has_login(data['admin_email'], session):
       return {"message": "the user has not logined"}, 400
 
     # check admin valid
+    data['email'] = data['admin_email']
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+
+    # check is admin
+    admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
+    if admin == None:
+      return {"message": "No permission"}, 400
 
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['user_email']).first()

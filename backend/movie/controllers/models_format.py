@@ -56,8 +56,8 @@ delete_thread = {
 
 forum_admin = {
   'user_email': fields.String(required=True),
-  'admin_id': fields.String(required=True),
-  'admin_token': fields.String(required=True)
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
 }
 
 post_thread = {
