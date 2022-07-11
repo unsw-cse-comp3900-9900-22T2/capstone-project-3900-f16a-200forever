@@ -1,4 +1,5 @@
 from concurrent.futures import thread
+from unicodedata import category
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
@@ -8,6 +9,7 @@ from movie.models import user as User
 from movie import db
 import uuid
 from datetime import datetime
+from movie.utils.other_until import convert_model_to_dict
 
 thread_ns = ThreadNS.thread_ns
 
@@ -104,7 +106,13 @@ class ThreadAdmin(Resource):
     db.session.commit()
     return {'message': "Successfully"}, 200
 
-
-
-
+@thread_ns.route('/categories')
+class ThreadAdmin(Resource):
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.forum_admin_form, validate=True)
+  def get(self):
+    categories = db.session.query(Thread.Categories).all()
+    categories = convert_model_to_dict(categories)
+    return {"categories": categories}, 200
 

@@ -24,7 +24,6 @@ class EventNS:
   attemp_event_form = event_ns.model('Attemp Event', attemp_event)
   finish_event_form = event_ns.model('Attemp Event', finish_event)
 
-
 class MovieNS:
   movie_ns = Namespace('Movie', description="the api for manage movie")
 
