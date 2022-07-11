@@ -1,5 +1,4 @@
 from locale import T_FMT
-from unicodedata import category
 from sqlalchemy import true
 from movie import db
 from movie.models.movie import Movies

@@ -1,10 +1,11 @@
-from unicodedata import category
+
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
 from movie.utils.auth_util import user_has_login, user_is_valid
 from movie.models import thread as Thread
 from movie.models import user as User
+from movie.models import genre as Genre
 from movie import db
 import uuid
 from datetime import datetime
@@ -48,7 +49,7 @@ class ThreadManager(Resource):
   @thread_ns.expect(ThreadNS.post_thread_form, validate=True)
   def post(self):
     data = thread_ns.payload
-    data['created_time'] = datetime.now()
+    data['created_time'] = str(datetime.now())
 
     # check user login
     if not user_has_login(data['email'], session):
@@ -58,13 +59,13 @@ class ThreadManager(Resource):
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
 
-    # check category valid
-    category = db.session.query(Thread.Categories).filter(Thread.Categories.id == data['category_id'])
-    if category == None:
-      return {"message": "Category id invalid"}, 400
+    # check genre valid
+    genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == data['genre_id']).first()
+    if genre == None:
+      return {"message": "Genre id invalid"}, 400
     
     # check is_anonymous
-    if data['is_anonymous'] != 0 or data['is_anonymous'] != 1:
+    if data['is_anonymous'] != 0 and data['is_anonymous'] != 1:
       return {"message": "Invalid is_anonymous value"}, 400
 
     # post
@@ -105,6 +106,7 @@ class ThreadAdmin(Resource):
     db.session.commit()
     return {'message': "Successfully"}, 200
 
+"""
 @thread_ns.route('/categories')
 class ThreadAdmin(Resource):
   @thread_ns.response(200, "Successfully")
@@ -114,4 +116,6 @@ class ThreadAdmin(Resource):
     categories = db.session.query(Thread.Categories).all()
     categories = convert_model_to_dict(categories)
     return {"categories": categories}, 200
+"""
+
 
