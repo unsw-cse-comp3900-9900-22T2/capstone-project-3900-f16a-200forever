@@ -54,6 +54,13 @@ delete_thread = {
   'token': fields.String(required=True)
 }
 
+
+forum_admin = {
+  'user_email': fields.String(required=True),
+  'admin_id': fields.String(required=True),
+  'admin_token': fields.String(required=True)
+}
+
 class Question_Form(fields.Raw):
   def format(self, value):
     return {  

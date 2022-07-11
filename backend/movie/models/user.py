@@ -18,6 +18,7 @@ class Users(db.Model):
   password = db.Column('password', db.String(256), nullable=False)
   validation_code = db.Column('validation_code', db.String(256))
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
+  is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
   # relationships from reviews
   #reviews = db.relationship('Reviews', backref='users', lazy=True)
   #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
@@ -48,6 +49,7 @@ class Users(db.Model):
     self.name = data['name']
     self.email = data['email']
     self.password = data['password']
+    self.is_forum_admin = 0
     
 
 class UserEevnt(db.Model):
