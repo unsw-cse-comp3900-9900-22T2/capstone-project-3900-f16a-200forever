@@ -1,10 +1,12 @@
 
+import imp
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
 from movie.utils.auth_util import user_has_login, user_is_valid
 from movie.models import thread as Thread
 from movie.models import user as User
+from movie.models import admin as Admin
 from movie.models import genre as Genre
 from movie import db
 import uuid
@@ -35,8 +37,15 @@ class ThreadManager(Resource):
       return {'message': 'The thread not exist'}, 400
 
     # thread own by the user
-    user_id = session[data['email']]['id']
-    if thread.user_id != user_id:
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    admin = None
+    if user == None:
+      admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['email']).first()
+   
+    if user != None and thread.user_id != user.id and user.is_forum_admin != 1:
+      return {"message": 'No permission'}, 400
+
+    if user == None and admin == None:
       return {"message": 'No permission'}, 400
     
     # delete the thread
