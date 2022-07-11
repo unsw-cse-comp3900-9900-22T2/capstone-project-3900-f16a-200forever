@@ -37,9 +37,15 @@ class Users(db.Model):
       lazy=True,
       overlaps="user_review_likes_rel"
   )
+
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   threads = db.relationship('Threads', backref='user', lazy=True)
   thread_comments = db.relationship('ThreadComment', backref='user', lazy=True)
+  follow_list = db.relationship('FollowList', back_populates='user_id', lazy=True)
+  follower_list = db.relationship('FollowList', back_populates='follow_id', lazy=True)
+  banned_list = db.relationship('BannedList', back_populates='user_id', lazy=True)
+  be_banned_list = db.relationship('BannedList', back_populates='banned_user_id', lazy=True)
+
 
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
@@ -69,3 +75,27 @@ class UserEevnt(db.Model):
     self.event_status = 'attemping'
     self.start_time = data['start_time']
  
+
+class FollowList(db.Model):
+  __tablename__ = 'r_follow_list'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+  follow_id = db.Column('follow_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+
+  def __repr__(self):
+    return '<FollowList user id: {} follow id: {}>'.format(self.user_id, self.follow_id)
+  
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.follow_id = data['follow_id']
+
+class BannedList(db.Model):
+  __tablename__ = 'r_banned_list'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+  banned_user_id = db.Column('banned_user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+
+  def __repr__(self):
+    return '<BannedList user id: {} follow id: {}>'.format(self.user_id, self.follow_id)
+  
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.follow_id = data['follow_id']
