@@ -16,12 +16,12 @@ class UserEvent(Resource):
     get all events of the user
     """
     parser = reqparse.RequestParser()
-    parser.add_argument('id', type=str, location='args', required=True)
+    parser.add_argument('email', type=str, location='args', required=True)
     args = parser.parse_args()
-    id = args['id']
+    email = args['email']
 
     # 1. check the user is valid or not
-    user = db.session.query(User.Users).filter(User.Users.id == id).first()
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
       return {"message": "the user not exist"},400
 
