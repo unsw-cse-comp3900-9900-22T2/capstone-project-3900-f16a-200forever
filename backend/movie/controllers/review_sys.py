@@ -17,13 +17,12 @@ class ReviewController(Resource):
   @review_ns.expect(ReviewNS.review_create_form, validate=True)
   def post(self):
     data = review_ns.payload
-    user = data['user_id']
-    movie = data['movie_id']
-    rating = data['rating']
-    content = data['review_content']
+    #user = data['user_id']
+    #movie = data['movie_id']
+    #rating = data['rating']
+    #content = data['review_content']
 
     id = db.session.query(Review.Reviews).count() + 1
-    #data['id'] = review.id + 1
     data['id'] = id
     data['created_time'] = datetime.datetime.now()
     data['weight'] = 1
