@@ -4,9 +4,9 @@ from movie import db
 from flask_restx import Resource, reqparse
 from movie.models import movie as Movie
 from movie.models import review as Review
+from movie.models import user as User
 from sqlalchemy import func
-from movie.utils.other_until import paging, convert_model_to_dict
-
+from movie.utils.other_until import paging, convert_object_to_dict
 review_ns = ReviewNS.review_ns
 
 @review_ns.route('/sort')
@@ -36,38 +36,49 @@ class ReviewSort(Resource):
     if movie == None:
       return {"message": "Invalid movie id"}, 400
 
-    reviews = None
     # sort by the create time
-    all_reviews = db.session.query(Review.Reviews).filter(Review.Reviews.movie_id == movie_id
-    ).order_by(Review.Reviews.created_time.desc(), Review.Reviews.id
-    ).all()
+    if args['type'] == 'time':
+      all_reviews = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
+      ).group_by(Review.Reviews.id
+      ).order_by(Review.Reviews.created_time.desc(), Review.Reviews.id
+      ).all()
 
     # sort by the likes
     if args['type'] == 'likes':
-      reviews = db.session.query(Review.Reviews).filter(Review.Reviews.movie_id == movie_id).join(Review.ReviewLikes
-      ).group_by(Review.Reviews.id).order_by(func.count(Review.ReviewLikes.review_id).desc(), Review.Reviews.created_time.desc()).all()
-
+      all_reviews = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
+      ).group_by(Review.Reviews.id
+      ).order_by(func.count(Review.ReviewLikes.review_id).desc(), Review.Reviews.created_time.desc()
+      ).all()
 
     # sort by unlikes
     if args['type'] == 'unlikes':
-      reviews = db.session.query(Review.Reviews).filter(Review.Reviews.movie_id == movie_id).join(Review.ReviewUnlikes
-      ).group_by(Review.Reviews.id).order_by(func.count(Review.ReviewUnlikes.review_id).desc()).all()
+      all_reviews = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
+      ).group_by(Review.Reviews.id
+      ).order_by(func.count(Review.ReviewUnlikes.review_id).desc(), Review.Reviews.created_time.desc()
+      ).all()
 
-    if reviews == None and args['type'] != 'time':
+    if all_reviews == None:
       return {"Something wrong"}, 400
-
-    if args['type'] == 'likes' or args['type'] == 'unlikes':
-      for re in all_reviews:
-        if re not in reviews:
-          reviews.append(re)
-
-    if args['type'] == 'time':
-      reviews = all_reviews
-
+    
     # paging
-    total_num = len(reviews)
+    total_num = len(all_reviews)
     # paging
-    matched_movies = paging(args['page'], args['num_per_page'], reviews)
-    return {"total": total_num, "reviews": convert_model_to_dict(matched_movies)}
+    matched_movies = paging(args['page'], args['num_per_page'], all_reviews)
+    result = []
+    for mo in matched_movies:
+      review = convert_object_to_dict(mo[0])
+      user = convert_object_to_dict(mo[1])
+      review['likes_count'] = mo[2]
+      review['unlikes_count'] = mo[3]
+      review['user_email'] = user['email']
+      review['user_name'] = user['name']
+      review['user_image'] = user['image']
+      result.append(review)
+      
+
+    return {"total": total_num, "reviews": result}
 
 
