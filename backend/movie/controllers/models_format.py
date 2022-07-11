@@ -48,6 +48,12 @@ finish_event = {
   'answers': fields.List(fields.Integer, required=True)
 }
 
+delete_thread = {
+  'thread_id': fields.String(required=True),
+  'email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
 class Question_Form(fields.Raw):
   def format(self, value):
     return {  

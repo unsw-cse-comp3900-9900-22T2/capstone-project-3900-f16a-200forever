@@ -1,7 +1,7 @@
 from attr import field
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
-  attemp_event, finish_event
+  attemp_event, finish_event, delete_thread
 from numpy import require
 
 class AuthNS:
@@ -45,3 +45,4 @@ class RecommendationNS:
   
 class ThreadNS:
   thread_ns = Namespace('Thread', description="the api for thread")
+  delete_thread_form = thread_ns.model('Delete thread', delete_thread)
