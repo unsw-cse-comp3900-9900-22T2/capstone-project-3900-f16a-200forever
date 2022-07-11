@@ -7,7 +7,7 @@ class Reviews(db.Model):
     movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'))
     user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'))
     review_content = db.Column('review_content', db.String(256), nullable=False)
-    create_time = db.Column('create_time', db.DateTime, nullable=False)
+    created_time = db.Column('created_time', db.DateTime, nullable=False)
     rating = db.Column('rating', db.Integer, nullable=False)
     weight = db.Column('weight', db.Float(20), nullable=False)
     # relationships
@@ -37,7 +37,7 @@ class Reviews(db.Model):
         self.movie_id = data['movie_id']
         self.user_id = data['user_id']
         self.review_content = data['review_content']
-        self.create_time = data['create_time']
+        self.created_time = data['created_time']
         self.rating = data['rating']
         self.weight = data['weight']
 

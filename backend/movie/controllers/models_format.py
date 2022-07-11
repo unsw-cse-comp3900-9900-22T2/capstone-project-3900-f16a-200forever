@@ -67,5 +67,9 @@ user_profile = {
   'p'
 }
 """
-
-    
+review_detail = {
+  'user_id': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'rating': fields.Integer(required=True),
+  'review_content': fields.String(required=True)
+}

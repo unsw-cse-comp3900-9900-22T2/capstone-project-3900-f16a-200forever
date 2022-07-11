@@ -1,6 +1,6 @@
 from attr import field
 from flask_restx import Namespace
-from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password
+from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, review_detail
 from numpy import require
 
 class AuthNS:
@@ -33,3 +33,6 @@ class UserNs:
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
   
+class ReviewNS:
+  review_ns = Namespace('Review', description="the api for review")
+  review_create_form = review_ns.model('Review Post', review_detail)
