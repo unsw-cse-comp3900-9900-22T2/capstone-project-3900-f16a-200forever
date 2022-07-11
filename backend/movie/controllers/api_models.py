@@ -43,3 +43,5 @@ class ReviewNS:
 class RecommendationNS:
   recommendation_ns = Namespace('Recommendation', description="the api for recommendation")
   
+class ThreadNS:
+  thread_ns = Namespace('Thread', description="the api for thread")
