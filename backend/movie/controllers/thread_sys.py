@@ -1,4 +1,3 @@
-from concurrent.futures import thread
 from unicodedata import category
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse

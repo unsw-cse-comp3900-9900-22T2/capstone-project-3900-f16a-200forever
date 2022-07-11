@@ -5,7 +5,7 @@ from movie import db
 class Threads(db.Model):
   __tablename__ = 't_threads'
   id = db.Column('id', db.String(256), primary_key=True)
-  user_id = db.Column('user_id', db.ForeignKey('t_users.id'), db.String(256), nullable=False)
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False)
   category_id = db.Column('category_id', db.String(256), nullable=False)
   created_time = db.Column('created_time', db.DateTime, nullable=False)
   is_anonymous = db.Column('is_anonymous', db.Integer, nullable=False)
@@ -31,7 +31,7 @@ class Threads(db.Model):
 class Categories(db.Model):
   __tablename__ = 't_categories'
   id = db.Column('id', db.String(256), primary_key=True)
-  genre_id = db.Column('genre_id', db.ForeignKey('t_genres.id'), db.Integer, nullable=False)
+  #genre_id = db.Column('genre_id', db.Integer, db.ForeignKey('t_genres.id'), nullable=False)
   name = db.Column('name', db.String(256), nullable=False)
 
   def __repr__(self):
@@ -45,9 +45,9 @@ class Categories(db.Model):
 class ThreadComment(db.Model):
   __tablename__ ='t_thread_comment'
   id = db.Column('id', db.String(256), primary_key=True)
-  thread_id = db.Column('thread_id', db.ForeignKey('t_threads.id'), db.String(256), nullable=False)
-  user_id = db.Column('user_id', db.ForeignKey('t_users.id'), db.String(256), nullable=False)
-  reply_comment_id = db.Column('reply_comment_id', db.ForeignKey('t_thread_comment.id'), db.String(256), nullable=False)
+  thread_id = db.Column('thread_id', db.Integer, db.ForeignKey('t_threads.id'), nullable=False)
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False)
+  reply_comment_id = db.Column('reply_comment_id', db.String(256), db.ForeignKey('t_thread_comment.id'),  nullable=False)
   comment_time = db.Column('comment_time', db.DateTime, nullable=False)
   content = db.Column('content', db.String(256), nullable=False)
   is_anonymous = db.Column('is_anonymous', db.Integer, nullable=False)  
