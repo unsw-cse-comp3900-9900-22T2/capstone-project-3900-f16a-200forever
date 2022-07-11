@@ -154,6 +154,11 @@ class AttempEvent(Resource):
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
     
+    # check event valid
+    event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
+    if event == None:
+      return {"message": "Event not exists"}, 400
+
     # attemp the event
     user_id = session[data['email']]['id']
     data['user_id'] = user_id
@@ -211,11 +216,11 @@ class AttempEvent(Resource):
 
     # check the answer
     questions = event.questions
-    answers = list(data['answers'])
+    answers = data['answers']
     num = 0
     correctness = 0
     print(questions)
-    if len(questions) != len(answers):
+    if len(questions) != len(answers.keys()):
       # update the db
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
@@ -223,7 +228,10 @@ class AttempEvent(Resource):
       return {"message": "Failed"}, 400
 
     for que in questions:
-      if que.correct_answer == int(answers[num]):
+      # check the answer
+      if que.id not in answers.keys():
+        return {"message":"Answer id is invalid"}, 400
+      if que.correct_answer == int(answers[que.id]):
         correctness+=1
       num+=1
     if correctness < event.require_correctness_amt:
