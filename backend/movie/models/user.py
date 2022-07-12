@@ -5,6 +5,7 @@ from sqlalchemy import *
 from movie import db
 from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 from sqlalchemy.orm import backref
+from datetime import datetime
 
 
 class Users(db.Model):
@@ -45,6 +46,9 @@ class Users(db.Model):
   user_follower_list = db.relationship('FollowList', foreign_keys="FollowList.follow_id", backref='follower', lazy=True)
   user_banned_list = db.relationship('BannedList', foreign_keys="BannedList.user_id", backref='banned_own', lazy=True)
   user_be_banned_list = db.relationship('BannedList',foreign_keys="BannedList.banned_user_id",  backref='banner', lazy=True)
+  user_dropped_list = db.relationship('MovieDroppedList', backref='users', lazy=True)
+  user_watched_list = db.relationship('MovieWatchedList', backref='users', lazy=True)
+  user_wish_list = db.relationship('MovieWishList', backref='users', lazy=True)
 
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
@@ -98,3 +102,46 @@ class BannedList(db.Model):
   def __init__(self, data):
     self.user_id = data['user_id']
     self.follow_id = data['follow_id']
+
+class MovieDroppedList(db.Model):
+  __tablename__ = 'r_droppedlist_movie'
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True, nullable=False)
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+  added_time = db.Column('added_time', db.String(256), nullable=False)
+
+  def __repr__(self):
+    return '<DroppedList user id: {} movie id: {}>'.format(self.user_id, self.movie_id)
+  
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.follow_id = data['movie_id']
+    self.added_time = str(datetime.now())
+
+class MovieWatchedList(db.Model):
+  __tablename__ = 'r_watchedlist_movie'
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True, nullable=False)
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+  added_time = db.Column('added_time', db.String(256), nullable=False)
+
+  def __repr__(self):
+    return '<WatchedList user id: {} movie id: {}>'.format(self.user_id, self.movie_id)
+  
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.follow_id = data['movie_id']
+    self.added_time = str(datetime.now())
+    
+
+class MovieWishList(db.Model):
+  __tablename__ = 'r_wishlist_movie'
+  movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True, nullable=False)
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
+  added_time = db.Column('added_time', db.String(256), nullable=False)
+
+  def __repr__(self):
+    return '<WishList user id: {} movie id: {}>'.format(self.user_id, self.movie_id)
+  
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.follow_id = data['movie_id']
+    self.added_time = str(datetime.now())
