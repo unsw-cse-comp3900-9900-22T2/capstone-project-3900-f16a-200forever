@@ -69,10 +69,16 @@ post_thread = {
   'content': fields.String(required=True)
 }
 
-add_follow = {
+follow = {
   'email': fields.String(required=True), 
   'token': fields.String(required=True), 
   'follow_email': fields.String(required=True)
+}
+
+user_movie_list = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'movie_id': fields.Integer(required=True)
 }
 
 class Question_Form(fields.Raw):

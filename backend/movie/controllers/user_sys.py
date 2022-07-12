@@ -2,6 +2,7 @@ import imp
 from .api_models import UserNs
 from flask_restx import Resource, reqparse
 from movie.models import user as User
+from movie.models import movie as Movie
 from movie import db
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from movie.utils.auth_util import user_has_login, user_is_valid
@@ -121,3 +122,91 @@ class FollowListManage(Resource):
     db.session.delete(follow_rel)
     db.session.commit()
     return {"message": "Successfully"}, 200
+
+@user_ns.route("/watchedlist")
+class WatchedMovieList(Resource):
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('email', type=str, location='args', required=True)
+    args = parser.parse_args()
+    email = args['email']
+
+    # 1. check the user is valid or not
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if user == None:
+      return {"message": "the user not exist"},400
+
+    # return
+    result = convert_model_to_dict(user.user_watched_list)
+    return {"movies": result}, 200
+      
+
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.movie_list_form, validate=True)
+  def post(self):
+    data = user_ns.payload
+
+    # check user login
+    if not user_has_login(data['email'], session):
+        return {"message": "the user has not logined"}, 400
+
+    # check user token valid
+    if not user_is_valid(data):
+        return {"message": "the token is incorrect"}, 400
+
+    # check the movie id valid
+    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
+    if movie == None:
+      return {"message": "Invalid movie id"}, 400
+
+    # check the movie not in the watchedlist
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    print(user.user_watched_list)
+
+    if movie in user.user_watched_list:
+      return {"message": "Already in watched list"}, 400
+
+    if movie in user.user_dropped_list:
+      user.user_dropped_list.remove(movie)
+
+    if movie in user.user_wish_list:
+      user.user_wish_list.remove(movie)
+
+    # check the movie in the dropped list or the wish list
+    user.user_watched_list.append(movie)
+    db.session.commit()
+    return {"message": "Succeffully"}, 200
+    
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.movie_list_form, validate=True)
+  def delete(self):
+    data = user_ns.payload
+
+    # check user login
+    if not user_has_login(data['email'], session):
+        return {"message": "the user has not logined"}, 400
+
+    # check user token valid
+    if not user_is_valid(data):
+        return {"message": "the token is incorrect"}, 400
+
+    # check the movie id valid
+    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
+    if movie == None:
+      return {"message": "Invalid movie id"}, 400
+
+    # check the movie not in the watchedlist
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+
+    if movie not in user.user_watched_list:
+      return {"message": "Not in watched list"}, 400
+
+    # check the movie in the dropped list or the wish list
+    user.user_watched_list.remove(movie)
+    db.session.commit()
+    return {"message": "Succeffully"}, 200
+    

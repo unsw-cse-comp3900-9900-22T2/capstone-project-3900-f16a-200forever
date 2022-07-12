@@ -1,7 +1,7 @@
 from attr import field
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
-  attemp_event, finish_event, delete_thread, forum_admin, post_thread, add_follow
+  attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow, user_movie_list
 from numpy import require
 
 class AuthNS:
@@ -32,8 +32,8 @@ class PersonNS:
   
 class UserNs:
   user_ns = Namespace('User', escription="the api for user")
-  follow_form = user_ns.model('Add follow', add_follow)
-
+  follow_form = user_ns.model('Add follow', follow)
+  movie_list_form = user_ns.model('Movie List', user_movie_list)
 
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
