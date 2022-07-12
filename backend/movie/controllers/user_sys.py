@@ -114,7 +114,9 @@ class FollowListManage(Resource):
     if follow == None:
       return {"message": "Follow email invalid"}, 400
     
-
+    follow_rel = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == follow.id).first()
+    if follow_rel == None:
+      return {"message": "Haven't followed before"}, 400
 
     db.session.delete(follow_rel)
     db.session.commit()
