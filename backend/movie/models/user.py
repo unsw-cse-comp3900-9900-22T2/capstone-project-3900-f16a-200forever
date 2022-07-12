@@ -12,7 +12,7 @@ class Users(db.Model):
   id = db.Column('id', db.String(256), primary_key=True)
   name = db.Column('name', db.String(256), nullable=False)
   email = db.Column('email', db.String(256), unique=True, nullable=False)
-  public_status = db.Column('public_status', db.Boolean)
+  #public_status = db.Column('public_status', db.Boolean)
   signature = db.Column('signature', db.String(256))
   image = db.Column('image', db.String(256))
   password = db.Column('password', db.String(256), nullable=False)
@@ -20,7 +20,7 @@ class Users(db.Model):
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
   is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
   # relationships from reviews
-  #reviews = db.relationship('Reviews', backref='users', lazy=True)
+  reviews = db.relationship('Reviews', backref='users', lazy=True)
   #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
   #review_unlikes = db.relationship('ReviewUnlikes', backref='users', lazy=True)
   user_review_likes_rel = db.relationship(

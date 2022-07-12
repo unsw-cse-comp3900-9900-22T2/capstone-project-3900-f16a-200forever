@@ -114,10 +114,44 @@ class FollowListManage(Resource):
     if follow == None:
       return {"message": "Follow email invalid"}, 400
     
-    follow_rel = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == follow.id).first()
-    if follow_rel == None:
-      return {"message": "Haven't followed before"}, 400
+
 
     db.session.delete(follow_rel)
     db.session.commit()
     return {"message": "Successfully"}, 200
+
+@user_ns.route("/followlist/reviews")
+class FollowReview(Resource):
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.follow_form, validate=True)
+  def post(self):
+    data = user_ns.payload
+
+    # check user login
+    if not user_has_login(data['email'], session):
+        return {"message": "the user has not logined"}, 400
+
+    # check token valid
+    if not user_is_valid(data):
+        return {"message": "the token is incorrect"}, 400
+
+    # check the user in the follow list
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {'message': "invalid user email"}, 400
+
+    follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
+    if follow == None:
+      return {"message": "Haven't followed"}, 400
+
+    follow_rel = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == follow.id).first()
+    if follow_rel == None:
+      return {"message": "Haven't followed before"}, 400
+
+    # get the reviews 
+    result = follow.reviews
+    result.sort(key=lambda x: x.created_time)
+    result.reverse()
+    
+    return {"reviews": convert_model_to_dict(result)}, 200
