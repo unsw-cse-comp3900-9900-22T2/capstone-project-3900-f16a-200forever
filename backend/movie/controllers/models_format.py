@@ -69,7 +69,7 @@ post_thread = {
   'content': fields.String(required=True)
 }
 
-add_follow = {
+follow = {
   'email': fields.String(required=True), 
   'token': fields.String(required=True), 
   'follow_email': fields.String(required=True)
