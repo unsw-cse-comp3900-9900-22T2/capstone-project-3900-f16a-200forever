@@ -4,6 +4,9 @@ from flask_restx import Resource, reqparse
 from movie.models import user as User
 from movie import db
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
+from movie.utils.auth_util import user_has_login, user_is_valid
+from movie import db
+from flask import session
 
 user_ns = UserNs.user_ns
 
@@ -54,5 +57,39 @@ class FollowListManage(Resource):
 
     return {"list": result}, 200
 
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.add_follow_form, validate=True)
+  def post(self):
+    data = user_ns.payload
+
+    # check user login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # check token valid
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+
+    # check follow itself
+    if data['email'] == data['follow_email']:
+      return {"message": "Cannot follow self"}, 400
+      
+    # check follow valid
+    follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
+    if follow == None:
+      return {"message": "Follow email invalid"}, 400
+
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     
+    # check has follow
+    try:
+      tmp = {"user_id": user.id, "follow_id": follow.id}
+      new = User.FollowList(tmp)
+      db.session.add(new)
+      db.session.commit()
+    except:
+      db.session.rollback()
+      return {"message": "Has followed already"}, 400
+    return {"message": "Successfully"}, 200
 
