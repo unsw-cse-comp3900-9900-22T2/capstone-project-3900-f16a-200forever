@@ -32,7 +32,7 @@ class PersonNS:
   
 class UserNs:
   user_ns = Namespace('User', escription="the api for user")
-  add_follow_form = user_ns.model('Add follow', add_follow)
+  follow_form = user_ns.model('Add follow', add_follow)
 
 
 class GenreNS:

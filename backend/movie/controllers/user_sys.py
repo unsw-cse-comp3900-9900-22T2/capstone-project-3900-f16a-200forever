@@ -59,7 +59,7 @@ class FollowListManage(Resource):
 
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNs.add_follow_form, validate=True)
+  @user_ns.expect(UserNs.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
 
@@ -74,7 +74,7 @@ class FollowListManage(Resource):
     # check follow itself
     if data['email'] == data['follow_email']:
       return {"message": "Cannot follow self"}, 400
-      
+
     # check follow valid
     follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
     if follow == None:
@@ -93,3 +93,31 @@ class FollowListManage(Resource):
       return {"message": "Has followed already"}, 400
     return {"message": "Successfully"}, 200
 
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.follow_form, validate=True)
+  def delete(self):
+    data = user_ns.payload
+
+    # check user login
+    if not user_has_login(data['email'], session):
+        return {"message": "the user has not logined"}, 400
+
+    # check token valid
+    if not user_is_valid(data):
+        return {"message": "the token is incorrect"}, 400
+
+    # check follow valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+
+    follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
+    if follow == None:
+      return {"message": "Follow email invalid"}, 400
+    
+    follow_rel = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == follow.id).first()
+    if follow_rel == None:
+      return {"message": "Haven't followed before"}, 400
+
+    db.session.delete(follow_rel)
+    db.session.commit()
+    return {"message": "Successfully"}, 200
