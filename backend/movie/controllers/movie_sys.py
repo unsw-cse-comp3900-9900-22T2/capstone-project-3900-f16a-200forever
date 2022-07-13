@@ -215,8 +215,8 @@ class MovieDetails(Resource):
     # this is a new part for movie reviews
     movie_reviews = [] # this is a list of dictionary
     # reviews_res = db.session.query(Review.Reviews, User.Users, Movie.Movies, Review.ReviewLikes, Review.ReviewUnlikes).with_entities(Review.Reviews.id, Review.Reviews.review_content, Review.Reviews.rating, Review.Reviews.created_time, User.Users.id, User.Users.name, User.Users.image, Review.ReviewLikes.user_id, Review.ReviewUnlikes.user_id).filter(Review.Reviews.movie_id == movie_id).filter(Review.Reviews.user_id == User.Users.id).filter(Movie.Movies.id == Review.Reviews.movie_id).all()
-    reviews_res = db.session.query(Review.Reviews, User.Users, Movie.Movies, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
-      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id, Movie.Movies.id == Review.Reviews.movie_id).all()
+    reviews_res = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id).all()
     for rev in reviews_res:
       review_info = {}
       review = convert_object_to_dict(rev[0])
