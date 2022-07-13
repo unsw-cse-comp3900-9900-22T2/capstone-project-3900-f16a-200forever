@@ -1,4 +1,5 @@
 from audioop import reverse
+from datetime import datetime
 from json import dumps
 from numpy import require
 from movie.utils.movie_until import movie_sort
@@ -14,6 +15,9 @@ from movie.utils.other_until import convert_object_to_dict, convert_model_to_dic
 from operator import attrgetter
 from sqlalchemy import and_, null, or_
 from movie.models import genre as Genre
+from movie.models import review as Review
+from movie.models import user as User
+from sqlalchemy import func
  
 movie_ns = MovieNS.movie_ns
 
@@ -169,7 +173,6 @@ class MovieDetails(Resource):
 
     select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
     if select_movie == None:
-      print("fjdklas")
       return {'message': 'Cannot find movie'}, 400
   
     movie_genre = []
@@ -188,6 +191,11 @@ class MovieDetails(Resource):
     release_time = str(select_movie.release_time)
     release_status = select_movie.release_status
 
+    if rating_count  == None:
+        movie_rating = 0
+    else:
+        movie_rating = round(float(total_rating) / float(rating_count), 1)
+
     movie_actors = []
     movie_directors = []
     actor_result = db.session.query(Person.MovieActor, Person.Persons, Movie.Movies).with_entities(Person.Persons.name, Person.MovieActor.character).filter(Person.MovieActor.movie_id == movie_id).filter(Person.Persons.id == Person.MovieActor.person_id).filter(Movie.Movies.id == Person.MovieActor.movie_id).all()
@@ -204,6 +212,27 @@ class MovieDetails(Resource):
       director_info['name'] = director.name
       movie_directors.append(director_info)
 
+    # this is a new part for movie reviews
+    movie_reviews = [] # this is a list of dictionary
+    # reviews_res = db.session.query(Review.Reviews, User.Users, Movie.Movies, Review.ReviewLikes, Review.ReviewUnlikes).with_entities(Review.Reviews.id, Review.Reviews.review_content, Review.Reviews.rating, Review.Reviews.created_time, User.Users.id, User.Users.name, User.Users.image, Review.ReviewLikes.user_id, Review.ReviewUnlikes.user_id).filter(Review.Reviews.movie_id == movie_id).filter(Review.Reviews.user_id == User.Users.id).filter(Movie.Movies.id == Review.Reviews.movie_id).all()
+    reviews_res = db.session.query(Review.Reviews, User.Users, Movie.Movies, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id, Movie.Movies.id == Review.Reviews.movie_id).all()
+    for rev in reviews_res:
+      review_info = {}
+      review = convert_object_to_dict(rev[0])
+      user = convert_object_to_dict(rev[1])
+      review_info['review_id'] = review['id']
+      review_info['review_content'] = review['review_content']
+      review_info['rating'] = review['rating']
+      review_info['created_time'] = review['created_time']
+      review_info['user_id'] = user['id']
+      review_info['user_name'] = user['name']
+      review_info['user_image'] = user['image']
+      review_info['pos_count'] = rev[3]
+      review_info['neg_count'] = rev[4]
+
+      movie_reviews.append(review_info)
+
     movie_details = {
       'id': movie_id, #str
       'name': movie_title, #str
@@ -212,65 +241,14 @@ class MovieDetails(Resource):
       'runtime': runtime, #int
       'release_time': release_time, #str
       'release_status': release_status, #str
-      'total rating': total_rating, #int
-      'rating count': rating_count, #int
+      # 'total rating': total_rating, #int
+      # 'rating count': rating_count, #int
+      'rating': movie_rating, #float
       'actors': movie_actors, #list of dict
       'directors': movie_directors, #list of str
       'genres': movie_genre,  #list of str
-      'reviews': [] #list of dict
+      'reviews': movie_reviews #list of dict
     }
     return movie_details, 200
 
-# @movie_ns.route('/genres')
-# class Genres(Resource):
-#   @movie_ns.response(200, 'Successfully retrieved genres')
-#   @movie_ns.response(400, 'Something went wrong')
-#   def get(self):
-#     genres_result = db.session.query(Genre.Genres).all()
-#     # genres = []
-#     # for genre in genres_result:
-#     # 	genre_info = {}
-#     # 	genre_info['id'] = genre.id
-#     # 	genre_info['name'] = genre.name
-#     # 	genres.append(genre_info)
-#     genres = {'genres': convert_model_to_dict(genres_result)}
 
-#     return genres, 200
-
-# @movie_ns.route('/genre')
-# class GenreMovie(Resource):
-#   @movie_ns.response(200, 'Successfully retrieved movies of this genre')
-#   @movie_ns.response(400, 'Something went wrong')
-#   def get(self):
-#     parser = reqparse.RequestParser()
-#     parser.add_argument('genre_id', type=int, required=True, location="args")
-#     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
-#     args = parser.parse_args()
-#     genre_id = args['genre_id']
-#     if args['order'] == None:
-#       args['order'] = 'ascending'
-#     strategy = args['order']
-
-#     genre_movie_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies,
-#     ).with_entities(Movie.Movies.id, Movie.Movies.title, Movie.Movies.backdrop, Movie.Movies.total_rating, Movie.Movies.rating_count,
-#     ).filter(Genre.Genres.id == genre_id).filter(Movie.Movies.id == Movie.MovieGenre.movie_id,
-#     ).filter(Genre.Genres.id == Movie.MovieGenre.genre_id).all()
-#     movies_lst = []
-#     for movie in genre_movie_result:
-#         movie_info = {}
-#         movie_info['id'] = movie.id
-#         movie_info['title'] = movie.title
-#         movie_info['backdrop'] = movie.backdrop
-#         # if movie.id == 11:
-#         #     movie_info['total_rating'] = 1000000
-#         #     movie_info['rating_count'] = 234
-#         # else:
-#         movie_info['total_rating'] = movie.total_rating
-#         movie_info['rating_count'] = movie.rating_count
-
-#         movies_lst.append(movie_info)
-    
-#     movies_lst = movie_sort(movies_lst, strategy)
-
-#     movies = {'movies': movies_lst}
-#     return movies, 200
