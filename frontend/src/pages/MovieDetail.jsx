@@ -1,10 +1,11 @@
-import { Image, Layout, Rate, List } from "antd";
+import { Image, Layout, Rate, List, Row, Col } from "antd";
 import React, { useState } from "react";
 import { Typography } from "antd";
 import "../css/MovieDetail.css";
 import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import RecommendationInMovie from "../components/RecommendationInMovie";
 import MovieReview from "../components/MovieReview";
 const { Header, Content, Footer } = Layout;
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
@@ -122,10 +123,14 @@ function MovieDetail() {
           </div>
         </div>
       </div>
+      <div className="movie-recommendation">
+        <RecommendationInMovie></RecommendationInMovie>
+      </div>
       <div className="movie-review">
         <MovieReview></MovieReview>
       </div>
-      
+
+
     </div>
   );
 }

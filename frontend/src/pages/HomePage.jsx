@@ -1,7 +1,7 @@
 import React from "react";
 import "../css/HomePage.css";
 import SearchComponent from "../components/SearchComponent";
-import { Breadcrumb, Layout, Divider,Menu } from "antd";
+import { Breadcrumb, Layout, Divider,Menu , Button} from "antd";
 import CurrentlyTrendingMovies from "../components/CurrentlyTrendingMovies";
 import GenresInHomepage from "../components/GenresInHomepage";
 import GenresPage from "./GenresPage"
@@ -22,7 +22,7 @@ function HomePage() {
           <CurrentlyTrendingMovies></CurrentlyTrendingMovies>
           <Divider orientation="left">GENRES</Divider>
           <GenresInHomepage></GenresInHomepage>
-
+      
         </Content>
       </div>
     </Layout>

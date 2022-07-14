@@ -1,7 +1,7 @@
 .movie-detail-page {
   max-width: 1200px;
   width: 100%;
-  margin: 100px 50px;
+  margin: 100px 50px 10px 50px;
   box-shadow: 0 0 5px #ccc;
   display: inline-block;
 }
@@ -40,4 +40,26 @@
 .rating-text {
   text-transform: uppercase;
   letter-spacing: 2px;
+}
+
+.movie-review {
+  max-width: 1200px;
+  width: 100%;
+  margin: 10px 50px;
+  padding: 15px;
+  box-shadow: 0 0 5px #ccc;
+  display: inline-block;
+}
+
+.recommendation-component {
+  max-width: 1200px;
+  width: 100%;
+  margin: 10px 50px;
+  padding: 15px;
+  box-shadow: 0 0 5px #ccc;
+  display: inline-block;
+}
+.recommendation-component-title {
+  font-size: large;
+  text-transform: uppercase;
 }
