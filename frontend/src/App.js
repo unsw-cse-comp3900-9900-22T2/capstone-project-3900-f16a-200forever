@@ -27,7 +27,6 @@ import SetAdmin from "./components/SetAdmin";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
-  const [sid, setSid] = useState("");
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
@@ -44,13 +43,7 @@ function App() {
           path="/"
           element={
             <>
-              <Header
-                loginStatus={loginStatus}
-                updateLoginStatus={updateLoginStatus}
-                userInfo={userInfo}
-                updateUserInfo={updateUserInfo}
-                sid={sid}
-              />
+              <Header loginStatus={loginStatus} updateLoginStatus={updateLoginStatus} userInfo={userInfo} updateUserInfo={updateUserInfo}/>
               <Outlet />
             </>
           }
@@ -58,23 +51,11 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route
             path="/login"
-            element={
-              <Login
-                updateLoginStatus={updateLoginStatus}
-                updateUserInfo={updateUserInfo}
-                sid={sid}
-                setSid={setSid}
-              />
-            }
+            element={<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo} />}
           />
           <Route
             path="/register"
-            element={
-              <Register
-                updateLoginStatus={updateLoginStatus}
-                updateUserInfo={updateUserInfo}
-              />
-            }
+            element={<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}
           />
           <Route
             path="/forgetpassword"
@@ -87,16 +68,14 @@ function App() {
           <Route path="/movie/detail/:id" element={<MovieDetail />} />
           <Route path="/userprofile/:id" element={<UserProfile />} />
           <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
-          <Route path="/genres/:id" element={<GenresPage/>}/>
+          <Route path="/genre/:id" element={<GenresPage/>}/>
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
         </Route>
         <Route
           path="/admin"
           element={
             <>
-              <AdminHeader
-                loginStatus={loginStatus}
-                updateLoginStatus={updateLoginStatus}
+              <AdminHeader loginStatus={loginStatus} updateLoginStatus={updateLoginStatus}
               />
               <Outlet />
             </>
