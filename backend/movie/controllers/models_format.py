@@ -67,9 +67,16 @@ user_profile = {
   'p'
 }
 """
-review_detail = {
-  'user_id': fields.String(required=True),
+review_post = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
   'movie_id': fields.Integer(required=True),
   'rating': fields.Integer(required=True),
   'review_content': fields.String(required=True)
+}
+
+review_delete = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True)
 }

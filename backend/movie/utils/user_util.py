@@ -9,3 +9,9 @@ def user_id_valid(id):
   if user == None:
     return False
   return True
+
+def get_user_id(email):
+  user = db.session.query(User.Users).filter(User.Users.email == email).first()
+  if user == None:
+    raise Exception("User doesn't exist")
+  return user.id
