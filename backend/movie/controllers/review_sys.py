@@ -17,8 +17,8 @@ class ReviewController(Resource):
   @review_ns.expect(ReviewNS.review_create_form, validate=True)
   def post(self):
     data = review_ns.payload
-    #user = data['user_id']
-    #movie = data['movie_id']
+    user = data['user_id']
+    movie = data['movie_id']
     #rating = data['rating']
     #content = data['review_content']
 
@@ -34,5 +34,5 @@ class ReviewController(Resource):
     db.session.commit()
 
     return {
-        "Create review success"
+        "message": "Create review success"
     }, 200
