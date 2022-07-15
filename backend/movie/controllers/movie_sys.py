@@ -228,8 +228,8 @@ class MovieDetails(Resource):
       review_info['user_id'] = user['id']
       review_info['user_name'] = user['name']
       review_info['user_image'] = user['image']
-      review_info['pos_count'] = rev[3]
-      review_info['neg_count'] = rev[4]
+      review_info['pos_count'] = rev[2]
+      review_info['neg_count'] = rev[3]
 
       movie_reviews.append(review_info)
 
