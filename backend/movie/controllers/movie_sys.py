@@ -143,7 +143,8 @@ class SearchMovie(Resource):
         data = convert_object_to_dict(movie)
         year = None
         if movie.release_time != None:
-          year = movie.release_time.year
+          time = movie.release_time
+          year = time[0:4]
           data['release_time'] = year
           movies.append(data)
       return {"movies": movies, "total": total_num}, 200
@@ -152,7 +153,8 @@ class SearchMovie(Resource):
       print(movie)
       year = None
       if movie.Movies.release_time != None:
-        year = movie.Movies.release_time.year
+        time = movie.release_time
+        year = time[0:4]
       data = convert_object_to_dict(movie.Movies)
       data['release_time'] = year
       #data['actors'] = convert_model_to_dict(movie.MovieActor)
@@ -192,7 +194,7 @@ class MovieDetails(Resource):
     total_rating = select_movie.total_rating
     description = select_movie.description
     runtime = select_movie.runtime
-    release_time = str(select_movie.release_time)
+    release_time = select_movie.release_time
     release_status = select_movie.release_status
 
     movie_actors = []
