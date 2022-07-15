@@ -86,7 +86,7 @@ function App() {
           />
           <Route path="/movie/detail/:id" element={<MovieDetail />} />
           <Route path="/userprofile/:id" element={<UserProfile />} />
-          <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
+          <Route path="/guesswhatyoulike" element={<GuessWhatYouLikePage/>}/>
           <Route path="/genres/:id" element={<GenresPage/>}/>
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
         </Route>
