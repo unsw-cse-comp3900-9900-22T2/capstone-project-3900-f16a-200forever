@@ -70,7 +70,8 @@ class ReviewController(Resource):
   def delete(self):
     data = review_ns.payload
     email = data['email']
-    
+    movie = data['movie_id']
+    user_id = get_user_id(email)
 
     # check if logged in
     '''if not user_has_login(email, session):
@@ -79,6 +80,22 @@ class ReviewController(Resource):
     # check token
     if not user_is_valid(data):
       return {"message": "Invalid user id"}, 400'''
+
+    # check valid user and movie ids
+    if not movie_id_valid(movie):
+      return {"message": "Invalid movie id"}, 400
+
+    # check user hasn't already reviewed this movie
+    if not user_reviewed_movie(user_id, movie):
+      return {"message": "User has not reviewed this movie"}, 400
+
+    review = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id).filter(Review.Reviews.movie_id == movie).first()
+    # this shouldn't be possible but check if review exists
+    if review == None:
+      return {"message": "Review doesn't exist???"}, 400
+
+    db.session.delete(review)
+    db.session.commit()
 
     return {
         "message": "Delete review success"
