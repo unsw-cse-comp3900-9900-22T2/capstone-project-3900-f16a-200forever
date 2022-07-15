@@ -1,3 +1,6 @@
+from movie.utils.movie_until import movie_id_valid
+from movie.utils.user_util import user_id_valid
+from movie.utils.review_util import user_reviewed_movie, calculate_weight
 from movie.models import review as Review
 from flask_restx import Resource, reqparse
 from .api_models import ReviewNS
@@ -19,13 +22,28 @@ class ReviewController(Resource):
     data = review_ns.payload
     user = data['user_id']
     movie = data['movie_id']
-    #rating = data['rating']
+    rating = data['rating']
     #content = data['review_content']
+
+    # check rating between 1-5
+    if rating < 1 or rating > 5:
+      return {"message": "Rating should be 1-5"}, 400
+
+    # check valid user and movie ids
+    if not movie_id_valid(movie):
+      return {"message": "Invalid movie id"}, 400
+
+    if not user_id_valid(user):
+      return {"message": "Invalid user id"}, 400
+
+    # check user hasn't already reviewed this movie
+    if user_reviewed_movie(user, movie):
+      return {"message": "User already reviewed this movie"}, 400
 
     id = db.session.query(Review.Reviews).count() + 1
     data['id'] = id
     data['created_time'] = datetime.datetime.now()
-    data['weight'] = 1
+    data['weight'] = calculate_weight(user, movie)
 
     # commit into db
     new_review = Review.Reviews(data)
