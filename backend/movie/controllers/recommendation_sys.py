@@ -48,26 +48,29 @@ class RCMDirector(Resource):
     if movie == None:
       return {"message": "Invalid movie id"}, 400
     
+    
     # get movie director
     directors = db.session.query(Person.MovieDirector).filter(Person.MovieDirector.movie_id == movie_id).all()
     ids = [director.person_id for director in directors]
-    offset = randint(0, 25799)
-    movie_res = db.session.query(Person.MovieDirector, Movie.Movies).filter(Person.MovieDirector.person_id.in_(ids)).limit(100).offset(offset).all()
-    # print(movie_res)
     movies_lst = []
-    for movie in movie_res:
-      movie_detail = {}
-      movie_detail['movie_id'] = movie.Movies.id
-      movie_detail['movie_title'] = movie.Movies.title
-      movie_detail['tagline'] = movie.Movies.tagline
-      movie_detail['backdrop'] = movie.Movies.backdrop
-      movie_detail['description'] = movie.Movies.description
-      movie_detail['runtime'] = movie.Movies.runtime
-      movie_detail['release_time'] = movie.Movies.release_time
-      movie_detail['total_rating'] = movie.Movies.total_rating
-      movie_detail['rating_count'] = movie.Movies.rating_count
+    while movies_lst == []:
+      offset = randint(0, 25799)
+      movie_res = db.session.query(Person.MovieDirector, Movie.Movies).filter(Person.MovieDirector.person_id.in_(ids)).limit(100).offset(offset).all()
+      # print(movie_res)
+      
+      for movie in movie_res:
+        movie_detail = {}
+        movie_detail['movie_id'] = movie.Movies.id
+        movie_detail['movie_title'] = movie.Movies.title
+        movie_detail['tagline'] = movie.Movies.tagline
+        movie_detail['backdrop'] = movie.Movies.backdrop
+        movie_detail['description'] = movie.Movies.description
+        movie_detail['runtime'] = movie.Movies.runtime
+        movie_detail['release_time'] = movie.Movies.release_time
+        movie_detail['total_rating'] = movie.Movies.total_rating
+        movie_detail['rating_count'] = movie.Movies.rating_count
 
-      movies_lst.append(movie_detail)
+        movies_lst.append(movie_detail)
 
 
     return {"movies": movies_lst}, 200
