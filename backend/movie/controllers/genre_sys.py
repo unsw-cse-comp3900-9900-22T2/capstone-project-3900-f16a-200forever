@@ -42,8 +42,20 @@ class GenreMovie(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('genre_id', type=int, required=True, location="args")
     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
+    parser.add_argument('num_per_page', type=int, location='args')
+    parser.add_argument('page', type=int, location='args')
     args = parser.parse_args()
     genre_id = args['genre_id']
+
+    # defualt the first page is 1
+    if args['page'] == None:
+      args['page'] = 1
+
+    # default num of movies in one page is 10
+    if args['num_per_page'] == None:
+      args['num_per_page'] = 10
+
+    # default order by asceding 
     if args['order'] == None:
       args['order'] = 'ascending'
     strategy = args['order']
@@ -68,6 +80,8 @@ class GenreMovie(Resource):
         movies_lst.append(movie_info)
     
     movies_lst = movie_sort(movies_lst, strategy)
+
+    movies_lst = paging(args['page'], args['num_per_page'], movies_lst)
 
     movies = {'movies': movies_lst}
     return movies, 200
