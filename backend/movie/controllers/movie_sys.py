@@ -167,9 +167,19 @@ class MovieDetails(Resource):
   def get(self):
     parser = reqparse.RequestParser()
     parser.add_argument('movie_id', type=int, required=True, location="args")
+    parser.add_argument('review_num_per_page', type=int, location='args')
+    parser.add_argument('page', type=int, location='args')
     args = parser.parse_args()
     print(args)
     movie_id = args['movie_id']
+
+    # defualt the first page is 1
+    if args['page'] == None:
+      args['page'] = 1
+
+    # default num of movies in one page is 5
+    if args['review_num_per_page'] == None:
+      args['review_num_per_page'] = 5
 
     select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
     if select_movie == None:
@@ -216,7 +226,12 @@ class MovieDetails(Resource):
     movie_reviews = [] # this is a list of dictionary
     # reviews_res = db.session.query(Review.Reviews, User.Users, Movie.Movies, Review.ReviewLikes, Review.ReviewUnlikes).with_entities(Review.Reviews.id, Review.Reviews.review_content, Review.Reviews.rating, Review.Reviews.created_time, User.Users.id, User.Users.name, User.Users.image, Review.ReviewLikes.user_id, Review.ReviewUnlikes.user_id).filter(Review.Reviews.movie_id == movie_id).filter(Review.Reviews.user_id == User.Users.id).filter(Movie.Movies.id == Review.Reviews.movie_id).all()
     reviews_res = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
-      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id).all()
+      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
+      ).group_by(Review.Reviews.id
+      ).all()
+
+    reviews_res = paging(args['page'], args['review_num_per_page'], reviews_res)
+
     for rev in reviews_res:
       review_info = {}
       review = convert_object_to_dict(rev[0])
@@ -232,6 +247,7 @@ class MovieDetails(Resource):
       review_info['neg_count'] = rev[3]
 
       movie_reviews.append(review_info)
+    
 
     movie_details = {
       'id': movie_id, #str
