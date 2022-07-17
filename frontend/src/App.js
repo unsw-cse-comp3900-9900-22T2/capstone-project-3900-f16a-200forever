@@ -26,6 +26,7 @@ import GenresPage from "./pages/GenresPage";
 import SetAdmin from "./components/SetAdmin";
 import ForumPage from "./pages/FourmPage";
 import ThreadPage from "./components/ThreadPage";
+import NewPost from "./components/NewPost";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -74,6 +75,7 @@ function App() {
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
           <Route path='/fourm' element={<ForumPage/>}/>
           <Route path = '/thread/:id' element={<ThreadPage></ThreadPage>}/>
+          <Route path='/newpost' element={<NewPost></NewPost>}/>
         </Route>
         <Route
           path="/admin"

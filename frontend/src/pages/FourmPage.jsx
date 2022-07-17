@@ -17,7 +17,7 @@ const { Meta } = Card;
 const ForumPage = () => {
   const { Title } = Typography;
   const [genres, setGenres] = useState([]);
-
+  let navigate = useNavigate();
   useEffect(() => {
     axios
       // todo change url here
@@ -44,7 +44,9 @@ const ForumPage = () => {
     // </div>
     <div className="forum-page">
       <div className="new-post-btn">
-        <Button onClick={navigate()}>New Post</Button>
+        <Button onClick={() => navigate("/newpost")}>
+          New Post
+        </Button>
       </div>
       <div className="wrapper">
         <div className="title-wraper">
