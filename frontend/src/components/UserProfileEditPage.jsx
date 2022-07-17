@@ -18,8 +18,11 @@ import ImgCrop from "antd-img-crop";
 import { useInsertionEffect } from "react";
 import axios from "axios";
 import "../css/UserProfile.css";
+import openNotification from "./Notification";
+import { useEffect } from "react";
 
-const UserProfileEditPage = () => {
+const UserProfileEditPage = ({ userProfile }) => {
+
   const [fileList, setFileList] = useState([
     {
       uid: "-1",
@@ -28,6 +31,7 @@ const UserProfileEditPage = () => {
       url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
     },
   ]);
+
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
@@ -48,7 +52,12 @@ const UserProfileEditPage = () => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  const { id } = useParams();
+
+  const haha = (values) => {
+    console.log(values);
+    console.log(userProfile)
+  }
+
   return (
     <div className="user-profile-edit-page">
       <div className="user-profile-edit-form">
@@ -56,9 +65,16 @@ const UserProfileEditPage = () => {
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 15 }}
           layout="horizontal"
+          onFinish={haha}
+          initialValues={{
+            ["username"]: userProfile.username,
+            ["signature"]: userProfile.signature
+          }}
         >
           {" "}
-          <Form.Item label="Head Portrait:">
+          <Form.Item 
+            name="avatar"
+            label="Head Portrait:">
             <ImgCrop rotate>
               <Upload
                 action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -67,14 +83,15 @@ const UserProfileEditPage = () => {
                 onChange={onChange}
                 onPreview={onPreview}
               >
-                {fileList.length < 5 && "+ Upload"}
+                {fileList.length < 1 && "+ Upload"}
               </Upload>
             </ImgCrop>
           </Form.Item>
-          <Form.Item label="UserName">
+          <Form.Item name="username" label="UserName">
             <Input></Input>
           </Form.Item>
-          <Form.Item label="Personal Signature">
+          <Form.Item label="Personal Signature"
+            name="signature">
             <Input></Input>
           </Form.Item>
           <Form.Item
@@ -82,7 +99,6 @@ const UserProfileEditPage = () => {
             label="current password"
             rules={[
               {
-           
                 message: "Please input your password!",
               },
             ]}
@@ -95,7 +111,6 @@ const UserProfileEditPage = () => {
             label="new password"
             rules={[
               {
-           
                 message: "Please input your password!",
               },
             ]}
@@ -104,11 +119,10 @@ const UserProfileEditPage = () => {
             <Input.Password />
           </Form.Item>
           <Form.Item
-            name="confirm"
+            // name="confirm"
             label="Confirm Password"
             rules={[
               {
-               
                 message: "Please confirm your password!",
               },
               ({ getFieldValue }) => ({
