@@ -12,6 +12,7 @@ const { Meta } = Card;
 const GenresPage = () => {
   const [movies, setMovies] = useState([]);
   const [numItem, setNumItem] = useState(0);
+  // const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const id_val = id.replace("id=", "");
 
@@ -31,7 +32,9 @@ const GenresPage = () => {
     })
     .then(function (response) {
       console.log(response.data.movies);
-      console.log(id_val);
+      // setLoading(false);
+      setMovies(response.data.movies);
+      // console.log(id_val);
     })
     // todo handle error
     .catch(function (error) {
@@ -64,6 +67,7 @@ const GenresPage = () => {
                 hoverable
                 bordered={false}
                 style={{}}
+                // loading={loading}
                 cover={
                   <img
                     alt="example"
