@@ -24,6 +24,7 @@ import UserProfileEditPage from "./components/UserProfileEditPage";
 import GuessWhatYouLikePage from "./components/GuessWhatYouLikePage";
 import GenresPage from "./pages/GenresPage";
 import SetAdmin from "./components/SetAdmin";
+import ForumPage from "./pages/FourmPage";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -89,6 +90,7 @@ function App() {
           <Route path="/guesswhatyoulike" element={<GuessWhatYouLikePage/>}/>
           <Route path="/genres/:id" element={<GenresPage/>}/>
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
+          <Route path='/fourm' element={<ForumPage/>}/>
         </Route>
         <Route
           path="/admin"
