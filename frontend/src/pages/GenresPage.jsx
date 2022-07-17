@@ -6,7 +6,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import HomePage from "./HomePage";
 import openNotification from "../components/Notification";
-
+import "../css/GenresPage.css"
 const { Meta } = Card;
 
 const GenresPage = () => {
@@ -27,7 +27,8 @@ const GenresPage = () => {
     // todo change url here
     .get("http://127.0.0.1:8080/genre/genremovies", {
       params: {
-        "genre_id": id_val
+        "genre_id": id_val,
+        "num_per_page":12
       }
     })
     .then(function (response) {
@@ -47,8 +48,9 @@ const GenresPage = () => {
 
   return (
     <div className="genres-page">
-      <div className="genres-name">Action</div>
+     
       <div className="genres-movies-wrapper">
+      
       <List
         grid={{
           gutter: 16,
@@ -58,6 +60,13 @@ const GenresPage = () => {
           lg: 4,
           xl: 6,
           xxl: 10,
+        }}
+        pagination={{
+          onChange: (page) => {
+            console.log(page);
+          },
+          pageSize: 10,
+          total:100
         }}
         dataSource={movies}
         renderItem={(item) => (
@@ -81,7 +90,7 @@ const GenresPage = () => {
           </List.Item>
         )}
       />
-      <Pagination defaultCurrent={1} total={numItem} defaultPageSize={12} hideOnSinglePage onChange={changePage}/>
+      {/* <Pagination defaultCurrent={1} total={numItem} defaultPageSize={10} hideOnSinglePage onChange={changePage}/> */}
       </div>
     </div>
   );
