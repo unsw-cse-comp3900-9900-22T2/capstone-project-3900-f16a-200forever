@@ -64,6 +64,7 @@ class GenreMovie(Resource):
     ).with_entities(Movie.Movies.id, Movie.Movies.title, Movie.Movies.backdrop, Movie.Movies.total_rating, Movie.Movies.rating_count,
     ).filter(Genre.Genres.id == genre_id).filter(Movie.Movies.id == Movie.MovieGenre.movie_id,
     ).filter(Genre.Genres.id == Movie.MovieGenre.genre_id).all()
+    total_num = len(genre_movie_result)
     movies_lst = []
     for movie in genre_movie_result:
         movie_info = {}
@@ -83,5 +84,5 @@ class GenreMovie(Resource):
 
     movies_lst = paging(args['page'], args['num_per_page'], movies_lst)
 
-    movies = {'movies': movies_lst}
+    movies = {'movies': movies_lst, 'total_num': total_num}
     return movies, 200
