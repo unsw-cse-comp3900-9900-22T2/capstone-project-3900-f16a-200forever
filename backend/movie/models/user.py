@@ -12,7 +12,7 @@ class Users(db.Model):
   id = db.Column('id', db.String(256), primary_key=True)
   name = db.Column('name', db.String(256), nullable=False)
   email = db.Column('email', db.String(256), unique=True, nullable=False)
-  public_status = db.Column('public_status', db.Boolean)
+  # public_status = db.Column('public_status', db.Boolean)
   signature = db.Column('signature', db.String)
   image = db.Column('image', db.String)
   password = db.Column('password', db.String, nullable=False)

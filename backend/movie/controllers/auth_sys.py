@@ -180,6 +180,7 @@ class LoginController(Resource):
     session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
 
     return {
+        'id': curr_user.id,
         'token': token,
         'name': curr_user.name
     }, 200
