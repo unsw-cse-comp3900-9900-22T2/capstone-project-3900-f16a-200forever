@@ -13,7 +13,7 @@ class Users(db.Model):
   name = db.Column('name', db.String(256), nullable=False)
   email = db.Column('email', db.String(256), unique=True, nullable=False)
   #public_status = db.Column('public_status', db.Boolean)
-  signature = db.Column('signature', db.String)
+  signature = db.Column('signature', db.BLOB)
   image = db.Column('image', db.String)
   password = db.Column('password', db.String, nullable=False)
   validation_code = db.Column('validation_code', db.String)
@@ -48,10 +48,11 @@ class Users(db.Model):
     self.password = data['password']
     
 
-class UserEevnt(db.Model):
+class UserEvent(db.Model):
   __tablename__ = 'r_user_event'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True)
   event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), primary_key=True)
+  event_status = db.Column('event_status', db.String(256), nullable=False)
 
   def __repr__(self):
     return '<UserEvent user id: {} event id: {}>'.format(self.user_id, self.event_id)
