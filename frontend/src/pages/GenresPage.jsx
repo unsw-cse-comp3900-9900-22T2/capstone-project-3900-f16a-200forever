@@ -22,6 +22,31 @@ const GenresPage = () => {
     // getList(page);
   }
 
+  // const getList = (pageNum) => {
+  //   axios
+  //   // todo change url here
+  //   .get("http://127.0.0.1:8080/genre/genremovies", {
+  //     params: {
+  //       "genre_id": id_val,
+  //       "num_per_page":12
+  //     }
+  //   })
+  //   .then(function (response) {
+  //     console.log(response.data.movies);
+  //     console.log(response.data.movies[1].backdrop)
+  //     // setFullList(response.data.result);
+  //     setNumItem(response.data.total);
+  //     setShowList(response.data.movies);
+  //   })
+  //   // todo handle error
+  //   .catch(function (error) {
+  //     console.log(error.response);
+  //     openNotification({
+  //       "title": "Search error",
+  //     })
+  //   });
+  // }
+
   useEffect( () => {
     axios
     // todo change url here
@@ -61,13 +86,6 @@ const GenresPage = () => {
           xl: 6,
           xxl: 10,
         }}
-        pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
-          pageSize: 10,
-          total:100
-        }}
         dataSource={movies}
         renderItem={(item) => (
           <List.Item>
@@ -90,7 +108,7 @@ const GenresPage = () => {
           </List.Item>
         )}
       />
-      {/* <Pagination defaultCurrent={1} total={numItem} defaultPageSize={10} hideOnSinglePage onChange={changePage}/> */}
+      <Pagination defaultCurrent={1} total={100} pageSize={12} showSizeChanger={false} hideOnSinglePage onChange={changePage}/>
       </div>
     </div>
   );
