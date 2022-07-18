@@ -29,9 +29,26 @@ class RCMGenre(Resource):
     # get movie genre
     genres = movie.movie_genre
     ids = [ge.id for ge in genres]
-    offset = randint(0, 25799)
-    movies = db.session.query(Movie.Movies).filter(Movie.MovieGenre.genre_id.in_(ids)).join(Movie.MovieGenre).order_by(Movie.Movies.total_rating.desc()).limit(100).offset(offset).all()
-    return {"movies": convert_model_to_dict(movies)}, 200    
+    movies_lst = []
+    while movies_lst == []:
+      offset = randint(0, 25799)
+      movie_res = db.session.query(Movie.Movies).filter(Movie.MovieGenre.genre_id.in_(ids)).join(Movie.MovieGenre).order_by(Movie.Movies.total_rating.desc()).limit(100).offset(offset).all()
+
+      for movie in movie_res:
+        movie_detail = {}
+        movie_detail['movie_id'] = movie.id
+        movie_detail['movie_title'] = movie.title
+        movie_detail['tagline'] = movie.tagline
+        movie_detail['backdrop'] = movie.backdrop
+        movie_detail['description'] = movie.description
+        movie_detail['runtime'] = movie.runtime
+        movie_detail['release_time'] = movie.release_time
+        movie_detail['total_rating'] = movie.total_rating
+        movie_detail['rating_count'] = movie.rating_count
+
+        movies_lst.append(movie_detail)
+    
+    return {"movies": movies_lst}, 200    
 
 @recommendation_ns.route('/director')
 class RCMDirector(Resource):
@@ -55,7 +72,7 @@ class RCMDirector(Resource):
     movies_lst = []
     while movies_lst == []:
       offset = randint(0, 25799)
-      movie_res = db.session.query(Person.MovieDirector, Movie.Movies).filter(Person.MovieDirector.person_id.in_(ids)).limit(100).offset(offset).all()
+      movie_res = db.session.query(Person.MovieDirector, Movie.Movies).filter(Person.MovieDirector.person_id.in_(ids)).limit(50).offset(offset).all()
       # print(movie_res)
       
       for movie in movie_res:
