@@ -230,6 +230,7 @@ class MovieDetails(Resource):
       ).group_by(Review.Reviews.id
       ).all()
 
+    total_num = len(reviews_res)
     reviews_res = paging(args['page'], args['review_num_per_page'], reviews_res)
 
     for rev in reviews_res:
@@ -265,6 +266,7 @@ class MovieDetails(Resource):
       'genres': movie_genre,  #list of str
       'reviews': movie_reviews #list of dict
     }
+    movie_details['review_num'] = total_num
     return movie_details, 200
 
 
