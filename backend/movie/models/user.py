@@ -18,6 +18,8 @@ class Users(db.Model):
   password = db.Column('password', db.String, nullable=False)
   validation_code = db.Column('validation_code', db.String)
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
+  is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
+  is_review_admin = db.Column('is_review_admin', db.Integer, nullable=False)
   # relationships from reviews
   #reviews = db.relationship('Reviews', backref='users', lazy=True)
   #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
@@ -52,7 +54,7 @@ class UserEvent(db.Model):
   __tablename__ = 'r_user_event'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True)
   event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), primary_key=True)
-  event_status = db.Column('event_status', db.String(256), nullable=False)
+  event_status = db.Column('event_status', db.String(256))
 
   def __repr__(self):
     return '<UserEvent user id: {} event id: {}>'.format(self.user_id, self.event_id)

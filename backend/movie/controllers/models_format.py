@@ -80,3 +80,16 @@ review_delete = {
   'token': fields.String(required=True),
   'movie_id': fields.Integer(required=True)
 }
+
+review_admin = {
+  'user_email': fields.String(required=True),
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+review_admin_delete = {
+  'user_email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'admin_email': fields.String(required=True)
+}
