@@ -6,13 +6,17 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import MovieReview from "../components/MovieReview";
+import openNotification from "../components/Notification";
+import UserProfile from "../components/UserProfile";
+
 const { Header, Content, Footer } = Layout;
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 const { Title, Text } = Typography;
 
-function MovieDetail() {
+function MovieDetail({ userInfo, loginStatus }) {
   const { id } = useParams();
   const [movieInfo, setMovieInfo] = useState({});
+
   useEffect(() => {
     axios
       // todo change url here
@@ -28,15 +32,11 @@ function MovieDetail() {
       // todo handle error
       .catch(function (error) {
         console.log(error.response);
-        // openNotification({
-        //   "title": "Search error",
-        //   "content": error
-        // })
+        openNotification({
+          "title": "Viewing page error",
+        })
       });
   }, []);
-  // const test = [{
-  //   "name": "name1"
-  // }];
 
   return (
     <div>
@@ -123,7 +123,7 @@ function MovieDetail() {
         </div>
       </div>
       <div className="movie-review">
-        <MovieReview></MovieReview>
+        <MovieReview id={id.replace("id=", "")} userInfo={userInfo} loginStatus={loginStatus} ></MovieReview>
       </div>
       
     </div>

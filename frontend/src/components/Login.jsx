@@ -38,12 +38,7 @@ const Login = ({ updateLoginStatus, updateUserInfo, sid, setSid }) => {
           "email": values["email"]
         })
         // console.log(response.data.sid)
-        setSid(response.data.sid)
-        // axios.defaults.headers.post['Cookie'] = "session=session=5b0dc704-3114-465b-a76f-35522701e7d9"
-        // todo change url here
-        navigate("/", {
-          sid: sid
-        })
+        navigate("/")
       })
       .catch(function (error) {
         console.log(error.response.data);
