@@ -12,6 +12,7 @@ class Threads(db.Model):
   content = db.Column('content', db.String(10000), nullable=False)
   comments = db.relationship("ThreadComment", backref="thread", lazy=True)
   
+  
 
   def __repr__(self):
     return '<Thread: id{} user_id{}>'.format(self.id, self.user_id)
@@ -54,4 +55,16 @@ class ThreadComment(db.Model):
   content = db.Column('content', db.String(256), nullable=False)
   is_anonymous = db.Column('is_anonymous', db.Integer, nullable=False)  
   comments = db.relationship("ThreadComment", remote_side=[id])
+  comment_likes = db.relationship("CommentLikes", backref="ThreadComment", lazy=True)
 
+class CommentLikes(db.Model):
+  __tablename__ = 'r_comment_likes'
+  user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key = True)
+  comment_id = db.Column('comment_id', db.String(256), db.ForeignKey('t_thread_comment.id'), nullable=False, primary_key = True)
+
+  def __repr__(self):
+    return '<CommentLikes: user_id{} comment_id{}>'.format(self.user_id, self.comment_id)
+
+  def __init__(self, data):
+    self.user_id = data['user_id']
+    self.comment_id = data['comment_id']

@@ -40,6 +40,7 @@ class Users(db.Model):
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   threads = db.relationship('Threads', backref='user', lazy=True)
   thread_comments = db.relationship('ThreadComment', backref='user', lazy=True)
+  comment_likes = db.relationship('CommentLikes', backref='user', lazy=True)
 
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
