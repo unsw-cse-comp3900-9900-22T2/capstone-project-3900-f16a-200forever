@@ -13,3 +13,6 @@ code frontend page(login/register)
 
 Week5
 code frontend page(homepage/admin/movie details/search) --->sprint1
+
+Week6
+code frontend page(admin/ details/ user profile/ movies) 
