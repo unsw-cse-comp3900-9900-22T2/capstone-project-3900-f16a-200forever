@@ -45,7 +45,7 @@ finish_event = {
   'email': fields.String(required=True),
   'token': fields.String(required=True),
   'event_id': fields.String(required=True),
-  'answers': fields.Raw()
+  'answers': fields.Raw(required=True)
 }
 
 
