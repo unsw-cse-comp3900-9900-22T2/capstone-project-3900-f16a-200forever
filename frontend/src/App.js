@@ -27,6 +27,8 @@ import SetAdmin from "./components/SetAdmin";
 import ForumPage from "./pages/FourmPage";
 import ThreadPage from "./components/ThreadPage";
 import NewPost from "./components/NewPost";
+import GetBadge from "./components/GetBadge";
+import BadgeQuestion from "./components/BadgeQuestion";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -73,9 +75,11 @@ function App() {
           <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
           <Route path="/genre/:id" element={<GenresPage/>}/>
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
-          <Route path='/fourm' element={<ForumPage/>}/>
+          <Route path='/forum' element={<ForumPage/>}/>
           <Route path = '/thread/:id' element={<ThreadPage></ThreadPage>}/>
           <Route path='/newpost' element={<NewPost></NewPost>}/>
+          <Route path='/getbadge' element={<GetBadge></GetBadge>}/>
+          <Route path='/badgequestion/:id' element={<BadgeQuestion></BadgeQuestion>}/>
         </Route>
         <Route
           path="/admin"

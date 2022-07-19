@@ -50,7 +50,7 @@ const ForumPage = () => {
       </div>
       <div className="wrapper">
         <div className="title-wraper">
-          <Title>Fourm by genres</Title>
+          <Title>Forum by genres</Title>
         </div>
 
         <div className="genres-component-in-HomePage">
@@ -67,7 +67,7 @@ const ForumPage = () => {
             dataSource={genres}
             renderItem={(item) => (
               <List.Item>
-                <Link to={`/fourm/id=${item.id}`}>
+                <Link to={`/forum/id=${item.id}`}>
                   <Card
                     hoverable
                     bordered={true}
