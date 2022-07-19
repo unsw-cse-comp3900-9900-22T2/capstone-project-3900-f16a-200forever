@@ -245,10 +245,10 @@ class AttempEvent(Resource):
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"result": "Failed", "correctness": correctness}, 400
+      return {"result": "Failed", "correctness": correctness, "require": event.require_correctness_amt}, 400
 
     # user get the event
     event_attemp.end_time = now
     event_attemp.event_status = 'passed'
     db.session.commit()
-    return {"correctness": correctness, 'result': 'Pass'}, 200
+    return {"correctness": correctness, 'result': 'Pass', "require": event.require_correctness_amt}, 200
