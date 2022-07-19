@@ -12,6 +12,7 @@ def user_reviewed_movie(user, movie):
   return True
 
 
+# weight is 2 if user has badge, 1 otherwise
 def calculate_weight(user, movie):
   badges = db.session.query(User.UserEvent).filter(User.UserEvent.user_id == user).filter(User.UserEvent.event_status.like(f'%passed%')).all()
   for badge in badges:
