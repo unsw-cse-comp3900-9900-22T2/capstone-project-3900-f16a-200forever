@@ -186,10 +186,12 @@ class MovieDetails(Resource):
       return {'message': 'Cannot find movie'}, 400
   
     movie_genre = []
-    genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies).with_entities(Genre.Genres.name).filter(Movie.Movies.id == movie_id).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
+    genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies).with_entities(Genre.Genres.name, Genre.Genres.id).filter(Movie.Movies.id == movie_id).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
     for genre in genre_result:
-      genre_name = genre.name
-      movie_genre.append(genre_name)
+      genre_info = {}
+      genre_info['id'] = genre.id
+      genre_info['name'] = genre.name
+      movie_genre.append(genre_info)
 
     # title, backdrop, rating
     movie_title = select_movie.title
