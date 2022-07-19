@@ -90,7 +90,13 @@ class GetEventDetail(Resource):
 
     if event == None:
       return {"message": f'Event {id} not found'}
-    return convert_object_to_dict(event), 200
+    
+    data = convert_object_to_dict(event)
+    questions = {}
+    for que in event.questions:
+      questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
+    data["questions"] = questions
+    return data, 200
 
 @event_ns.route('/edit')
 class EditEvent(Resource):
