@@ -72,7 +72,7 @@ class GetAllEvents(Resource):
   @event_ns.response(200, "Successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):
-    events = db.session.query(Event.Events).all()
+    events = db.session.query(Event.Events).filter(Event.Events.event_status == 'open').all()
     events = convert_model_to_dict(events)
     return {"events": events}, 200
 
