@@ -1,6 +1,6 @@
 from attr import field
 from flask_restx import Namespace
-from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, review_post, review_delete, review_admin, review_admin_delete
+from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, review_post, review_delete, review_admin, review_admin_delete, edit_profile
 from numpy import require
 
 class AuthNS:
@@ -27,8 +27,9 @@ class MovieNS:
 class PersonNS:
   person_ns = Namespace('Person', description="the api for person")
   
-class UserNs:
-  user_ns = Namespace('User', escription="the api for user")
+class UserNS:
+  user_ns = Namespace('User', description="the api for user")
+  user_edit_profile = user_ns.model('Edit profile', edit_profile)
 
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
