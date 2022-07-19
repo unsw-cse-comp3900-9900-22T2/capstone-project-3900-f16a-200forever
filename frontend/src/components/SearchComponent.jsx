@@ -73,8 +73,8 @@ const SearchComponent = ({ type, keywords, order, changePage }) => {
               defaultValue={`By ${order}`}
               onChange={updateSearchOrder}
             >
-              <Option value="descending">Sort: descending</Option>
-              <Option value="ascending">Sort: ascending</Option>
+              <Option value="descending">By rating: descending</Option>
+              <Option value="ascending">By rating: ascending</Option>
             </Select>
           </Col>
         </Space>
