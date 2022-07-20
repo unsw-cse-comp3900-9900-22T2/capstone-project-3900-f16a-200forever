@@ -280,8 +280,4 @@ class MovieDetails(Resource):
 #     movies_lst = movie_sort(movies_lst, strategy)
 
 #     movies = {'movies': movies_lst}
-<<<<<<< HEAD
 #     return movies, 200
-=======
-#     return movies, 200
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e

@@ -72,7 +72,10 @@ edit_profile = {
   'signature': NullableString(required=True),
   'image': NullableString(required=True),
   'current_password': fields.String,
-  'new_password': fields.String
+  'new_password': fields.String,
+  'double_check': fields.String,
+  'email': fields.String(required=True),
+  'token': fields.String(required=True)
 }
 
 review_post = {

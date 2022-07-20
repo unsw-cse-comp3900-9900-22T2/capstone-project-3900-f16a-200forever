@@ -50,7 +50,10 @@ def pw_encode(password):
   Return:
       (string) encoded password
   '''
+  
   return hashlib.sha256(password.encode()).hexdigest()
+
+
 
 def user_is_valid(data):
   email = data['email']
