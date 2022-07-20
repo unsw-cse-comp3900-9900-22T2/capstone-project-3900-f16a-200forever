@@ -15,8 +15,8 @@ class ReviewSort(Resource):
   @review_ns.response(400, 'Something went wrong')
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('type', type=str, location='args', required=True)
-    parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
+    parser.add_argument('type', choices=['time', 'likes', 'unlikes'], type=str, location='args', required=True)
+    parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args', required=True)
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
     parser.add_argument('movie_id', type=int, location='args', required=True)
@@ -61,10 +61,6 @@ class ReviewSort(Resource):
       else:
         all_reviews = query.order_by(func.count(Review.ReviewLikes.review_id).asc(), Review.Reviews.created_time.desc()
       ).all()
-
-      """
-            
-      """
 
 
     # sort by unlikes
