@@ -65,8 +65,8 @@ function App() {
             path="/search/:type/:keywords/:order"
             element={<SearchResult />}
           />
-          <Route path="/movie/detail/:id" element={<MovieDetail />} />
-          <Route path="/userprofile/:id" element={<UserProfile userInfo={userInfo}/>} />
+          <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>} />
+          <Route path="/userprofile/:id" element={<UserProfile />} />
           <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
           <Route path="/genres/:id" element={<GenresPage/>}/>
         </Route>

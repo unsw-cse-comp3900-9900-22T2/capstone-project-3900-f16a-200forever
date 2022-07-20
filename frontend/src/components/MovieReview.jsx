@@ -16,6 +16,11 @@ import {
   LikeFilled,
   LikeOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
+import openNotification from "./Notification";
+import axios from "axios";
+import { UserOutlined } from '@ant-design/icons';
+
 const { TextArea } = Input;
 
 const CommentList = ({ comments }) => (
@@ -68,31 +73,66 @@ const data = [
   },
 ];
 
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
-  <>
-    <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
-    </Form.Item>
-    <Form.Item>
-      <Rate />
-    </Form.Item>
-    <Form.Item>
-      <Button
-        htmlType="submit"
-        loading={submitting}
-        onClick={onSubmit}
-        type="primary"
-      >
-        Add Comment
-      </Button>
-    </Form.Item>
-  </>
-);
 
-const MovieReview = () => {
+const MovieReview = ({ id, userInfo, loginStatus }) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [pageNum, setPageNum] = useState(1);
+  const [rating, setRating] = useState(1);
+
+  const Editor = ({ onChange, onSubmit, submitting, value }) => (
+    <>
+      <Form.Item>
+        <TextArea rows={4} onChange={onChange} value={value} />
+      </Form.Item>
+      <Form.Item>
+        <Rate 
+          onChange={(value) => { setRating(value) }}
+          defaultValue={1}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button
+          htmlType="submit"
+          loading={submitting}
+          onClick={onSubmit}
+          type="primary"
+        >
+          Add Comment
+        </Button>
+      </Form.Item>
+    </>
+  );
+
+
+  const getReviews = () => {
+    axios
+      // todo change url here
+      .get("http://127.0.0.1:8080/movie/movie_detail", {
+        params: {
+          movie_id: id.replace("id=", ""),
+          page: pageNum,
+          review_num_per_page: 20
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        // setMovieInfo(response.data);
+      })
+      // todo handle error
+      .catch(function (error) {
+        console.log(error.response);
+        openNotification({
+          "title": "Viewing page error",
+        })
+      });
+  }
+
+  useEffect(() => {
+    
+  }, []);
 
   const like = () => {
     setLikes(1);
@@ -107,30 +147,52 @@ const MovieReview = () => {
   };
 
   const [comments, setComments] = useState([]);
-  const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState("");
 
   const handleSubmit = () => {
-    if (!value) return;
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setValue("");
-      setComments([
-        ...comments,
-        {
-          author: "Han Solo",
-          avatar: "https://joeschmoe.io/api/v1/random",
-          content: <p>{value}</p>,
-          datetime: moment().fromNow(),
-        },
-      ]);
-    }, 1000);
+    if (loginStatus === false) {
+      openNotification({
+        "title": "Please login first"
+      })
+      return
+    }
+    if (!value) {
+      openNotification({
+        "title": "Please enter some contents"
+      })
+      return
+    }
+    // console.log(value);
+    // console.log(rating);
+    // console.log(id);
+    // console.log(userInfo);
+    axios
+      .post("http://127.0.0.1:8080/review/review", {
+        movie_id: parseInt(id),
+        email: userInfo.email,
+        token: userInfo.token,
+        rating: parseInt(rating),
+        review_content: value
+      })
+      .then(function (response) {
+        console.log(response);
+        openNotification({
+          "title": "Posting successfully!",
+        })
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        openNotification({
+          "title": "An error occur when posting",
+          "content": error.response.data.message
+        })
+      });
   };
 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+
   const actions = [
     <Tooltip key="comment-basic-like" title="Like">
       <span onClick={like}>
@@ -146,7 +208,6 @@ const MovieReview = () => {
         <span className="comment-action">{dislikes}</span>
       </span>
     </Tooltip>,
-    <span key="comment-basic-reply-to">Reply to</span>,
   ];
 
   return (
@@ -154,13 +215,13 @@ const MovieReview = () => {
       {comments.length > 0 && <CommentList comments={comments} />}
       <Comment
         avatar={
-          <Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
+          <Avatar size="large" icon={<UserOutlined/>} ></Avatar>
         }
         content={
           <Editor
             onChange={handleChange}
             onSubmit={handleSubmit}
-            submitting={submitting}
+            submitting={false}
             value={value}
           />
         }
