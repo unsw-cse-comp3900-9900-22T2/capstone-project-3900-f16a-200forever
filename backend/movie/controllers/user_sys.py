@@ -42,7 +42,7 @@ class UserProfileController(Resource):
     user_profile = {
       'id': user_id, #str
       'username': username, #str
-      'profile_picture': profile_picture, #str
+      'profile_picture': str(profile_picture), #str
       'signature': signature, #str
       'wishlist': wishlist, #list
       'watchedlist': watchedlist, #list

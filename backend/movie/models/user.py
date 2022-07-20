@@ -14,7 +14,7 @@ class Users(db.Model):
   email = db.Column('email', db.String(256), unique=True, nullable=False)
   # public_status = db.Column('public_status', db.Boolean)
   signature = db.Column('signature', db.String)
-  image = db.Column('image', db.String)
+  image = db.Column('image', db.BLOB)
   password = db.Column('password', db.String, nullable=False)
   validation_code = db.Column('validation_code', db.String)
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
