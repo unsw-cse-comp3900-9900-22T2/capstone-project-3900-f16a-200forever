@@ -1,6 +1,7 @@
 from audioop import reverse
 from json import dumps
 from numpy import require
+from movie.utils.movie_until import movie_sort
 import movie
 from .api_models import MovieNS
 from flask_restx import Resource, reqparse
@@ -279,4 +280,8 @@ class MovieDetails(Resource):
 #     movies_lst = movie_sort(movies_lst, strategy)
 
 #     movies = {'movies': movies_lst}
+<<<<<<< HEAD
 #     return movies, 200
+=======
+#     return movies, 200
+>>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e

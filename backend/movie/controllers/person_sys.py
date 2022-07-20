@@ -1,6 +1,6 @@
 import imp
 from numpy import require
-from .api_models import PersonNs
+from .api_models import PersonNS
 from flask_restx import Resource, reqparse
 from movie.models import person as Person
 from movie import db
@@ -8,7 +8,7 @@ from movie.utils.other_until import convert_object_to_dict
 from movie.utils.person_until import get_gender
 from json import dumps
 
-person_ns = PersonNs.person_ns
+person_ns = PersonNS.person_ns
 
 @person_ns.route("/detail")
 class PersonDetail(Resource):

@@ -59,4 +59,48 @@ event_detail = {
   'require_correctness_amt': fields.Integer(required=True),
   'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
+<<<<<<< HEAD
+=======
+}
+
+# Accept null values
+class NullableString(fields.String):
+    __schema_type__ = ['string', 'null']
+    __schema_example__ = 'nullable string'
+
+
+edit_profile = {
+  'username': fields.String(required=True),
+  'signature': NullableString(required=True),
+  'image': NullableString(required=True),
+  'current_password': fields.String,
+  'new_password': fields.String
+}
+
+review_post = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'rating': fields.Integer(required=True),
+  'review_content': fields.String(required=True)
+}
+
+review_delete = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True)
+}
+
+review_admin = {
+  'user_email': fields.String(required=True),
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+review_admin_delete = {
+  'user_email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'admin_email': fields.String(required=True)
+>>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
 }

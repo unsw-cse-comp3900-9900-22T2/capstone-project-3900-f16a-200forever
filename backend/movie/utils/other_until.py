@@ -18,5 +18,8 @@ def paging(page, num, data):
   
   data = data[start:end]
   return data
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
