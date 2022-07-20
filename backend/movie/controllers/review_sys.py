@@ -5,6 +5,7 @@ from movie.utils.user_util import get_user_id
 from movie.models import review as Review
 from movie.models import admin as Admin
 from movie.models import user as User
+from movie.models import movie as Movie
 from flask_restx import Resource, reqparse
 from .api_models import ReviewNS
 from json import dumps
@@ -57,6 +58,11 @@ class ReviewController(Resource):
 
     # commit into db
     new_review = Review.Reviews(data)
+    this_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie).first()
+    this_movie.total_rating += rating * data['weight']
+    if this_movie.rating_count == None:
+      this_movie.rating_count = 0
+    this_movie.rating_count += data['weight']
     print(new_review)
     db.session.add(new_review)
     db.session.commit()
@@ -95,6 +101,11 @@ class ReviewController(Resource):
     # this shouldn't be possible but check if review exists
     if review == None:
       return {"message": "Review doesn't exist???"}, 400
+
+    this_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie).first()
+
+    this_movie.rating_count -= review.weight
+    this_movie.total_rating -= review.rating
 
     db.session.delete(review)
     db.session.commit()
@@ -177,6 +188,11 @@ class ReviewAdmin(Resource):
     # this shouldn't be possible but check if review exists
     if review == None:
       return {"message": "Review doesn't exist???"}, 400
+
+    this_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie).first()
+
+    this_movie.rating_count -= review.weight
+    this_movie.total_rating -= review.rating
 
     db.session.delete(review)
     db.session.commit()
