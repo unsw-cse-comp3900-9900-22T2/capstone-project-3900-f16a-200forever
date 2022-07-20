@@ -68,8 +68,7 @@ function App() {
           <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>} />
           <Route path="/userprofile/:id" element={<UserProfile />} />
           <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
-          <Route path="/genre/:id" element={<GenresPage/>}/>
-          <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
+          <Route path="/genres/:id" element={<GenresPage/>}/>
         </Route>
         <Route
           path="/admin"

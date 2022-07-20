@@ -29,10 +29,11 @@ const Login = ({ updateLoginStatus, updateUserInfo, sid, setSid }) => {
         is_admin: admin_status
       })
       .then(function (response) {
-        console.log(response);
-        console.log(admin_status);
+        console.log(response.data);
+        // console.log(admin_status);
         updateLoginStatus(true);
         updateUserInfo({
+          "id": response.data.id,
           "username": response.data.name,
           "token": response.data.token,
           "email": values["email"]
