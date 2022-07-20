@@ -106,7 +106,6 @@ const MovieReview = ({ id, userInfo, loginStatus }) => {
     </>
   );
 
-
   const getReviews = () => {
     axios
       // todo change url here
