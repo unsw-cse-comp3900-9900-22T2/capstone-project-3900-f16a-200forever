@@ -23,8 +23,15 @@ class SearchMovie(Resource):
   @movie_ns.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('type', type=str, location='args', required=True)
-    parser.add_argument("keywords", type=str, location='args', required=True)
+    # parser.add_argument('by_title', type=str, location='args')
+    # parser.add_argument('by_description', type=str, location='args')
+    # parser.add_argument('by_director', type=str, location='args')
+    # parser.add_argument('by_actor', type=str, location='args')
+    # parser.add_argument('order', choices=['asc', 'desc'], type=str, location='args')
+    # parser.add_argument('page', type=int, location='args')
+    # parser.add_argument('num_per_page', type=int, location='args')
+    parser.add_argument('type', type=str, location='args')
+    parser.add_argument("keywords", type=str, location='args')
     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
@@ -136,7 +143,7 @@ class SearchMovie(Resource):
         data = convert_object_to_dict(movie)
         year = None
         if movie.release_time != None:
-          year = movie.release_time.year
+          year = movie.release_time.split('-')[0]
           data['release_time'] = year
           movies.append(data)
       return {"movies": movies, "total": total_num}, 200
@@ -145,7 +152,7 @@ class SearchMovie(Resource):
       print(movie)
       year = None
       if movie.Movies.release_time != None:
-        year = movie.Movies.release_time.year
+        year = movie.Movies.release_time.split('-')[0]
       data = convert_object_to_dict(movie.Movies)
       data['release_time'] = year
       #data['actors'] = convert_model_to_dict(movie.MovieActor)
@@ -185,7 +192,7 @@ class MovieDetails(Resource):
     total_rating = select_movie.total_rating
     description = select_movie.description
     runtime = select_movie.runtime
-    release_time = str(select_movie.release_time)
+    release_time = select_movie.release_time
     release_status = select_movie.release_status
 
     movie_actors = []
