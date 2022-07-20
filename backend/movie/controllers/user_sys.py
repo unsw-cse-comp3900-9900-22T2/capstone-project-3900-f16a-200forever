@@ -1,9 +1,6 @@
 from operator import is_
 from attr import validate
-<<<<<<< HEAD
-=======
 from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
 from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
@@ -13,11 +10,7 @@ from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS
-<<<<<<< HEAD
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges
-=======
 from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
 
 user_ns = UserNS.user_ns
 
@@ -36,11 +29,7 @@ class UserProfileController(Resource):
     this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if this_user == None:
       print("none")
-<<<<<<< HEAD
-      return {'message': 'User doesn\'t exist'}, 400
-=======
       return {"message": "User doesn\'t exist"}, 400
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
 
     username = this_user.name
     profile_picture = this_user.image
@@ -54,20 +43,13 @@ class UserProfileController(Resource):
     user_profile = {
       'id': user_id, #str
       'username': username, #str
-<<<<<<< HEAD
       'profile_picture': str(profile_picture), #str
-=======
-      'profile_picture': profile_picture, #str
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
       'signature': signature, #str
       'wishlist': wishlist, #list
       'watchedlist': watchedlist, #list
       'droppedlist': droppedlist, #list
       'badges': badges #list
     }
-<<<<<<< HEAD
-    return user_profile, 200
-=======
     return user_profile, 200
 
   @user_ns.response(200, "Edit profile success")
@@ -135,4 +117,3 @@ class UserProfileController(Resource):
     return {
         "message": "Edit profile success"
     }, 200
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e

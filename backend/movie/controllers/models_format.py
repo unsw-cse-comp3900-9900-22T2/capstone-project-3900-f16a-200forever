@@ -59,8 +59,6 @@ event_detail = {
   'require_correctness_amt': fields.Integer(required=True),
   'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
-<<<<<<< HEAD
-=======
 }
 
 # Accept null values
@@ -102,5 +100,4 @@ review_admin_delete = {
   'token': fields.String(required=True),
   'movie_id': fields.Integer(required=True),
   'admin_email': fields.String(required=True)
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
 }

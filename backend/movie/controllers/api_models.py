@@ -28,9 +28,6 @@ class PersonNS:
   person_ns = Namespace('Person', description="the api for person")
   
 class UserNS:
-<<<<<<< HEAD
-  user_ns = Namespace("User", description="the api for user")
-=======
   user_ns = Namespace('User', description="the api for user")
   user_edit_profile = user_ns.model('Edit profile', edit_profile)
 
@@ -43,4 +40,3 @@ class ReviewNS:
   review_delete_form = review_ns.model('Review Delete', review_delete)
   review_admin_form = review_ns.model('Review Admin', review_admin)
   review_admin_delete_form = review_ns.model('Review Admin Delete', review_admin_delete)
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
