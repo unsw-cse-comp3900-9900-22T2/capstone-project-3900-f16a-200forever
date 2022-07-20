@@ -61,10 +61,18 @@ event_detail = {
   'movies': fields.List(fields.Integer, required=True)
 }
 
-# editing can only be username, profile picture, signature
+# Accept null values
+class NullableString(fields.String):
+    __schema_type__ = ['string', 'null']
+    __schema_example__ = 'nullable string'
+
+
 edit_profile = {
-  'editing': fields.String(required=True),
-  'info': fields.String(required=True),
+  'username': fields.String(required=True),
+  'signature': NullableString(required=True),
+  'image': NullableString(required=True),
+  'current_password': fields.String,
+  'new_password': fields.String
 }
 
 review_post = {

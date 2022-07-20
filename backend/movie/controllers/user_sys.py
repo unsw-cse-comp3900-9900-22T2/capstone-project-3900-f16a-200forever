@@ -1,5 +1,6 @@
 from operator import is_
 from attr import validate
+from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
 from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
@@ -9,7 +10,7 @@ from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email
 
 user_ns = UserNS.user_ns
 
@@ -60,17 +61,7 @@ class UserProfileController(Resource):
     args = parser.parse_args()
     print(args)
     user_id = args['user_id']
-
-    this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
-    if this_user == None:
-      print("none")
-      return {"message": "User doesn\'t exist"}, 400
-
-    # editing is which attribute the user wants to edit
-    # info is what they want to edit it to
-    data = user_ns.payload
-    editing = data['editing']
-    info = data['info']
+    email = get_user_email(user_id)
 
     # check if logged in
     '''if not user_has_login(email, session):
@@ -80,24 +71,49 @@ class UserProfileController(Resource):
     if not user_is_valid(data):
       return {"message": "Invalid user id"}, 400'''
 
-    if editing == "username":
-      exists = db.session.query(User.Users).filter(User.Users.name == info).first()
-      if exists != None:
-        return {'message': 'Username already taken'}, 400
-      this_user.name = info
-      db.session.commit()
-      return {"message": "Successfully updated username"}, 200
+    this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
+    if this_user == None:
+      print("none")
+      return {"message": "User doesn\'t exist"}, 400
 
-    if editing == "profile picture":
-      this_user.image = info
-      db.session.commit()
-      return {"message": "Successfully updated profile picture"}, 200
+    data = user_ns.payload
+    username = data['username']
+    signature = data['signature']
+    image = data['image']
+    current_password = None
+    new_password = None
 
-    if editing == "signature":
-      this_user.signature = info
-      db.session.commit()
-      return {"message": "Successfully updated signature"}, 200
+    # check password fields
+    if ('current_password' in data and not 'new_password' in data) or (not 'current_password' in data and 'new_password' in data):
+      return {"message": "Need both passwords"}, 400
+      
+    if 'current_password' in data and 'new_password' in data:
+      current_password = data['current_password']
+      new_password = data['new_password']
+
+    if not username_format_valid(username):
+      return {"message": "Username must be 6-20 characters"}, 400
+
+    if not username_is_unique(username):
+      return {"message": "Username already taken"}, 400
+
+    if current_password != None and new_password != None:
+      if not correct_password_format(new_password):
+        return {"message": "The password is too short, at least 8 characters"}, 400
+
+      if password_is_correct(this_user, current_password):
+        return {"message": "Incorrect password"}, 400
+
+      if current_password == new_password:
+        return {"message": "New password cannot be the same as the old"}, 400
+
+      this_user.password = pw_encode(new_password)
+
+    this_user.name = username
+    this_user.signature = signature
+    #this_user.image = image
+    db.session.commit()
 
     return {
-        "message": "Edit profile error"
-    }, 400
+        "message": "Edit profile success"
+    }, 200
