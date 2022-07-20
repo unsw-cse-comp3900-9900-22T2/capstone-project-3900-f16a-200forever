@@ -18,7 +18,7 @@ import uuid
 review_ns = ReviewNS.review_ns
 
 # user profile page
-@review_ns.route('/review')
+@review_ns.route('')
 class ReviewController(Resource):
   @review_ns.response(200, "Create review success")
   @review_ns.response(400, "Something wrong")
@@ -78,8 +78,8 @@ class ReviewController(Resource):
   def delete(self):
     data = review_ns.payload
     email = data['email']
-    movie = data['movie_id']
-    user_id = get_user_id(email)
+    review_id = data['review_id']
+    #user_id = get_user_id(email)
 
     # check if logged in
     '''if not user_has_login(email, session):
@@ -89,30 +89,34 @@ class ReviewController(Resource):
     if not user_is_valid(data):
       return {"message": "Invalid user id"}, 400'''
 
-    # check valid user and movie ids
-    if not movie_id_valid(movie):
-      return {"message": "Invalid movie id"}, 400
-
-    # check user hasn't already reviewed this movie
-    if not user_reviewed_movie(user_id, movie):
-      return {"message": "User has not reviewed this movie"}, 400
-
-    review = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id).filter(Review.Reviews.movie_id == movie).first()
-    # this shouldn't be possible but check if review exists
+    # check review valid
+    review = db.session.query(Review.Reviews).filter(Review.Reviews.id == review_id).first()
     if review == None:
-      return {"message": "Review doesn't exist???"}, 400
+      return {"message": "Invalid review id"}, 400
 
-    this_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie).first()
-
+    # check permission
+    if review.user.email != email:
+      user = db.session.query(User.Users).filter(User.Users.email == email).first()
+      if user is not None and user.is_review_admin != 1:
+        print(user.is_review_admin)
+        return {'message': 'No permission'}, 400
+      # check admin
+      if user is None:
+        admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
+        if admin == None:
+          return {'message': 'No permission'}, 400
+    
+    # delete 
+    movie_id = review.movie_id
+    this_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
     this_movie.rating_count -= review.weight
     this_movie.total_rating -= review.rating
-
     db.session.delete(review)
     db.session.commit()
 
     return {
         "message": "Delete review success"
-    }, 200
+    }, 200 
 
 
 @review_ns.route('/admin')
@@ -152,7 +156,7 @@ class ReviewAdmin(Resource):
     db.session.commit()
     return {'message': "User is now review admin"}, 200
 
-
+"""
   @review_ns.response(200, "Delete review success")
   @review_ns.response(400, "Something wrong")
   @review_ns.expect(ReviewNS.review_admin_delete_form, validate=True)
@@ -200,3 +204,4 @@ class ReviewAdmin(Resource):
     return {
         "message": "Delete review success"
     }, 200
+"""

@@ -78,7 +78,7 @@ review_post = {
 review_delete = {
   'email': fields.String(required=True),
   'token': fields.String(required=True),
-  'movie_id': fields.Integer(required=True)
+  'review_id': fields.String(required=True)
 }
 
 review_admin = {

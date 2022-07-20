@@ -21,9 +21,7 @@ class Users(db.Model):
   is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
   is_review_admin = db.Column('is_review_admin', db.Integer, nullable=False)
   # relationships from reviews
-  #reviews = db.relationship('Reviews', backref='users', lazy=True)
-  #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
-  #review_unlikes = db.relationship('ReviewUnlikes', backref='users', lazy=True)
+  reviews = db.relationship('Reviews', backref='user', lazy=True)
   user_review_likes_rel = db.relationship(
       "Reviews",
       secondary='r_review_likes',
