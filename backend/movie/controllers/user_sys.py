@@ -54,7 +54,7 @@ class UserProfileController(Resource):
   @user_ns.response(200, "Edit profile success")
   @user_ns.response(400, "Something wrong")
   @user_ns.expect(UserNS.user_edit_profile, validate=True)
-  def post(self):
+  def put(self):
     parser = reqparse.RequestParser()
     parser.add_argument('user_id', type=str, required=True, location="args")
     args = parser.parse_args()
