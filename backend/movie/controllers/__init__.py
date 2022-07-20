@@ -6,11 +6,8 @@ from .event_sys import event_ns
 from .movie_sys import movie_ns
 from .person_sys import person_ns
 from .user_sys import user_ns
-<<<<<<< HEAD
-=======
 from .genre_sys import genre_ns
 from .review_sys import review_ns
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
 from flask_restx import Api
 from flask import Blueprint
 
@@ -41,12 +38,6 @@ person_api = Api(person_bp, version='1.0', title="Person API", description="Movi
 person_api.add_namespace(person_ns, path='/person')
 
 
-<<<<<<< HEAD
-# user profile
-user_bp = Blueprint("user", __name__)
-user_api = Api(user_bp, version='1.0', title="User API", description="Movie Forever api.")
-user_api.add_namespace(user_ns, path='/user')
-=======
 #user 
 user_bp = Blueprint("user", __name__)
 user_api = Api(user_bp, version='1.0', title="User API", description="Movie Forever api.")
@@ -61,4 +52,3 @@ genre_api.add_namespace(genre_ns, path='/genre')
 review_bp = Blueprint("review", __name__)
 review_api = Api(review_bp, version='1.0', title="Review API", description="Movie Forever api.")
 review_api.add_namespace(review_ns, path='/review')
->>>>>>> 6369f1e2e8e00181e2c83438758c7285e2c4948e
