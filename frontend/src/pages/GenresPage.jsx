@@ -1,4 +1,4 @@
-import { Breadcrumb, Button, Layout, Menu, List } from "antd";
+import { Breadcrumb, Button, Layout, Menu, List, Select } from "antd";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Card, Row, Col, Pagination, Space } from "antd";
 import { useState } from "react";
@@ -6,46 +6,52 @@ import axios from "axios";
 import { useEffect } from "react";
 import HomePage from "./HomePage";
 import openNotification from "../components/Notification";
-import "../css/GenresPage.css"
+import "../css/GenresPage.css";
+
+const { Option } = Select;
 const { Meta } = Card;
 
 const GenresPage = () => {
   const [movies, setMovies] = useState([]);
   const [numItem, setNumItem] = useState(0);
+  const [order, setOrder] = useState("ascending");
   // const [loading, setLoading] = useState(true);
-  const { id } = useParams();
+  const { genre, id } = useParams();
+  const genre_val = genre.replace("genre=", "")
   const id_val = id.replace("id=", "");
 
   const changePage = (page, pageSize) => {
     console.log(page);
     console.log(pageSize);
-    // getList(page);
+    getList(page);
   }
 
-  // const getList = (pageNum) => {
-  //   axios
-  //   // todo change url here
-  //   .get("http://127.0.0.1:8080/genre/genremovies", {
-  //     params: {
-  //       "genre_id": id_val,
-  //       "num_per_page":12
-  //     }
-  //   })
-  //   .then(function (response) {
-  //     console.log(response.data.movies);
-  //     console.log(response.data.movies[1].backdrop)
-  //     // setFullList(response.data.result);
-  //     setNumItem(response.data.total);
-  //     setShowList(response.data.movies);
-  //   })
-  //   // todo handle error
-  //   .catch(function (error) {
-  //     console.log(error.response);
-  //     openNotification({
-  //       "title": "Search error",
-  //     })
-  //   });
-  // }
+  const getList = (pageNum) => {
+    axios
+    // todo change url here
+    .get("http://127.0.0.1:8080/genre/genremovies", {
+      params: {
+        "genre_id": id_val,
+        "num_per_page":12,
+        "order": order,
+        "page": pageNum
+      }
+    })
+    .then(function (response) {
+      // console.log(response.data.movies);
+      // console.log(response.data.movies[1].backdrop)
+      // setFullList(response.data.result);
+      setMovies(response.data.movies);
+      setNumItem(response.data.total_num);
+    })
+    // todo handle error
+    .catch(function (error) {
+      console.log(error.response);
+      openNotification({
+        "title": "Genre search error",
+      })
+    });
+  }
 
   useEffect( () => {
     axios
@@ -57,9 +63,10 @@ const GenresPage = () => {
       }
     })
     .then(function (response) {
-      console.log(response.data.movies);
+      console.log(response.data);
       // setLoading(false);
       setMovies(response.data.movies);
+      setNumItem(response.data.total_num);
       // console.log(id_val);
     })
     // todo handle error
@@ -73,9 +80,8 @@ const GenresPage = () => {
 
   return (
     <div className="genres-page">
-     
       <div className="genres-movies-wrapper">
-      
+      <h1>{genre_val} movies</h1>
       <List
         grid={{
           gutter: 16,
@@ -108,7 +114,17 @@ const GenresPage = () => {
           </List.Item>
         )}
       />
-      <Pagination defaultCurrent={1} total={100} pageSize={12} showSizeChanger={false} hideOnSinglePage onChange={changePage}/>
+      <Pagination defaultCurrent={1} total={numItem} pageSize={12} showSizeChanger={false} hideOnSinglePage onChange={changePage}/>
+      <Select
+        defaultValue={`descending`}
+        onChange={(value) => {setOrder(value)}}
+      >
+        <Option value="descending">Sort: descending rating</Option>
+        <Option value="ascending">Sort: ascending rating</Option>
+      </Select>
+      <Button onClick={() => {getList(1)}}>
+        GO!
+      </Button>
       </div>
     </div>
   );

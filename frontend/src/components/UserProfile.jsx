@@ -28,7 +28,8 @@ const UserProfile = ({ userInfo }) => {
   const navigate = useNavigate();
   const [userProfile, setUserProfile] = useState({});
   const [isEdit, setIsEdit] = useState(false);
-  useEffect(() => {
+  useEffect(() => {    
+    console.log(userInfo)
     axios
     // todo change url here
     .get("http://127.0.0.1:8080/user/userprofile", {
