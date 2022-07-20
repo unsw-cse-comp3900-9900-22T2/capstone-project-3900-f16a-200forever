@@ -1,4 +1,4 @@
-import { Select, Layout, Button } from "antd";
+import { Select, Layout, Button ,Input} from "antd";
 import React from "react";
 import "../css/AdminPages.css";
 const { Option } = Select;
@@ -23,31 +23,8 @@ const SetAdmin = () => {
             <div className="set-admin-title">set admin</div>
             <div className="set-admin-select">
               {" "}
-              <Select
-                mode="multiple"
-                allowClear
-                style={{
-                  width: "100%",
-                }}
-                placeholder="Please select"
-                defaultValue={["a10", "c12"]}
-                onChange={handleChange}
-              >
-                {children}
-              </Select>
-              <br />
-              <Select
-                mode="multiple"
-                disabled
-                style={{
-                  width: "100%",
-                }}
-                placeholder="Please select"
-                defaultValue={["a10", "c12"]}
-                onChange={handleChange}
-              >
-                {children}
-              </Select>
+              <div>please provide target admin email</div>
+              <Input></Input>
               <Button> submit </Button>
             </div>
           </center>
