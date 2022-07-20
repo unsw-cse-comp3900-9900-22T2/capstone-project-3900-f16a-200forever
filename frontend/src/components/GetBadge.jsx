@@ -8,12 +8,12 @@ const eventList = [
   {
     title: "aaa",
     status: "bbb",
-    description: "aosidjfo"
+    description: "aosidjfo",
   },
   {
     title: "aaa",
     status: "bbb",
-    description:"harry potter"
+    description: "harry potter",
   },
 ];
 
@@ -38,7 +38,7 @@ const GetBadge = () => {
           dataSource={eventList}
           renderItem={(item) => (
             <List.Item>
-              <Link to={`/ratio/id=${item.id}`}>
+              <Link to={`/badgequestion/id=${item.id}`}>
                 {/* {item} */}
                 <h4>Title: {item.title}</h4>
                 <h4>Status: {item.status}</h4>

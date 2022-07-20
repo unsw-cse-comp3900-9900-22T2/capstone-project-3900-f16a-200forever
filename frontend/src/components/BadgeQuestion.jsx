@@ -17,7 +17,7 @@ const BadgeQuestion = () => {
           {" "}
           <text>I am question here hahahahaha</text>
         </div>
-        <div className="ration-area">
+        <div className="ratio-area">
           {" "}
           <Radio.Group onChange={onChange} value={value}>
             <Radio value={1}>A</Radio>
@@ -31,7 +31,7 @@ const BadgeQuestion = () => {
           {" "}
           <text>I am question here hahahahaha</text>
         </div>
-        <div className="ration-area">
+        <div className="ratio-area">
           {" "}
           <Radio.Group onChange={onChange} value={value}>
             <Radio value={1}>A</Radio>
