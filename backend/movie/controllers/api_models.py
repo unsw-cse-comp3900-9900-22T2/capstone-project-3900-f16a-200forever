@@ -32,4 +32,4 @@ class GenreNS:
 
 class ReviewNs:
   review_ns = Namespace('Review', description="the api for review")
-  
+  validation_check = review_ns.model("Validate", validation)
