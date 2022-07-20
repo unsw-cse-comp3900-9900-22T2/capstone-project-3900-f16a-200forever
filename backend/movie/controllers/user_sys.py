@@ -42,10 +42,14 @@ class UserProfileController(Resource):
     badges = get_badges(user_id)
 
     # id, username, profile picture, signature, wishlist, watchlist, droplist, badges
+    image = None
+    if profile_picture is not None:
+      image = str(profile_picture.decode())
+    
     user_profile = {
       'id': user_id, #str
       'username': username, #str
-      'profile_picture': str(profile_picture.decode()), #str
+      'profile_picture': image, #str
       'signature': signature, #str
       'wishlist': wishlist, #list
       'watchedlist': watchedlist, #list
