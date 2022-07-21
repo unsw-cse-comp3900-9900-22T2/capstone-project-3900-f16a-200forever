@@ -65,7 +65,7 @@ function Header({ loginStatus, updateLoginStatus, userInfo, updateUserInfo, cook
           <div>
             <Button className="header-login-btn" onClick={()=>navigate("/login")}>login</Button>
             <Button className="header-register-btn" onClick={()=>navigate("register")}>register</Button>
-            <Button className="header-register-btn" onClick={()=>navigate("/userprofile/:id")}>UserProfile</Button>
+            {/* <Button className="header-register-btn" onClick={()=>navigate("/userprofile/:id")}>UserProfile</Button> */}
           </div>
         }
       </div>
