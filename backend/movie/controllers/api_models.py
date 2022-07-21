@@ -37,6 +37,6 @@ class UserNs:
 class GenreNS:
   genre_ns = Namespace('Genre', description="the api for genre")
 
-class ReviewNS:
+class ReviewNs:
   review_ns = Namespace('Review', description="the api for review")
-  
+  validation_check = review_ns.model("Validate", validation)

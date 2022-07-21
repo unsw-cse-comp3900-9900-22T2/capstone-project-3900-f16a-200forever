@@ -11,7 +11,7 @@ class Movies(db.Model):
   backdrop = db.Column('backdrop', db.String(200))
   description = db.Column('description', db.String(1000))
   runtime = db.Column('runtime', db.Integer)
-  release_time = db.Column('release_time', db.DateTime)
+  release_time = db.Column('release_time', db.String(20))
   release_status = db.Column('release_status', db.String(20))
   total_rating = db.Column('total_rating', db.Float(20))
   rating_count = db.Column('rating_count', db.Integer)
