@@ -8,21 +8,19 @@ def movie_id_valid(id):
     return False
   return True
 
-def format_movie_return_list(data):
-  movies = []
-  for movie in data:
+def format_movie_return_list(movies):
+  result = []
+  for movie in movies:
     movie = movie[0]
     data = {}
     data['id'] = movie.id
     data['title'] = movie.title
     if movie.release_time == None:
-      data['relese_time'] = "Unknown"
+      data['release_time'] = "Unknown"
     else:
-      time = data['relese_time']
-      year = time[0:4]
-      data['relese_time'] = year
-    movies.append(data)
-  return movies
+      data['relese_time'] = movie.release_time[0:4]
+    result.append(data)
+  return result 
 
 def movie_sort(movies_lst, strategy):
   for movie in movies_lst:
