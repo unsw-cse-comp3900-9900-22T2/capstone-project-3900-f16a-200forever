@@ -146,7 +146,7 @@ comment_react = {
 }
 
 
-thread_comment = thread_comment = {
+thread_comment = {
   "email": fields.String(required=True),
   'token': fields.String(required=True),
   "content": fields.String(required=True),
