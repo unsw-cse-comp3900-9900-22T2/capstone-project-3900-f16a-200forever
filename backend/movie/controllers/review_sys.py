@@ -146,7 +146,7 @@ class ReactToReview(Resource):
           return {"message": "User not exist"}, 400
 
         data = {'review_id': review_id, 'user_id': user.id}
-
+        is_remove = -1
         like = db.session.query(Review.ReviewLikes).filter(Review.ReviewLikes.review_id == review_id, Review.ReviewLikes.user_id == user.id).first()
         unlike = db.session.query(Review.ReviewUnlikes).filter(Review.ReviewUnlikes.review_id == review_id, Review.ReviewUnlikes.user_id == user.id).first()
         # positive reaction
@@ -154,6 +154,7 @@ class ReactToReview(Resource):
           # delete the like
           if like is not None:
             db.session.delete(like)
+            is_remove = 0
             db.session.commit()
           # like failed
           elif like is None and unlike is not None:
@@ -162,12 +163,14 @@ class ReactToReview(Resource):
           elif like is None and unlike is None:
             react = Review.ReviewLikes(data)
             db.session.add(react)
+            is_remove = 1
             db.session.commit()
         # negative reaction
         elif reaction == "unlike":
           # delete the unlike
           if unlike is not None:
             db.session.delete(unlike)
+            is_remove = 0
             db.session.commit()
           # unlike failed
           elif unlike is None and like is not None:
@@ -176,9 +179,10 @@ class ReactToReview(Resource):
           elif unlike is None and like is None:
             reaction = Review.ReviewUnlikes(data)
             db.session.add(reaction)
+            is_remove = 1 
             db.session.commit()
 
-        return {"message": "Successfully"}, 200
+        return {"is_remove": is_remove}, 200
 
 
 review_ns = ReviewNS.review_ns
