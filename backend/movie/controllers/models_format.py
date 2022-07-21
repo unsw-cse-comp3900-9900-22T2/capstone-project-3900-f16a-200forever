@@ -52,7 +52,7 @@ finish_event = {
 class Question_Form(fields.Raw):
   def format(self, value):
     return {  
-      'id': fields.String(required=True),
+      'id': fields.String(),
       'content': fields.String(required=True),
       'choice_1': fields.String(required=True),
       'choice_2': fields.String(required=True),

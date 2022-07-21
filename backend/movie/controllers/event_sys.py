@@ -27,13 +27,15 @@ class EventCreate(Resource):
   @event_ns.expect(EventNS.event_create_form, validate=True)
   def post(self):
     data = event_ns.payload
-
+    """
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
 
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
     
     # check the user is admin
     if not user_is_admin(data['email']):
@@ -109,13 +111,15 @@ class EditEvent(Resource):
     args = parser.parse_args()
     id = args['id']
     data = event_ns.payload
-
+    """
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
 
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check the user is admin
     if not user_is_admin(data['email']):
@@ -152,6 +156,7 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
+    """
     # login or not
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
@@ -159,6 +164,7 @@ class AttempEvent(Resource):
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
     
     # check event valid
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
@@ -187,6 +193,7 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
+
     # login or not
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
