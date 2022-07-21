@@ -37,7 +37,9 @@ class Users(db.Model):
       overlaps="user_review_likes_rel"
   )
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
-  
+  threads = db.relationship('Threads', backref='user', lazy=True)
+  thread_comments = db.relationship('ThreadComment', backref='user', lazy=True)
+
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)
 
@@ -46,6 +48,7 @@ class Users(db.Model):
     self.name = data['name']
     self.email = data['email']
     self.password = data['password']
+    self.is_forum_admin = 0
     
 
 class UserEvent(db.Model):

@@ -48,6 +48,26 @@ finish_event = {
   'answers': fields.Raw(required=True)
 }
 
+delete_thread = {
+  'thread_id': fields.String(required=True),
+  'email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+forum_admin = {
+  'user_email': fields.String(required=True),
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+post_thread = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'genre_id': fields.Integer(required=True),
+  'is_anonymous': fields.Integer(required=True),
+  'title': fields.String(required=True), 
+  'content': fields.String(required=True)
+}
 
 class Question_Form(fields.Raw):
   def format(self, value):

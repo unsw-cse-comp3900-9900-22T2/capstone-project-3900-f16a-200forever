@@ -135,7 +135,6 @@ class ReviewSort(Resource):
       review['user_image'] = user['image']
       result.append(review)
       
-
     return {"total": total_num, "reviews": result}
     """
 

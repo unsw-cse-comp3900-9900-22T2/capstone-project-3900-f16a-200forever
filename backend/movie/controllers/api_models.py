@@ -1,6 +1,7 @@
 from attr import field
 from flask_restx import Namespace
-from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, review_post, review_delete, review_admin, review_admin_delete, edit_profile, attemp_event, finish_event
+from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
+  review_post, review_delete, review_admin, review_admin_delete, edit_profile, attemp_event, finish_event, delete_thread, forum_admin, post_thread
 from numpy import require
 
 class AuthNS:
@@ -22,7 +23,6 @@ class EventNS:
   validation_form = event_ns.model("Validate", validation)
   attemp_event_form = event_ns.model('Attemp Event', attemp_event)
   finish_event_form = event_ns.model('Attemp Event', finish_event)
-
 
 class MovieNS:
   movie_ns = Namespace('Movie', description="the api for manage movie")
@@ -49,3 +49,8 @@ class ReviewNS:
 class RecommendationNS:
   recommendation_ns = Namespace('Recommendation', description="the api for recommendation")
   
+class ThreadNS:
+  thread_ns = Namespace('Thread', description="the api for thread")
+  delete_thread_form = thread_ns.model('Delete thread', delete_thread)
+  forum_admin_form = thread_ns.model('Thread admin',forum_admin) 
+  post_thread_form = thread_ns.model('Post thread', post_thread)
