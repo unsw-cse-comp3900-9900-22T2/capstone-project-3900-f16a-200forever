@@ -138,3 +138,9 @@ review_admin_delete = {
   'movie_id': fields.Integer(required=True),
   'admin_email': fields.String(required=True)
 }
+
+comment_react = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  "comment_id": fields.String(required=True)
+}

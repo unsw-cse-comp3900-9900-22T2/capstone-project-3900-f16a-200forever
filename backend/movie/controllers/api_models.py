@@ -1,7 +1,8 @@
 from attr import field
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
-  review_post, review_delete, review_admin, review_admin_delete, edit_profile, attemp_event, finish_event, delete_thread, forum_admin, post_thread
+  review_post, review_delete, review_admin, review_admin_delete, edit_profile, attemp_event, finish_event, delete_thread, forum_admin, post_thread, \
+  comment_react
 from numpy import require
 
 class AuthNS:
@@ -54,3 +55,4 @@ class ThreadNS:
   delete_thread_form = thread_ns.model('Delete thread', delete_thread)
   forum_admin_form = thread_ns.model('Thread admin',forum_admin) 
   post_thread_form = thread_ns.model('Post thread', post_thread)
+  comment_react_form = thread_ns.model("React Thread", comment_react)

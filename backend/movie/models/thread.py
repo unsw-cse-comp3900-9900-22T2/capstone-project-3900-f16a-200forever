@@ -48,10 +48,10 @@ class Categories(db.Model):
 class ThreadComment(db.Model):
   __tablename__ ='t_thread_comment'
   id = db.Column('id', db.String(256), primary_key=True)
-  thread_id = db.Column('thread_id', db.Integer, db.ForeignKey('t_threads.id'), nullable=False)
+  thread_id = db.Column('thread_id', db.String(256), db.ForeignKey('t_threads.id'), nullable=False)
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False)
-  reply_comment_id = db.Column('reply_comment_id', db.String(256), db.ForeignKey('t_thread_comment.id'),  nullable=False)
-  comment_time = db.Column('comment_time', db.DateTime, nullable=False)
+  reply_comment_id = db.Column('reply_comment_id', db.String(256), db.ForeignKey('t_thread_comment.id'))
+  comment_time = db.Column('comment_time', db.String(256), nullable=False)
   content = db.Column('content', db.String(256), nullable=False)
   is_anonymous = db.Column('is_anonymous', db.Integer, nullable=False)  
   comments = db.relationship("ThreadComment", remote_side=[id])

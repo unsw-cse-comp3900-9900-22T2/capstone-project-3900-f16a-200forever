@@ -1,5 +1,7 @@
 
 import imp
+
+from attr import validate
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
@@ -145,17 +147,35 @@ class ThreadAdmin(Resource):
 class ReactToComment(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.comment_react_form, validate=True)
   def post(self):
-    parser = reqparse.RequestParser()
-    parser.add_argument('user_id', type=str, location = 'args', required=True)
-    parser.add_argument('comment_id', type=str, location = 'args', required=True)
-    args = parser.parse_args()
-    comment_id = args['comment_id']
-    user_id = args['user_id']
-    data = {'user_id': user_id, 'comment_id': comment_id}
-    new_comment_reaction = Thread.CommentLikes(data)
-    db.session.add(new_comment_reaction)
-    db.session.commit()
+    data = thread_ns.payload
 
-    return {"message": "Reaction add successfully"}, 200
+    """
+    # check user login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
 
+    # check user valid
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    """
+    # check user valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {"message": "Incalid user"}, 400
+    # check comment valid
+    comment = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['comment_id']).first()
+    if comment == None:
+      return {"message": "Comment not exist"}, 400
+
+    react = db.session.query(Thread.CommentLikes).filter(Thread.CommentLikes.comment_id == data['comment_id'], Thread.CommentLikes.user_id == user.id).first()
+    if react == None:
+      new_react = Thread.CommentLikes({'user_id': user.id, 'comment_id': data['comment_id']})
+      db.session.add(new_react)
+      db.session.commit()
+      return {"is_remove": 1}, 200
+    else:
+      db.session.delete(react)
+      db.session.commit()
+      return {"is_remove": 0}, 200
