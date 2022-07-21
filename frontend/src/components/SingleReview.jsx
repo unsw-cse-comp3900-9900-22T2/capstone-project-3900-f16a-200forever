@@ -1,10 +1,11 @@
 import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
-import { Avatar, Comment, Tooltip } from 'antd';
+import { Avatar, Comment, Rate, Tooltip } from 'antd';
+import axios from 'axios';
 import React, { createElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import openNotification from './Notification';
 
-
-const SingleReview = ({ item }) => {
+const SingleReview = ({ item, userInfo, loginStatus }) => {
 	const [likes, setLikes] = useState(item.likes_count);
   const [dislikes, setDislikes] = useState(item.unlikes_count);
   const [action, setAction] = useState(null);
@@ -13,6 +14,20 @@ const SingleReview = ({ item }) => {
   const like = () => {
     setLikes(likes + 1);
     setAction('liked');
+    axios
+      .post(`http://127.0.0.1:8080/review/react?review_id=${item.id}&reaction=like`, {
+        email: userInfo["email"],
+        token: userInfo.token
+      })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        openNotification({
+          "title": "An error occur",
+        })
+      });
   };
 
   const dislike = () => {
@@ -45,12 +60,19 @@ const SingleReview = ({ item }) => {
 					alt={item.user_name}
 				/>
 			}
+      
       content={
+        <>
+        
         <p>{item.review_content}</p>
+        </>
       }
       datetime={
 				<Tooltip>
-					<span>{item.created_time}</span>
+          <>
+          <Rate defaultValue={item.rating}></Rate>
+          <span>{item.created_time}</span>
+          </>
 				</Tooltip>
 			}
     />

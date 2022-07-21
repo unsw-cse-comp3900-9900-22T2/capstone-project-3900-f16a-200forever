@@ -33,6 +33,7 @@ const MovieReview = ({ id, userInfo, loginStatus }) => {
         <Rate 
           onChange={(value) => { setRating(value) }}
           defaultValue={1}
+          allowClear={false}
         />
       </Form.Item>
       <Form.Item>
@@ -146,7 +147,7 @@ const MovieReview = ({ id, userInfo, loginStatus }) => {
         dataSource={reviews}
         renderItem={(item) => (
           <li>
-            <SingleReview item={item}></SingleReview>
+            <SingleReview item={item} userInfo={userInfo} loginStatus={loginStatus}></SingleReview>
           </li>
         )}
       />
