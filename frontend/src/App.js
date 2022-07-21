@@ -97,9 +97,11 @@ function App() {
             element={<UserProfile userInfo={userInfo} />}
           />
           <Route
-            path="/userprofile/guesswhatyoulike/:id"
+            path="/guesswhatyoulike/:id"
             element={<GuessWhatYouLikePage />}
           />
+        
+        
           <Route path="/genre/genre/:id" element={<GenresPage />} />
           <Route
             path="/userprofile/edit/:id"

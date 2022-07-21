@@ -28,7 +28,7 @@ const { Meta } = Card;
 const GuessWhatYouLikePage = () => {
   const { type, keywords, order } = useParams();
   const [showList, setShowList] = useState([]);
-  const type_val = type.replace("type=", "")
+  const type_val = type.replace("id=", "")
   return (
     <div className="guess-what-you-like-page">
       <Content

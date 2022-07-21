@@ -29,7 +29,7 @@ const CurrentlyTrendingMovies = () => {
           </Card>
         </List.Item>
       </List>
-      <Button onClick={() => navigate("/guesswhatyoulike")}>Guess what you like</Button>
+      <Button onClick={() => navigate("/guesswhatyoulike/:id")}>Guess what you like</Button>
     </div>
   );
 };
