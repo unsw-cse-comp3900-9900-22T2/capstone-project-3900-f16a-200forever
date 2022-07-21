@@ -193,7 +193,7 @@ const UserProfile = ({ userInfo }) => {
         </div>
       </div>
         :
-        <UserProfileEditPage userProfile={userProfile}></UserProfileEditPage>
+        <UserProfileEditPage userProfile={userProfile} userInfo={userInfo}></UserProfileEditPage>
       }
     </>
       );

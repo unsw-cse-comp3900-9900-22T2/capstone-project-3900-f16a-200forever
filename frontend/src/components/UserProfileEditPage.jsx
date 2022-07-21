@@ -38,7 +38,7 @@ function fileToDataUrl(file) {
   return dataUrlPromise;
 }
 
-const UserProfileEditPage = ({ userProfile }) => {
+const UserProfileEditPage = ({ userProfile, userInfo }) => {
 
   const [fileList, setFileList] = useState([
     {
@@ -77,7 +77,28 @@ const UserProfileEditPage = ({ userProfile }) => {
     console.log(values);
     // console.log(userProfile)
     console.log(base64);
+    // console.log(userInfo)
     // todo add url here
+    axios
+      .put("http://127.0.0.1:8080/user/userprofile", {
+        email: userInfo["email"],
+        token: userInfo.token,
+        username: values.username,
+        signature: values.signature,
+        image: null,
+        // current_password: values.curr_password,
+        // new_password: values.password,
+        // double_check: values.password
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        openNotification({
+          "title": "An error occur",
+        })
+      });
   }
 
   const onFinishFailed = () => {
