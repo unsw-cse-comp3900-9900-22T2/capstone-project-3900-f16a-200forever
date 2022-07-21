@@ -1,4 +1,3 @@
-from tkinter import Image
 from .api_models import ReviewNS
 from movie import db
 from flask_restx import Resource, reqparse
@@ -59,7 +58,7 @@ class ReviewSort(Resource):
     left = None
     # sort by the create time
     if args['type'] == 'time':
-      if args['order'] == 'ascending':
+      if args['order'] == 'descending':
         all_reviews = query_like.order_by(Review.Reviews.created_time.desc(), Review.Reviews.id).all()
       else:
         all_reviews = query_like.order_by(Review.Reviews.created_time.asc(), Review.Reviews.id).all()
@@ -69,7 +68,7 @@ class ReviewSort(Resource):
 
     # sort by the likes
     if args['type'] == 'likes':
-      if args['order'] == 'ascending':
+      if args['order'] == 'descending':
         all_reviews = query_like.order_by(func.count(Review.ReviewLikes.review_id).desc(), Review.Reviews.created_time.desc()
       ).all()
       else:
@@ -80,7 +79,7 @@ class ReviewSort(Resource):
 
     # sort by unlikes
     if args['type'] == 'unlikes':
-      if args['order'] == 'ascending':
+      if args['order'] == 'descending':
         all_reviews = query_unlike.order_by(func.count(Review.ReviewUnlikes.review_id).desc(), Review.Reviews.created_time.desc()
       ).all()
       else:
