@@ -11,13 +11,13 @@ def user_id_valid(id):
     return False
   return True
 
-def get_user_id(email):
+def get_admin_id(email):
   user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
   if user == None:
     raise Exception("Admin doesn't exist")
   return user.id
 
-def get_admin_id(email):
+def get_user_id(email):
   user = db.session.query(User.Users).filter(User.Users.email == email).first()
   if user == None:
     raise Exception("User doesn't exist")
