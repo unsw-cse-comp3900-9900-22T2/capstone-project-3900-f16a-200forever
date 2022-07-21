@@ -26,7 +26,7 @@ def format_movie_return_list(data):
 
 def movie_sort(movies_lst, strategy):
   for movie in movies_lst:
-    if movie['rating_count'] == None:
+    if movie['rating_count'] == None or movie['rating_count'] == 0:
         movie['rating'] = 0
     else:
         movie['rating'] = round(movie['total_rating'] / movie['rating_count'], 1)

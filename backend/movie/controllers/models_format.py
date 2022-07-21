@@ -74,12 +74,36 @@ event_detail = {
   'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
 }
-"""
-user_profile = {
-  'id': fields.String(required=True),
-  'username': fields.String(required=True),
-  'p'
-}
-"""
 
-    
+# editing can only be username, profile picture, signature
+edit_profile = {
+  'editing': fields.String(required=True),
+  'info': fields.String(required=True),
+}
+
+review_post = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'rating': fields.Integer(required=True),
+  'review_content': fields.String(required=True)
+}
+
+review_delete = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'review_id': fields.String(required=True)
+}
+
+review_admin = {
+  'user_email': fields.String(required=True),
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+review_admin_delete = {
+  'user_email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'admin_email': fields.String(required=True)
+}
