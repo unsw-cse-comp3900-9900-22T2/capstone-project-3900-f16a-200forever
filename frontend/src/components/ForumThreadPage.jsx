@@ -1,6 +1,7 @@
 import { Avatar, List } from "antd";
 import React from "react";
-import "../css/ThreadPage.css"
+import "../css/ThreadPage.css";
+import NewPost from "./NewPost";
 const data = [
   {
     title: "Ant Design Title 1",
@@ -19,7 +20,9 @@ const data = [
 const ThreadPage = () => (
   <div className="thread-page">
     {" "}
+    <NewPost></NewPost>
     <div className="thread-wrapper">
+      
       <List
         itemLayout="horizontal"
         dataSource={data}

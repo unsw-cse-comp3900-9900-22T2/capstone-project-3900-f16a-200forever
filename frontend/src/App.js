@@ -25,8 +25,8 @@ import GuessWhatYouLikePage from "./components/GuessWhatYouLikePage";
 import GenresPage from "./pages/GenresPage";
 import SetAdmin from "./components/SetAdmin";
 import ForumPage from "./pages/FourmPage";
-import ThreadPage from "./components/ThreadPage";
-import NewPost from "./components/NewPost";
+import ForumThreadPage from "./components/ForumThreadPage";
+
 import GetBadge from "./components/GetBadge";
 import BadgeQuestion from "./components/BadgeQuestion";
 function App() {
@@ -48,7 +48,12 @@ function App() {
           path="/"
           element={
             <>
-              <Header loginStatus={loginStatus} updateLoginStatus={updateLoginStatus} userInfo={userInfo} updateUserInfo={updateUserInfo}/>
+              <Header
+                loginStatus={loginStatus}
+                updateLoginStatus={updateLoginStatus}
+                userInfo={userInfo}
+                updateUserInfo={updateUserInfo}
+              />
               <Outlet />
             </>
           }
@@ -56,11 +61,21 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route
             path="/login"
-            element={<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo} />}
+            element={
+              <Login
+                updateLoginStatus={updateLoginStatus}
+                updateUserInfo={updateUserInfo}
+              />
+            }
           />
           <Route
             path="/register"
-            element={<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}
+            element={
+              <Register
+                updateLoginStatus={updateLoginStatus}
+                updateUserInfo={updateUserInfo}
+              />
+            }
           />
           <Route
             path="/forgetpassword"
@@ -70,22 +85,41 @@ function App() {
             path="/search/:type/:keywords/:order"
             element={<SearchResult />}
           />
-          <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>} />
-          <Route path="/userprofile/:id" element={<UserProfile userInfo={userInfo} />} />
-          <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
-          <Route path="/genre/genre/:id" element={<GenresPage/>}/>
-          <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
-          <Route path='/forum' element={<ForumPage/>}/>
-          <Route path = '/thread/:id' element={<ThreadPage></ThreadPage>}/>
-          <Route path='/newpost' element={<NewPost></NewPost>}/>
-          <Route path='/getbadge' element={<GetBadge></GetBadge>}/>
-          <Route path='/badgequestion/:id' element={<BadgeQuestion></BadgeQuestion>}/>
+          <Route
+            path="/movie/detail/:id"
+            element={
+              <MovieDetail userInfo={userInfo} loginStatus={loginStatus} />
+            }
+          />
+          <Route
+            path="/userprofile/:id"
+            element={<UserProfile userInfo={userInfo} />}
+          />
+          <Route
+            path="/userprofile/guesswhatyoulike/:id"
+            element={<GuessWhatYouLikePage />}
+          />
+          <Route path="/genre/genre/:id" element={<GenresPage />} />
+          <Route
+            path="/userprofile/edit/:id"
+            element={<UserProfileEditPage />}
+          />
+          <Route path="/forum" element={<ForumPage />} />
+          <Route path="/forum/:id" element={<ForumThreadPage></ForumThreadPage>} />
+
+          <Route path="/getbadge" element={<GetBadge></GetBadge>} />
+          <Route
+            path="/badgequestion/:id"
+            element={<BadgeQuestion></BadgeQuestion>}
+          />
         </Route>
         <Route
           path="/admin"
           element={
             <>
-              <AdminHeader loginStatus={loginStatus} updateLoginStatus={updateLoginStatus}
+              <AdminHeader
+                loginStatus={loginStatus}
+                updateLoginStatus={updateLoginStatus}
               />
               <Outlet />
             </>

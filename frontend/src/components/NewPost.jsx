@@ -20,11 +20,13 @@ const NewPost = () => {
     <div className="new-post-page">
       <div className="post-wrapper">
         {" "}
+        
         <Form
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 15 }}
+          labelCol={{ span: 5}}
+          wrapperCol={{ span: 20 }}
           layout="horizontal"
         >
+          <Form.Item>New forum</Form.Item>
           <Form.Item label="Topic">
             <Input></Input>
           </Form.Item>
