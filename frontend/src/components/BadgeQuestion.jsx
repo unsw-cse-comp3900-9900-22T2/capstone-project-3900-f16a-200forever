@@ -40,8 +40,9 @@ const BadgeQuestion = () => {
             <Radio value={4}>D</Radio>
           </Radio.Group>
         </div>
+        <Button>submit</Button>
       </div>
-      <Button>submit</Button>
+      
     </div>
   );
 };
