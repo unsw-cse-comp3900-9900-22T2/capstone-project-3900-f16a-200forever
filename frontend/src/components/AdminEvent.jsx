@@ -29,7 +29,11 @@ const onChange = (time, timeString) => {
 const AdminEvent = (detail, setDetail) => {
   const onFinish = (values) => {
     console.log("Received values of form:", values);
-    setDetail(values)
+    setDetail(values);
+  };
+  const CreateForonFinish = (values) => {
+    // setDetail(values)
+    console.log("form console log:", values);
   };
   const [fileList, setFileList] = useState([
     {
@@ -66,7 +70,11 @@ const AdminEvent = (detail, setDetail) => {
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 15 }}
           layout="horizontal"
+          onFinish={CreateForonFinish}
         >
+          <Form.Item>
+      
+          </Form.Item>
           <Form.Item label="Topic">
             <Input></Input>
           </Form.Item>
@@ -76,7 +84,6 @@ const AdminEvent = (detail, setDetail) => {
             <span>min(s)</span>
           </Form.Item>
           <Form.Item label="Deadline">
-          
             <RangePicker />
           </Form.Item>
           {/* ddl */}

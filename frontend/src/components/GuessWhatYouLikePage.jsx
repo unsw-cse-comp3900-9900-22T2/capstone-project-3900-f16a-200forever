@@ -23,12 +23,30 @@ import { useInsertionEffect } from "react";
 import axios from "axios";
 import "../css/UserProfile.css";
 import Title from "antd/lib/skeleton/Title";
+import { useEffect } from "react";
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
+
 const GuessWhatYouLikePage = () => {
-  const { type, keywords, order } = useParams();
   const [showList, setShowList] = useState([]);
-  const type_val = type.replace("id=", "")
+  const { id} = useParams();
+  // const { type, keywords, order } = useParams();
+  // const [showList, setShowList] = useState([]);
+  useEffect(()=>{
+    axios.get("http://127.0.0.1:8080/recommendation/user",{
+      params:{
+        "user_id":id.replace("id=",""),
+        "by": "genre"
+      }
+    })
+    .then(function(response){
+      console.log(response.data)
+      setShowList(response.data)
+    })
+    .catch(function(error){
+      console.log(error.response)
+    })
+  })
   return (
     <div className="guess-what-you-like-page">
       <Content
@@ -53,23 +71,7 @@ const GuessWhatYouLikePage = () => {
         renderItem={(item) => (
           <List.Item>
             {
-              type_val === "director" ?
-              <Link to={`/director/id=${item.id}`}>
-                <Card
-                  hoverable
-                  bordered={false}
-                  style={{}}
-                  cover={
-                    <img
-                      src={item.backdrop}
-                      alt="example"
-                    />
-                  }
-                >
-                  <Meta title={item.title}/>
-                </Card>   
-              </Link>
-                :
+             
               <Link to={`/movie/detail/id=${item.id}`}>
                 <Card
                   hoverable
