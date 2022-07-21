@@ -1,3 +1,4 @@
+from tkinter import Image
 from .api_models import ReviewNS
 from movie import db
 from flask_restx import Resource, reqparse
@@ -45,54 +46,81 @@ class ReviewSort(Resource):
       return {"message": "Invalid movie id"}, 400
 
 
-    query =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.user_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id
+    query_like =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.user_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id
     ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
-    ).group_by(Review.Reviews.id).all()
+    ).group_by(Review.Reviews.id)
 
-    print(query)
+    query_unlike = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewUnlikes.user_id)).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+    ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
+    ).group_by(Review.Reviews.id)
 
+
+    all_reviews = None
+    left = None
     # sort by the create time
     if args['type'] == 'time':
-
-      query =  db.session.query(Review.Reviews, User.Users, Review.ReviewLikes.user_id, Review.ReviewUnlikes.user_id).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
-      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
-      ).group_by(Review.Reviews.id)
-
       if args['order'] == 'ascending':
-        all_reviews = query.order_by(Review.Reviews.created_time.desc(), Review.Reviews.id).all()
+        all_reviews = query_like.order_by(Review.Reviews.created_time.desc(), Review.Reviews.id).all()
       else:
-        all_reviews = query.order_by(Review.Reviews.created_time.asc(), Review.Reviews.id).all()
+        all_reviews = query_like.order_by(Review.Reviews.created_time.asc(), Review.Reviews.id).all()
+      left = query_unlike.all()
 
-    print(all_reviews)
+
+
     # sort by the likes
     if args['type'] == 'likes':
-      query = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
-      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
-      ).group_by(Review.Reviews.id
-      )
       if args['order'] == 'ascending':
-        all_reviews = query.order_by(func.count(Review.ReviewLikes.review_id).desc(), Review.Reviews.created_time.desc()
+        all_reviews = query_like.order_by(func.count(Review.ReviewLikes.review_id).desc(), Review.Reviews.created_time.desc()
       ).all()
       else:
-        all_reviews = query.order_by(func.count(Review.ReviewLikes.review_id).asc(), Review.Reviews.created_time.desc()
+        all_reviews = query_like.order_by(func.count(Review.ReviewLikes.review_id).asc(), Review.Reviews.created_time.desc()
       ).all()
+      left = query_unlike.all()
 
 
     # sort by unlikes
     if args['type'] == 'unlikes':
-      query = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
-      ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
-      ).group_by(Review.Reviews.id
-      )
       if args['order'] == 'ascending':
-        all_reviews = query.order_by(func.count(Review.ReviewUnlikes.review_id).desc(), Review.Reviews.created_time.desc()
+        all_reviews = query_unlike.order_by(func.count(Review.ReviewUnlikes.review_id).desc(), Review.Reviews.created_time.desc()
       ).all()
       else:
-        all_reviews = query.order_by(func.count(Review.ReviewUnlikes.review_id).asc(), Review.Reviews.created_time.desc()
+        all_reviews = query_unlike.order_by(func.count(Review.ReviewUnlikes.review_id).asc(), Review.Reviews.created_time.desc()
       ).all()
+      left = query_like.all()
 
-    if all_reviews == None:
+    if all_reviews == None and left == None:
       return {"Something wrong"}, 400
+
+    # format left data
+    left_data = {}
+    for re in left:
+      review = convert_object_to_dict(re[0])
+      left_data[review['id']] = re[2]
+
+    # format:
+    total_num = len(all_reviews)
+    result = []
+    for review in all_reviews:
+      data = convert_object_to_dict(review[0])
+      user = review[1]
+      if args['type'] == 'unlikes':
+        data['likes_count'] = left_data[review[0].id]
+        data['unlikes_count'] = review[2]
+      elif args['type'] != 'unlikes':
+        data['unlikes_count'] = left_data[review[0].id]
+        data['likes_count'] = review[2]
+      data['user_email'] = user.email
+      data['user_name'] = user.name
+      image = None
+      profile_picture = user.image
+      if profile_picture is not None:
+        image = str(profile_picture.decode())
+      data['user_image'] = image
+      result.append(data)
+
+    return {"total": total_num, "reviews": result}
+
+
     """
       total_num = len(all_reviews)
     # paging
