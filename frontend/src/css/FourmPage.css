@@ -35,3 +35,16 @@
   padding: 30px 0;
   margin-left: 20px;
 }
+.post-page{
+  max-width: 1200px;
+  width: 100%;
+  margin: 100px 50px 10px 50px;
+  box-shadow: 0 0 5px #ccc;
+  display: inline-block;
+}
+.post-page-wrapper{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 30px 0;
+}
