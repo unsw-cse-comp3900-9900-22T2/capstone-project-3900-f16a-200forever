@@ -70,10 +70,10 @@ function App() {
             path="/search/:type/:keywords/:order"
             element={<SearchResult />}
           />
-          <Route path="/movie/detail/:id" element={<MovieDetail />} />
-          <Route path="/userprofile/:id" element={<UserProfile />} />
+          <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>} />
+          <Route path="/userprofile/:id" element={<UserProfile userInfo={userInfo} />} />
           <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
-          <Route path="/genre/:id" element={<GenresPage/>}/>
+          <Route path="/genre/genre/:id" element={<GenresPage/>}/>
           <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />} />
           <Route path='/forum' element={<ForumPage/>}/>
           <Route path = '/thread/:id' element={<ThreadPage></ThreadPage>}/>

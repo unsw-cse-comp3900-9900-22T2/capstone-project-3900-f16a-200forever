@@ -29,21 +29,17 @@ const Login = ({ updateLoginStatus, updateUserInfo, sid, setSid }) => {
         is_admin: admin_status
       })
       .then(function (response) {
-        console.log(response);
-        console.log(admin_status);
+        console.log(response.data);
+        // console.log(admin_status);
         updateLoginStatus(true);
         updateUserInfo({
+          "id": response.data.id,
           "username": response.data.name,
           "token": response.data.token,
           "email": values["email"]
         })
         // console.log(response.data.sid)
-        setSid(response.data.sid)
-        // axios.defaults.headers.post['Cookie'] = "session=session=5b0dc704-3114-465b-a76f-35522701e7d9"
-        // todo change url here
-        navigate("/", {
-          sid: sid
-        })
+        navigate("/")
       })
       .catch(function (error) {
         console.log(error.response.data);

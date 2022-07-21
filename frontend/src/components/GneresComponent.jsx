@@ -47,7 +47,7 @@ const GenresInHomepage = () => {
         dataSource={genres}
         renderItem={(item) => (
           <List.Item>
-            <Link to={`/genre/id=${item.id}`}>
+            <Link to={`/genre/genre=${item.name}/id=${item.id}`}>
               <Card
                 hoverable
                 bordered={true}
