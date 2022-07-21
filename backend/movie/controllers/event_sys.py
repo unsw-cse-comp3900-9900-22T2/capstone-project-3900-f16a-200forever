@@ -177,7 +177,7 @@ class AttempEvent(Resource):
     user_id = get_user_id(data['email'])
     data['user_id'] = user_id
     data['start_time'] = now
-    new = User.UserEevnt(data)
+    new = User.UserEvent(data)
     try:
       db.session.add(new)
       db.session.commit()
@@ -197,8 +197,8 @@ class AttempEvent(Resource):
     data = event_ns.payload
     """
     # login or not
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+    # if not user_has_login(data['email'], session):
+    #   return {"message": "the user has not logined"}, 400
 
     # check the user is valid or not
     if not user_is_valid(data):
