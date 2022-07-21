@@ -12,7 +12,7 @@ from movie.utils.review_util import user_reviewed_movie, calculate_weight
 from movie.utils.user_util import get_user_id
 from movie.models import admin as Admin
 import uuid
-import datetime
+from datetime import datetime
 
 review_ns = ReviewNS.review_ns
 
@@ -207,7 +207,7 @@ class ReviewController(Resource):
 
     data['id'] = str(uuid.uuid4())
     data['user_id'] = user_id
-    data['created_time'] = datetime.datetime.now()
+    data['created_time'] = datetime.now()
     data['weight'] = calculate_weight(user_id, movie)
 
     # commit into db
