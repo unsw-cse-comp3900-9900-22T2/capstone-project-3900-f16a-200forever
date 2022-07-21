@@ -1,4 +1,3 @@
-from tkinter import Image
 from .api_models import ReviewNS
 from movie import db
 from flask_restx import Resource, reqparse
