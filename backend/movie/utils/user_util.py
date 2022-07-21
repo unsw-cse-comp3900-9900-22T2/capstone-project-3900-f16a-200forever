@@ -16,6 +16,12 @@ def get_user_id(email):
     raise Exception("User doesn't exist")
   return user.id
 
+def get_user_email(id):
+  user = db.session.query(User.Users).filter(User.Users.id == id).first()
+  if user == None:
+    raise Exception("User doesn't exist")
+  return user.email
+
 # Unordered TODO find out what order to do, fix formatting
 # Returns a list of movies in user wishlist
 def get_wishlist(id):
