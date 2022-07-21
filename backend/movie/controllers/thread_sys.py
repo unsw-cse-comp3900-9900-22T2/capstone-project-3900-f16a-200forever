@@ -12,6 +12,7 @@ from movie import db
 import uuid
 from datetime import datetime
 from movie.utils.other_until import convert_model_to_dict
+from movie.utils.user_util import get_user_id
 
 thread_ns = ThreadNS.thread_ns
 
@@ -22,7 +23,7 @@ class ThreadManager(Resource):
   @thread_ns.expect(ThreadNS.delete_thread_form, validate=True)
   def delete(self):
     data = thread_ns.payload
-
+    """
     # login
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
@@ -30,6 +31,8 @@ class ThreadManager(Resource):
     # valid token
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
 
     # thread exist
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
@@ -59,7 +62,7 @@ class ThreadManager(Resource):
   def post(self):
     data = thread_ns.payload
     data['created_time'] = str(datetime.now())
-
+    """
     # check user login
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
@@ -67,6 +70,8 @@ class ThreadManager(Resource):
     # check user valid
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check genre valid
     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == data['genre_id']).first()
@@ -78,7 +83,7 @@ class ThreadManager(Resource):
       return {"message": "Invalid is_anonymous value"}, 400
 
     # post
-    data['user_id'] = session[data['email']]['id']
+    data['user_id'] = get_user_id(data['email'])
     data['id'] = str(uuid.uuid4())
     thread = Thread.Threads(data)
     db.session.add(thread)
@@ -93,6 +98,7 @@ class ThreadAdmin(Resource):
   @thread_ns.expect(ThreadNS.forum_admin_form, validate=True)
   def post(self):
     data = thread_ns.payload
+    """
     # check admin has login
     if not user_has_login(data['admin_email'], session):
       return {"message": "the user has not logined"}, 400
@@ -101,6 +107,8 @@ class ThreadAdmin(Resource):
     data['email'] = data['admin_email']
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
