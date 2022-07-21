@@ -141,4 +141,21 @@ class ThreadAdmin(Resource):
     return {"categories": categories}, 200
 """
 
+@thread_ns.route('/react')
+class ReactToComment(Resource):
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  def post(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('user_id', type=str, location = 'args', required=True)
+    parser.add_argument('comment_id', type=str, location = 'args', required=True)
+    args = parser.parse_args()
+    comment_id = args['comment_id']
+    user_id = args['user_id']
+    data = {'user_id': user_id, 'comment_id': comment_id}
+    new_comment_reaction = Thread.CommentLikes(data)
+    db.session.add(new_comment_reaction)
+    db.session.commit()
+
+    return {"message": "Reaction add successfully"}, 200
 
