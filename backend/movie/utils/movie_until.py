@@ -18,7 +18,9 @@ def format_movie_return_list(data):
     if movie.release_time == None:
       data['relese_time'] = "Unknown"
     else:
-      data['relese_time'] = movie.release_time.year
+      time = data['relese_time']
+      year = time[0:4]
+      data['relese_time'] = year
     movies.append(data)
   return movies
 
