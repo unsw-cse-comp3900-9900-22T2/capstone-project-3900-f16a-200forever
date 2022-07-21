@@ -1,4 +1,4 @@
-from locale import T_FMT
+#from locale import T_FMT
 from sqlalchemy import true
 from movie import db
 from movie.models.movie import Movies
