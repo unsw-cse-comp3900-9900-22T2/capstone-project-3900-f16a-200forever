@@ -56,7 +56,7 @@ class SearchMovie(Resource):
       # kw = args['by_title']
       kw = args["keywords"]
       result = []
-      if args['order'] == 'descending':
+      if args['order'] == 'ascending':
         result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
         ).all()
@@ -72,7 +72,7 @@ class SearchMovie(Resource):
       # kw = args['by_description']
       kw = args["keywords"]
       result = []
-      if args['order'] == 'descending':
+      if args['order'] == 'ascending':
         result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
         ).all()
@@ -88,7 +88,7 @@ class SearchMovie(Resource):
       # kw = args['by_director']
       kw = args["keywords"]
       result = []
-      if args['order'] == 'descending':
+      if args['order'] == 'ascending':
         result = db.session.query(
           Person.MovieDirector, Person.Persons, Movie.Movies, 
         ).filter(
