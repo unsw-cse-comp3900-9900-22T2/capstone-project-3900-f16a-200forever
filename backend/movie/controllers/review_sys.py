@@ -44,17 +44,26 @@ class ReviewSort(Resource):
     if movie == None:
       return {"message": "Invalid movie id"}, 400
 
+
+    query =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.user_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id
+    ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
+    ).group_by(Review.Reviews.id).all()
+
+    print(query)
+
     # sort by the create time
     if args['type'] == 'time':
-      query =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+
+      query =  db.session.query(Review.Reviews, User.Users, Review.ReviewLikes.user_id, Review.ReviewUnlikes.user_id).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
       ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
-      ).group_by(Review.Reviews.id
-      )
+      ).group_by(Review.Reviews.id)
+
       if args['order'] == 'ascending':
         all_reviews = query.order_by(Review.Reviews.created_time.desc(), Review.Reviews.id).all()
       else:
         all_reviews = query.order_by(Review.Reviews.created_time.asc(), Review.Reviews.id).all()
 
+    print(all_reviews)
     # sort by the likes
     if args['type'] == 'likes':
       query = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
@@ -84,9 +93,8 @@ class ReviewSort(Resource):
 
     if all_reviews == None:
       return {"Something wrong"}, 400
-    
-    # paging
-    total_num = len(all_reviews)
+    """
+      total_num = len(all_reviews)
     # paging
     matched_movies = paging(args['page'], args['num_per_page'], all_reviews)
     result = []
@@ -102,6 +110,11 @@ class ReviewSort(Resource):
       
 
     return {"total": total_num, "reviews": result}
+    """
+
+    # paging
+
+
 
 
 

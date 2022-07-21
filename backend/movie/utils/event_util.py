@@ -6,10 +6,12 @@ from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_an
 import uuid
 from movie.utils.movie_until import movie_id_valid
 
+from movie.utils.user_util import get_admin_id
+
 def create_event(event_id, event):
   try:
     event['id'] = event_id
-    admin_id = session[event['email']]["id"]
+    admin_id = get_admin_id(event['email'])
     event['admin_id'] = admin_id
     new_event  = Event.Events(event)
     db.session.add(new_event)

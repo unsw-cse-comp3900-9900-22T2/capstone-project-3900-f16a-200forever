@@ -2,6 +2,7 @@ from movie.utils.other_until import convert_object_to_dict, convert_model_to_dic
 from sqlalchemy import inspect
 from movie import db
 import movie.models.user as User
+import movie.models.admin as Admin
 
 def user_id_valid(id):
   user = db.session.query(User.Users).filter(User.Users.id == id).first()
@@ -11,6 +12,12 @@ def user_id_valid(id):
   return True
 
 def get_user_id(email):
+  user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
+  if user == None:
+    raise Exception("Admin doesn't exist")
+  return user.id
+
+def get_admin_id(email):
   user = db.session.query(User.Users).filter(User.Users.email == email).first()
   if user == None:
     raise Exception("User doesn't exist")

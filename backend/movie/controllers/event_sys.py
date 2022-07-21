@@ -13,10 +13,12 @@ from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_an
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
+from movie.utils.user_util import get_admin_id, get_user_id
 from .api_models import EventNS
 import uuid
 from movie import db
 from flask import session
+
 
 event_ns = EventNS.event_ns
 
@@ -172,7 +174,7 @@ class AttempEvent(Resource):
       return {"message": "Event not exists"}, 400
 
     # attemp the event
-    user_id = session[data['email']]['id']
+    user_id = get_user_id(data['email'])
     data['user_id'] = user_id
     data['start_time'] = now
     new = User.UserEevnt(data)
@@ -206,7 +208,7 @@ class AttempEvent(Resource):
     if event == None:
       return {"message": "The event not exists"}, 400
     duration = event.duration
-    user_id = session[data['email']]['id']
+    user_id = get_user_id(data['email'])
 
     # check the user have attemped the event or not
     event_attemp = db.session.query(User.UserEevnt).filter(User.UserEevnt.event_id == data['event_id'], \
