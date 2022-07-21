@@ -1,4 +1,3 @@
-from tkinter import E
 from attr import validate
 from movie import db
 from .api_models import ReviewNs
