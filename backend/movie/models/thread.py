@@ -1,3 +1,4 @@
+from re import S
 from xml.etree.ElementTree import Comment
 from movie import db
 
@@ -57,6 +58,21 @@ class ThreadComment(db.Model):
   comments = db.relationship("ThreadComment", remote_side=[id])
   comment_likes = db.relationship("CommentLikes", backref="ThreadComment", lazy=True)
 
+  def __repr__(self):
+    return '<Comment: user_id{} comment_id{}>'.format(self.user_id, self.thread_id)
+
+  def __init__(self, data):
+    self.id = data['id']
+    self.user_id = data['user_id']
+    self.thread_id = data['thread_id']
+    if 'reply_comment_id' in data.keys():
+      self.reply_comment_id = data['reply_comment_id']
+    else:
+      self.reply_comment_id = None
+    self.comment_time = data['time']
+    self.content = data['content']
+    self.is_anonymous = data['is_anonymous']
+
 class CommentLikes(db.Model):
   __tablename__ = 'r_comment_likes'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key = True)
@@ -68,3 +84,5 @@ class CommentLikes(db.Model):
   def __init__(self, data):
     self.user_id = data['user_id']
     self.comment_id = data['comment_id']
+
+

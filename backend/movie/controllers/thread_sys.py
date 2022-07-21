@@ -179,3 +179,54 @@ class ReactToComment(Resource):
       db.session.delete(react)
       db.session.commit()
       return {"is_remove": 0}, 200
+
+@thread_ns.route('/comment')
+class CommentThread(Resource):
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.thread_comment_form, validate=True)
+  def post(self):
+    data = thread_ns.payload
+
+    now = datetime.now()
+    data['time'] = now
+
+    """
+    # check user login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # check user valid
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    """
+    # check user valid
+    # check user valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {"message": "Incalid user"}, 400
+
+    # check thread id
+    thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
+    if thread == None:
+      return {"message": "Thread Not Exist"},400
+
+    # check replay comment id
+    if 'reply_comment_id' in data.keys():
+      parent = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['reply_comment_id']).first()
+      if parent == None or parent.thread_id != thread.id:
+        return {"message":"Parent id invalid"}, 400
+
+    data['user_id'] = user.id
+    data['id'] = str(uuid.uuid4())
+    comment = Thread.ThreadComment(data)
+    db.session.add(comment)
+    db.session.commit()
+    return {"comment_id": data['id']}, 200
+
+
+    
+
+
+
+

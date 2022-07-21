@@ -144,3 +144,13 @@ comment_react = {
   'token': fields.String(required=True),
   "comment_id": fields.String(required=True)
 }
+
+
+thread_comment = thread_comment = {
+  "email": fields.String(required=True),
+  'token': fields.String(required=True),
+  "content": fields.String(required=True),
+  "thread_id": fields.String(required=True),
+  "is_anonymous": fields.Integer,
+  "reply_comment_id": fields.String
+}
