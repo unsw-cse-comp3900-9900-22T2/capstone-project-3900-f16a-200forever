@@ -45,3 +45,7 @@ class ReviewNS:
   review_delete_form = review_ns.model('Review Delete', review_delete)
   review_admin_form = review_ns.model('Review Admin', review_admin)
   review_admin_delete_form = review_ns.model('Review Admin Delete', review_admin_delete)
+
+class RecommendationNS:
+  recommendation_ns = Namespace('Recommendation', description="the api for recommendation")
+  

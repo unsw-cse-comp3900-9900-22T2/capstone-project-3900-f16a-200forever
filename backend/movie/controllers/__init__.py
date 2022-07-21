@@ -8,6 +8,7 @@ from .person_sys import person_ns
 from .user_sys import user_ns
 from .genre_sys import genre_ns
 from .review_sys import review_ns
+from .recommendation_sys import recommendation_ns
 from flask_restx import Api
 from flask import Blueprint
 
@@ -52,3 +53,8 @@ genre_api.add_namespace(genre_ns, path='/genre')
 review_bp = Blueprint("review", __name__)
 review_api = Api(review_bp, version='1.0', title="Review API", description="Movie Forever api.")
 review_api.add_namespace(review_ns, path='/review')
+
+# reconmendation
+recommendation_bp = Blueprint("recommendation", __name__)
+recommendation_api = Api(recommendation_bp, version='1.0', title="recommendation API", description="Movie Forever api.")
+recommendation_api.add_namespace(recommendation_ns, path='/recommendation')
