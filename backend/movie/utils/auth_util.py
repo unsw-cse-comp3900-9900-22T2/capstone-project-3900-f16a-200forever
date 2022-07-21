@@ -31,6 +31,7 @@ def send_email(email, code):
   smptyserver.sendmail(EMAIL, [email], msg.as_string())
 
 def generate_token(email):
+  """
   d = {
     'data': {
       'email': email,
@@ -38,8 +39,12 @@ def generate_token(email):
     }
   }
   token = jwt.encode(d, SECRET, algorithm='HS256').decode('utf-8')
-
   return token
+  """
+  # TODO:
+
+  return "123"
+
 
 
 def pw_encode(password):
@@ -82,7 +87,7 @@ def check_correct_answer(value):
   return True
     
 def user_has_login(email, session):
-  return True
+  return False
   """
   if email not in session.keys():
     return False

@@ -45,7 +45,6 @@ class ReviewSort(Resource):
       return {"message": "Invalid movie id"}, 400
 
     # sort by the create time
-
     if args['type'] == 'time':
       query =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
       ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id

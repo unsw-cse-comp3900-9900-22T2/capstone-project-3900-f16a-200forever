@@ -164,7 +164,7 @@ class LoginController(Resource):
       return {"message": "The user not registered"}, 400
       
     # check the user has login or not
-    if email in session.keys():
+    if user_has_login(email, session):
       print(session[email]['token'])
       return {"message": "The user has logined"}, 400
 
