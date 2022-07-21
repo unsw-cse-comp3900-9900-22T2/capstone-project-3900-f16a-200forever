@@ -57,6 +57,9 @@ const GetBadge = () => {
           dataSource={eventList}
           renderItem={(item) => (
             <List.Item>
+              {/* todo 
+              can not goto link
+               */}
               <Link to={`/badgequestion/id=${item.id}`}>
                 {/* {item} */}
                 <h4>Title: {item.topic}</h4>

@@ -28,25 +28,25 @@ const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 
 const GuessWhatYouLikePage = () => {
-  const [showList, setShowList] = useState([]);
-  const { id} = useParams();
-  // const { type, keywords, order } = useParams();
   // const [showList, setShowList] = useState([]);
-  useEffect(()=>{
-    axios.get("http://127.0.0.1:8080/recommendation/user",{
-      params:{
-        "user_id":id.replace("id=",""),
-        "by": "genre"
-      }
-    })
-    .then(function(response){
-      console.log(response.data)
-      setShowList(response.data)
-    })
-    .catch(function(error){
-      console.log(error.response)
-    })
-  })
+  // const { id} = useParams();
+  // // const { type, keywords, order } = useParams();
+  // // const [showList, setShowList] = useState([]);
+  // useEffect(()=>{
+  //   axios.get("http://127.0.0.1:8080/recommendation/user",{
+  //     params:{
+  //       "user_id":id.replace("id=",""),
+  //       "by": "genre"
+  //     }
+  //   })
+  //   .then(function(response){
+  //     console.log(response.data)
+  //     setShowList(response.data)
+  //   })
+  //   .catch(function(error){
+  //     console.log(error.response)
+  //   })
+  // })
   return (
     <div className="guess-what-you-like-page">
       <Content
@@ -67,7 +67,7 @@ const GuessWhatYouLikePage = () => {
           xl: 6,
           xxl: 10,
         }}
-        dataSource={showList}
+        // dataSource={showList}
         renderItem={(item) => (
           <List.Item>
             {
