@@ -37,10 +37,19 @@ def calculate_director(directors):
   movie_dir = db.session.query(Person.MovieDirector, Movie.Movies).filter(Person.MovieDirector.movie_id == Movie.Movies.id, Person.MovieDirector.person_id.in_(directors)).all()
   return movie_dir
 
-def get_genre_director_movie(genre_ids, directors):
-  movies = db.session.query(Movie.Movies).filter(Movie.MovieGenre.movie_id == Movie.Movies.id, Person.MovieDirector.movie_id == Movie.Movies.id
-  ).filter(or_(Movie.MovieGenre.genre_id.in_(genre_ids), Person.MovieDirector.person_id.in_(directors))
-  ).order_by(Movie.Movies.total_rating.desc()).limit(20)
+def get_genre_director_movie(genre_ids, directors, by):
+  query = db.session.query(Movie.Movies).filter(Movie.MovieGenre.movie_id == Movie.Movies.id, Person.MovieDirector.movie_id == Movie.Movies.id)
+
+  if by and by == 'genre':
+    query = query.filter(Movie.MovieGenre.genre_id.in_(genre_ids))
+  if by and by == 'director':
+    query = query.filter(Person.MovieDirector.person_id.in_(directors))
+  else:
+    query = query.filter(or_(Movie.MovieGenre.genre_id.in_(genre_ids), Person.MovieDirector.person_id.in_(directors)))
+
+
+  # sort
+  movies = query.order_by(Movie.Movies.total_rating.desc()).limit(20)
   return movies
 
 

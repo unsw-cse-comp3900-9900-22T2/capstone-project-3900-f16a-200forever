@@ -46,7 +46,11 @@ class RecommendUser(Resource):
   def get(self):
     parser = reqparse.RequestParser()
     parser.add_argument('user_id', type=str, location='args', required=True)
+    parser.add_argument('by', type=str, location='args', choices=['genre', 'director'])    
     args = parser.parse_args()
+    by = None
+    if 'by' in args.keys():
+      by = args['by']
     user_id = args['user_id']
     # check user id valid
     user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
@@ -70,7 +74,7 @@ class RecommendUser(Resource):
         tmp = [director.id for director in movie.movie_director_rel]
         directors+=tmp
       # get all movies
-      movies = get_genre_director_movie(genres, directors)
+      movies = get_genre_director_movie(genres, directors, by)
       print(genres, directors)
       #rec_movies = top_twenty(all_movies)
     return {"movies": convert_model_to_dict(movies)}, 200    
