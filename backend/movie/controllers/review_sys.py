@@ -12,6 +12,7 @@ from movie.utils.review_util import user_reviewed_movie, calculate_weight
 from movie.utils.user_util import get_user_id
 from movie.models import admin as Admin
 import uuid
+from datetime import datetime
 
 review_ns = ReviewNS.review_ns
 
