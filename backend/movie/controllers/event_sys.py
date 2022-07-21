@@ -195,7 +195,7 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
-
+    """
     # login or not
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
@@ -204,6 +204,8 @@ class AttempEvent(Resource):
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
 
+    """
+
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
       return {"message": "The event not exists"}, 400
@@ -211,8 +213,8 @@ class AttempEvent(Resource):
     user_id = get_user_id(data['email'])
 
     # check the user have attemped the event or not
-    event_attemp = db.session.query(User.UserEevnt).filter(User.UserEevnt.event_id == data['event_id'], \
-      User.UserEevnt.user_id == user_id).first()
+    event_attemp = db.session.query(User.UserEvent).filter(User.UserEvent.event_id == data['event_id'], \
+      User.UserEvent.user_id == user_id).first()
     if event_attemp == None:
       return {"message": "The user haven't attemp the event before"}, 400
 

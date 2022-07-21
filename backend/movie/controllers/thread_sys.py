@@ -83,7 +83,7 @@ class ThreadManager(Resource):
     thread = Thread.Threads(data)
     db.session.add(thread)
     db.session.commit()
-    return {"message": "Successfully"}, 200
+    return {"thread_id": data['id']}, 200
 
 
 @thread_ns.route('/admin')
