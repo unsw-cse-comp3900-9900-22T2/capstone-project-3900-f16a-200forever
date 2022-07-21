@@ -58,7 +58,7 @@ class ReviewSort(Resource):
 
     # sort by the likes
     if args['type'] == 'likes':
-      all_reviews = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      query = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
       ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
       ).group_by(Review.Reviews.id
       )
@@ -72,7 +72,7 @@ class ReviewSort(Resource):
 
     # sort by unlikes
     if args['type'] == 'unlikes':
-      all_reviews = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+      query = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.review_id), func.count(Review.ReviewUnlikes.review_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
       ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
       ).group_by(Review.Reviews.id
       )
