@@ -92,6 +92,9 @@ const UserProfileEditPage = ({ userProfile, userInfo }) => {
       })
       .then(function (response) {
         console.log(response)
+        openNotification({
+          "title": "successful!"
+        })
       })
       .catch(function (error) {
         console.log(error.response);
