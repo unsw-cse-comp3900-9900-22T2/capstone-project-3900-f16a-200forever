@@ -86,7 +86,7 @@ class UserProfileController(Resource):
     user_id = args['user_id']
     data = user_ns.payload
     email = data['email']
-
+    """
     # check if logged in
     if not user_has_login(email, session):
       return {"message": "the user has not logined"}, 400
@@ -94,6 +94,8 @@ class UserProfileController(Resource):
     # check token
     if not user_is_valid(data):
       return {"message": "Token is not correct"}, 400
+    """
+
 
     this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if this_user == None:
@@ -103,8 +105,6 @@ class UserProfileController(Resource):
       return {"message": "No permission"}, 400
 
     username = data['username']
-    signature = data['signature']
-    image = data['image']
 
     # check user name
     if not username_format_valid(username):
@@ -128,8 +128,11 @@ class UserProfileController(Resource):
         this_user.password = pw_encode(data['new_password'])
 
     this_user.name = username
-    this_user.signature = signature
-    this_user.image = image.encode()
+    # 
+    if 'signature' in data.keys():
+      this_user.signature = data['signature']
+    if 'image' in data.keys():
+      this_user.image = data['image'].encode()
     db.session.commit()
 
     return {

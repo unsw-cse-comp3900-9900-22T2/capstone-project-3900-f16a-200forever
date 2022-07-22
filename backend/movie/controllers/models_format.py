@@ -103,8 +103,8 @@ class NullableString(fields.String):
 
 edit_profile = {
   'username': fields.String(required=True),
-  'signature': NullableString(required=True),
-  'image': NullableString(required=True),
+  'signature': fields.String,
+  'image': fields.String,
   'current_password': fields.String,
   'new_password': fields.String,
   'double_check': fields.String,
