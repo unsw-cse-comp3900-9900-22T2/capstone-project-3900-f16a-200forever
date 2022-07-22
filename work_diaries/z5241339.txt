@@ -16,3 +16,6 @@ code frontend page(homepage/admin/movie details/search) --->sprint1
 
 Week6
 code frontend page(admin/ details/ user profile/ movies) 
+
+Week7
+code event guess what you like page
