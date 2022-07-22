@@ -106,7 +106,7 @@ const ForgetPassword = () => {
           ]}
         >
           <Input onChange={updateEmail}/>
-          <Input />
+       
         </Form.Item>
         <Form.Item
           label="Verfication code"

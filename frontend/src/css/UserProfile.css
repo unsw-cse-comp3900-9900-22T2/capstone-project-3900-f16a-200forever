@@ -1,0 +1,106 @@
+.user-profile-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.user-profile-detail {
+  width: 100%;
+  margin: 100px 50px;
+  box-shadow: 0 0 5px red;
+  display: inline-block;
+}
+
+.user-profile-btn-group {
+  display: grid;
+
+  margin-top: 85px;
+
+  margin-right: 20px;
+  text-align: right;
+  padding: 15px 10px;
+  background-color: aquamarine;
+  /* justify-content: "center";
+  align-items: "center"; */
+}
+.upload-user-picture {
+  margin-left: 2%;
+  max-width: 250px;
+  background-color: aqua;
+}
+.user-detail {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 30px 0;
+}
+.user-box {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-left: 5%;
+}
+.user-badge {
+  text-align: justify;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 30px 0;
+  margin-left: 5%;
+  flex-direction: column;
+}
+.badge-title {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  justify-items: center;
+  margin-top: -30px;
+}
+.user-profile-movie-list {
+  flex-direction: row;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.blacklist {
+    margin-left: 2%;
+}
+
+.user-profile-edit-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+.user-profile-edit-form {
+  width: 100%;
+  margin: 100px 50px;
+}
+
+.guess-what-you-like-title {
+  padding: 30px;
+  font-size: x-large;
+  text-transform: uppercase;
+}
+.guess-you-like-card-wrap {
+  box-shadow: 0 0 5px red;
+  padding: 20px;
+}
+/* .user-profile-button-group {
+  display: inline;
+  flex-direction: row-reverse;
+  width: 30%;
+  align-items: space-between;
+}
+
+.guess-what-you-like-btn {
+  flex-wrap: wrap;
+  float: right;
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  justify-content: right;
+}
+.friend-list-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: right;
+  justify-content: right;
+} */

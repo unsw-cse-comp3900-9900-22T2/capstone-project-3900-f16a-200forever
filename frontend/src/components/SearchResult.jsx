@@ -137,7 +137,7 @@ const SearchResult = () => {
                     />
                   }
                 >
-                  <Meta title={item.title} description={`rating: 0`} />
+                  <Meta title={item.title} description={`rating: ${parseFloat(item.total_rating/item.rating_count).toFixed(2)}`} />
                 </Card>
               </Link>
             }

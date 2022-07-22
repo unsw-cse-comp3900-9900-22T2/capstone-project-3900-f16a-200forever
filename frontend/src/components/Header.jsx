@@ -1,10 +1,11 @@
 import React from "react";
-import { Affix, Col, Row } from "antd";
+import { Affix, Avatar, Col, Row } from "antd";
 import logo from "../images/new_logo.png";
 import { Button, Space } from "antd";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import openNotification from "./Notification";
+import { UserOutlined } from '@ant-design/icons';
 
 function Header({ loginStatus, updateLoginStatus, userInfo, updateUserInfo, cookie, setCookie, sid }) {
   let navigate = useNavigate();
@@ -57,12 +58,14 @@ function Header({ loginStatus, updateLoginStatus, userInfo, updateUserInfo, cook
           <div>
             <span>Welcome!</span>
             {/* <Button onClick={haha}>fjalksdjf</Button> */}
+            <Avatar size="large" icon={<UserOutlined/>} onClick={() => navigate(`/userprofile/${userInfo.id}`)} ></Avatar>
             <Button onClick={do_logout}>logout</Button>
           </div>
           :
           <div>
             <Button className="header-login-btn" onClick={()=>navigate("/login")}>login</Button>
             <Button className="header-register-btn" onClick={()=>navigate("register")}>register</Button>
+            {/* <Button className="header-register-btn" onClick={()=>navigate("/userprofile/:id")}>UserProfile</Button> */}
           </div>
         }
       </div>

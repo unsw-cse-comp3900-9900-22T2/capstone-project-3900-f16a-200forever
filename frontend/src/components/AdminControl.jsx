@@ -9,7 +9,7 @@ const AdminControl = () => {
       {" "}
       <div className="admin-control-card-wrapper">
         <Row gutter={16}>
-          <Col span={12} >
+          <Col span={12}>
             <Card
               hoverable
               title="EVENT"
@@ -20,7 +20,12 @@ const AdminControl = () => {
             </Card>
           </Col>
           <Col span={12}>
-            <Card hoverable title="SET ADMIN" bordered={false}>
+            <Card
+              hoverable
+              title="SET ADMIN"
+              onClick={() => navigate("/admin/setadmin")}
+              bordered={true}
+            >
               Set normal user as admin
             </Card>
           </Col>

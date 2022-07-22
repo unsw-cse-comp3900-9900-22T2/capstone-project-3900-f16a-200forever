@@ -44,3 +44,20 @@
   justify-content: center;
   margin: 20px auto;
 }
+.set-admin-page{
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.set-admin-page .set-admin-area{
+  margin-top: 100px;
+  
+}
+
+.set-admin-page .set-admin-title{
+  font-size: large;
+  text-transform: uppercase;
+}
+.set-admin-page .set-admin-select{
+  max-width: max-content;
+}
