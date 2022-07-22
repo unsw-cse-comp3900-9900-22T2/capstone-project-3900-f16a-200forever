@@ -29,3 +29,21 @@ init the smtpserver in __init__
 add .gitignore
 merge the backend, and test all the margin case, also test the normal functionality
 
+week5:
+write the event models, also write the event attemp and event finish, also fix the event search function
+write the user profile api
+
+wrrk6:
+write  the review model also the review likes and review unlikes models
+write the sort review api also the react review api
+write the thread models 
+
+wee7:
+write the recommendation by genre using the given movie id, also by director and the genre base on user history review
+write the fourm models and the forum delete and post
+
+week8:
+write the forum react and forum comment models
+also the event edit api
+imporve the code that write before 
+and format the api doc
