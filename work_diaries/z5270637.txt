@@ -14,3 +14,19 @@ working diaries
   write the draft models for the movie
   implement function: movie detail
   test functionality
+
+-Week 5
+  implement the function of genre
+  including show all the genres and their movies
+  
+-Week 6
+  implement the function of review
+  including show and react
+  
+-Week 7
+  implement the function of recommendation and thread
+  including recommend by director 
+  and thread react
+  
+-Week 8
+  test and fix the functions above
