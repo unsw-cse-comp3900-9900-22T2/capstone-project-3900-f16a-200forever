@@ -94,8 +94,8 @@ function App() {
             path="/admin/login"
             element={
               <AdminLogin
-                loginStatus={loginStatus}
                 updateLoginStatus={updateLoginStatus}
+                setUserInfo={setUserInfo}
               />
             }
           ></Route>
@@ -125,7 +125,7 @@ function App() {
             path="/admin/event/edit/:id"
             element={<EditEvent></EditEvent>}
           ></Route>
-          <Route path="/admin/setadmin" element={<SetAdmin></SetAdmin>}></Route>
+          <Route path="/admin/setadmin" element={<SetAdmin userInfo={userInfo} loginStatus={loginStatus}/>}></Route>
         </Route>
       </Routes>
 

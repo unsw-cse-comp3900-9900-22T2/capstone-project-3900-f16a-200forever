@@ -12,8 +12,8 @@ const tailLayout = {
   },
 };
 
-const Login = ({ loginStatus, updateLoginStatus }) => {
-  let navigate = useNavigate();
+const AdminLogin = ({ updateLoginStatus, setUserInfo }) => {
+  const navigate = useNavigate();
   const { Title } = Typography;
   const onFinish = (values) => {
     // console.log("Success:", values);
@@ -21,6 +21,7 @@ const Login = ({ loginStatus, updateLoginStatus }) => {
     // todo handle success
     // todo handle error
     // todo forget password?
+    console.log(values)
     axios
       .post("http://127.0.0.1:8080/login", {
         email: values["email"],
@@ -28,6 +29,14 @@ const Login = ({ loginStatus, updateLoginStatus }) => {
         is_admin: true
       })
       .then(function (response) {
+        console.log(response.data)
+        updateLoginStatus(true);
+        setUserInfo({
+          token: response.data.token,
+          email: values.email,
+          id: response.data.id,
+          name: response.data.name
+        })
         navigate("/admin/control")
       })
       .catch(function (error) {
@@ -110,11 +119,4 @@ const Login = ({ loginStatus, updateLoginStatus }) => {
   );
 };
 
-function AdminLogin(params) {
-  return (
-    <div>
-      <Login></Login>
-    </div>
-  );
-}
 export default AdminLogin;
