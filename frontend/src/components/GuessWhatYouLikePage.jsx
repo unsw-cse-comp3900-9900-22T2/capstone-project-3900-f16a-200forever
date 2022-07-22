@@ -2,6 +2,8 @@ import { Link, useParams } from "react-router-dom";
 import {
   Button,
   Radio,
+  Select,
+
   Row,
   Col,
   Space,
@@ -26,8 +28,11 @@ import Title from "antd/lib/skeleton/Title";
 import { useEffect } from "react";
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
-
+const { Option } = Select;
 const GuessWhatYouLikePage = () => {
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
   // const [showList, setShowList] = useState([]);
   // const { id} = useParams();
   // // const { type, keywords, order } = useParams();
@@ -57,41 +62,44 @@ const GuessWhatYouLikePage = () => {
       >
         <div className="guess-what-you-like-title">Guess what you like</div>
         <div className="guess-you-like-card-wrap">
-        <List
-        grid={{
-          gutter: 16,
-          xs: 1,
-          sm: 2,
-          md: 4,
-          lg: 4,
-          xl: 6,
-          xxl: 10,
-        }}
-        // dataSource={showList}
-        renderItem={(item) => (
-          <List.Item>
-            {
-             
-              <Link to={`/movie/detail/id=${item.id}`}>
-                <Card
-                  hoverable
-                  bordered={false}
-                  style={{}}
-                  cover={
-                    <img
-                      alt="example"
-                      src={item.backdrop}
-                    />
-                  }
-                >
-                  <Meta title={item.title} description={`rating: 0`} />
-                </Card>
-              </Link>
-            }
-          </List.Item>
-        )}
-      />
-         
+          <Select
+            defaultValue="lucy"
+            style={{
+              width: 120,
+            }}
+            onChange={handleChange}
+          >
+            <Option value="genre">genre</Option>
+            <Option value="director">director</Option>
+          </Select>
+          <List
+            grid={{
+              gutter: 16,
+              xs: 1,
+              sm: 2,
+              md: 4,
+              lg: 4,
+              xl: 6,
+              xxl: 10,
+            }}
+            // dataSource={showList}
+            renderItem={(item) => (
+              <List.Item>
+                {
+                  <Link to={`/movie/detail/id=${item.id}`}>
+                    <Card
+                      hoverable
+                      bordered={false}
+                      style={{}}
+                      cover={<img alt="example" src={item.backdrop} />}
+                    >
+                      <Meta title={item.title} description={`rating: 0`} />
+                    </Card>
+                  </Link>
+                }
+              </List.Item>
+            )}
+          />
         </div>
       </Content>
     </div>
