@@ -5,38 +5,54 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import openNotification from "./Notification";
-const eventList = [
-  {
-    title: "aaa",
-    status: "bbb",
-    description: "aosidjfo",
-  },
-  {
-    title: "aaa",
-    status: "bbb",
-    description: "harry potter",
-  },
-];
 
-const GetBadge = () => {
-    const [eventList, setEventList] = useState([]);
-    const getList = ()=>{
-        axios
-        .get("http://127.0.0.1:8080/event",{})
-        .then(function (response) {
-            console.log(response.data.events);
-            setEventList(response.data.events)
-        })
-        .catch(function (error) {
-            console.log(error.response);
-            openNotification({
-              "title": "Search error",
-            })
-        });    
-    }
-    useEffect(()=>{
-      getList()
-    },[]);
+const GetBadge = ({ loginStatus, userInfo}) => {
+  const [eventList, setEventList] = useState([]);
+  const navigate = useNavigate();
+
+  const attend = (event_id) => {
+    // console.log(event_id)
+    navigate(`/badgequestion/id=${event_id}`)
+    // if (!loginStatus) {
+    //   openNotification({
+    //     "title": "please login first"
+    //   })
+    //   return;
+    // }
+    // console.log(userInfo);
+    // console.log(event_id);
+    // axios
+    //   .post("http://127.0.0.1:8080/event/attemp", {
+    //     email: userInfo.email,
+    //     token: userInfo.token,
+    //     event_id: event_id
+    //   })
+    //   .then(function (response) {
+    //     console.log(response.data);
+    //     navigate(`/badgequestion/id=${event_id}`)
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error.response.data);
+    //     openNotification({
+    //       "title": "An error occur",
+    //       "content": error.response.data.message
+    //     })
+    //   });
+  }
+  useEffect(()=>{
+    axios
+      .get("http://127.0.0.1:8080/event")
+      .then(function (response) {
+          console.log(response.data.events);
+          setEventList(response.data.events)
+      })
+      .catch(function (error) {
+          console.log(error.response);
+          openNotification({
+            "title": "An error",
+          })
+      }); 
+  },[]);
   return (
     <div className="get-badge-page">
       {" "}
@@ -60,12 +76,13 @@ const GetBadge = () => {
               {/* todo 
               can not goto link
                */}
-              <Link to={`/badgequestion/id=${item.id}`}>
+              {/* <Link to={`/badgequestion/id=${item.id}`}> */}
                 {/* {item} */}
                 <h4>Title: {item.topic}</h4>
                 <h4>Status: {item.event_status}</h4>
                 <h4>Description:{item.description}</h4>
-              </Link>
+                <Button onClick={()=> {attend(item.id)}}>ATTEND</Button>
+              {/* </Link> */}
             </List.Item>
           )}
         />

@@ -60,60 +60,21 @@ function App() {
           }
         >
           <Route path="/" element={<HomePage />} />
-          <Route
-            path="/login"
-            element={
-              <Login
-                updateLoginStatus={updateLoginStatus}
-                updateUserInfo={updateUserInfo}
-              />
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Register
-                updateLoginStatus={updateLoginStatus}
-                updateUserInfo={updateUserInfo}
-              />
-            }
-          />
-          <Route
-            path="/forgetpassword"
-            element={<ForgetPassword updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/search/:type/:keywords/:order"
-            element={<SearchResult />}
-          />
-          <Route
-            path="/movie/detail/:id"
-            element={
-              <MovieDetail userInfo={userInfo} loginStatus={loginStatus} />
-            }
-          />
-          <Route
-            path="/userprofile/:id"
-            element={<UserProfile userInfo={userInfo} />}
-          />
-          <Route
-            path="/guesswhatyoulike/:id"
-            element={<GuessWhatYouLikePage />}
-          />
-        
-        
+          <Route path="/login" element={<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path="/register" element={<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path="/forgetpassword" element={<ForgetPassword updateLoginStatus={updateLoginStatus} />}/>
+          <Route path="/search/:type/:keywords/:order" element={<SearchResult />}/>
+          <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>}/>
+          <Route path="/userprofile/:id" element={<UserProfile userInfo={userInfo} />}/>
+          <Route path="/guesswhatyoulike/:id" element={<GuessWhatYouLikePage />}/>
           <Route path="/genre/genre/:id" element={<GenresPage />} />
-          <Route
-            path="/userprofile/edit/:id"
-            element={<UserProfileEditPage />}
-          />
+          <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />}/>
           <Route path="/forum" element={<ForumPage />} />
-          <Route path="/forum/:id" element={<ForumThreadPage></ForumThreadPage>} />
-
-          <Route path="/getbadge" element={<GetBadge></GetBadge>} />
+          <Route path="/forum/:id" element={<ForumThreadPage loginStatus={loginStatus} userInfo={userInfo}/>} />
+          <Route path="/events" element={<GetBadge loginStatus={loginStatus} userInfo={userInfo}/>} />
           <Route
             path="/badgequestion/:id"
-            element={<BadgeQuestion></BadgeQuestion>}
+            element={<BadgeQuestion loginStatus={loginStatus} userInfo={userInfo}/>}
           />
           <Route path="/post/:id" element={<PostPage></PostPage>}/>
         </Route>

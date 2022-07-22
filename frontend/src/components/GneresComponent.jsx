@@ -62,7 +62,7 @@ const GenresInHomepage = () => {
       <Space>
         {" "}
         <Button   onClick={() => navigate("/forum")}>Go to forum to disscuss more</Button>
-        <Button onClick={()=> navigate('/getbadge')}>Go to get a badge</Button>
+        <Button onClick={()=> navigate('/events')}>Go to get a badge</Button>
       </Space>
     </div>
   );

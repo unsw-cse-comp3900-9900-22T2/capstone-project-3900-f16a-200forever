@@ -9,7 +9,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 const SearchComponent = ({ type, keywords, order, changePage }) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [searchType, setSearchType] = useState(type);
   const [searchOrder, setSearchOrder] = useState(order);
   const updateSearchType = (type) => {

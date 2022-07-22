@@ -43,11 +43,11 @@ const ForumPage = () => {
     //   <div className="detail"> hello</div>
     // </div>
     <div className="forum-page">
-      <div className="new-post-btn">
+      {/* <div className="new-post-btn">
         <Button onClick={() => navigate("/newpost")}>
           New Post
         </Button>
-      </div>
+      </div> */}
       <div className="wrapper">
         <div className="title-wraper">
           <Title>Forum by genres</Title>
