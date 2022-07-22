@@ -1,9 +1,9 @@
 import React from "react";
 import "../css/HomePage.css";
 import SearchComponent from "../components/SearchComponent";
-import { Breadcrumb, Layout, Divider,Menu } from "antd";
+import { Breadcrumb, Layout, Divider,Menu , Button} from "antd";
 import CurrentlyTrendingMovies from "../components/CurrentlyTrendingMovies";
-import GenresInHomepage from "../components/GenresInHomepage";
+import GenresInHomepage from "../components/GneresComponent";
 import GenresPage from "./GenresPage"
 const { Header, Content, Footer } = Layout;
 function HomePage() {
@@ -22,7 +22,7 @@ function HomePage() {
           <CurrentlyTrendingMovies></CurrentlyTrendingMovies>
           <Divider orientation="left">GENRES</Divider>
           <GenresInHomepage></GenresInHomepage>
-
+          
         </Content>
       </div>
     </Layout>

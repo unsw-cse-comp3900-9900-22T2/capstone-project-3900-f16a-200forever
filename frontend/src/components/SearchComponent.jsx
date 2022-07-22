@@ -9,7 +9,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 const SearchComponent = ({ type, keywords, order, changePage }) => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [searchType, setSearchType] = useState(type);
   const [searchOrder, setSearchOrder] = useState(order);
   const updateSearchType = (type) => {
@@ -73,8 +73,8 @@ const SearchComponent = ({ type, keywords, order, changePage }) => {
               defaultValue={`By ${order}`}
               onChange={updateSearchOrder}
             >
-              <Option value="descending">Sort: descending</Option>
-              <Option value="ascending">Sort: ascending</Option>
+              <Option value="descending">By rating: descending</Option>
+              <Option value="ascending">By rating: ascending</Option>
             </Select>
           </Col>
         </Space>

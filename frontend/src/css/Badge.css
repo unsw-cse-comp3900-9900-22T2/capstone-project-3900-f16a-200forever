@@ -1,0 +1,25 @@
+.get-badge-page {
+  max-width: 1200px;
+  width: 100%;
+  margin: 100px 50px 10px 50px;
+  box-shadow: 0 0 5px #ccc;
+  display: inline-block;
+}
+
+.event-control-table {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 50px 40px;
+}
+.badge-question-page {
+  max-width: 1200px;
+  width: 100%;
+  margin: 100px 50px 10px 50px;
+  box-shadow: 0 0 5px #ccc;
+  display: inline-block;
+}
+.badge-question-wrapper {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 50px 40px;
+}

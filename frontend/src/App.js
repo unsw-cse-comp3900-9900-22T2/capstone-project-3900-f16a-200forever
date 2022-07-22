@@ -24,6 +24,12 @@ import UserProfileEditPage from "./components/UserProfileEditPage";
 import GuessWhatYouLikePage from "./components/GuessWhatYouLikePage";
 import GenresPage from "./pages/GenresPage";
 import SetAdmin from "./components/SetAdmin";
+import ForumPage from "./pages/FourmPage";
+import ForumThreadPage from "./components/ForumThreadPage";
+
+import GetBadge from "./components/GetBadge";
+import BadgeQuestion from "./components/BadgeQuestion";
+import PostPage from "./components/PostPage";
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -43,38 +49,42 @@ function App() {
           path="/"
           element={
             <>
-              <Header loginStatus={loginStatus} updateLoginStatus={updateLoginStatus} userInfo={userInfo} updateUserInfo={updateUserInfo}/>
+              <Header
+                loginStatus={loginStatus}
+                updateLoginStatus={updateLoginStatus}
+                userInfo={userInfo}
+                updateUserInfo={updateUserInfo}
+              />
               <Outlet />
             </>
           }
         >
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path="/register" element={<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}/>
+          <Route path="/forgetpassword" element={<ForgetPassword updateLoginStatus={updateLoginStatus} />}/>
+          <Route path="/search/:type/:keywords/:order" element={<SearchResult />}/>
+          <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>}/>
+          <Route path="/userprofile/:id" element={<UserProfile userInfo={userInfo} />}/>
+          <Route path="/guesswhatyoulike/:id" element={<GuessWhatYouLikePage />}/>
+          <Route path="/genre/genre/:id" element={<GenresPage />} />
+          <Route path="/userprofile/edit/:id" element={<UserProfileEditPage />}/>
+          <Route path="/forum" element={<ForumPage />} />
+          <Route path="/forum/:id" element={<ForumThreadPage loginStatus={loginStatus} userInfo={userInfo}/>} />
+          <Route path="/events" element={<GetBadge loginStatus={loginStatus} userInfo={userInfo}/>} />
           <Route
-            path="/login"
-            element={<Login updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo} />}
+            path="/badgequestion/:id"
+            element={<BadgeQuestion loginStatus={loginStatus} userInfo={userInfo}/>}
           />
-          <Route
-            path="/register"
-            element={<Register updateLoginStatus={updateLoginStatus} updateUserInfo={updateUserInfo}/>}
-          />
-          <Route
-            path="/forgetpassword"
-            element={<ForgetPassword updateLoginStatus={updateLoginStatus} />}
-          />
-          <Route
-            path="/search/:type/:keywords/:order"
-            element={<SearchResult />}
-          />
-          <Route path="/movie/detail/:id" element={<MovieDetail userInfo={userInfo} loginStatus={loginStatus}/>} />
-          <Route path="/userprofile/:id" element={<UserProfile userInfo={userInfo} />} />
-          <Route path="/userprofile/guesswhatyoulike/:id" element={<GuessWhatYouLikePage/>}/>
-          <Route path="/genre/:genre/:id" element={<GenresPage  />}/>
+          <Route path="/post/:id" element={<PostPage></PostPage>}/>
         </Route>
         <Route
           path="/admin"
           element={
             <>
-              <AdminHeader loginStatus={loginStatus} updateLoginStatus={updateLoginStatus}
+              <AdminHeader
+                loginStatus={loginStatus}
+                updateLoginStatus={updateLoginStatus}
               />
               <Outlet />
             </>
@@ -84,8 +94,8 @@ function App() {
             path="/admin/login"
             element={
               <AdminLogin
-                loginStatus={loginStatus}
                 updateLoginStatus={updateLoginStatus}
+                setUserInfo={setUserInfo}
               />
             }
           ></Route>
@@ -115,7 +125,7 @@ function App() {
             path="/admin/event/edit/:id"
             element={<EditEvent></EditEvent>}
           ></Route>
-          <Route path="/admin/setadmin" element={<SetAdmin></SetAdmin>}></Route>
+          <Route path="/admin/setadmin" element={<SetAdmin userInfo={userInfo} loginStatus={loginStatus}/>}></Route>
         </Route>
       </Routes>
 

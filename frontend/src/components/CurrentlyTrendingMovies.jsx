@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import HomePage from "../pages/HomePage";
 const { Meta } = Card;
 const CurrentlyTrendingMovies = () => {
+  let navigate = useNavigate()
   return (
     <div className="genres-component-in-HomePage">
       <List>
@@ -28,7 +29,7 @@ const CurrentlyTrendingMovies = () => {
           </Card>
         </List.Item>
       </List>
-      <Button>Guess what you like</Button>
+      <Button onClick={() => navigate("/guesswhatyoulike/:id")}>Guess what you like</Button>
     </div>
   );
 };

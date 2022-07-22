@@ -182,7 +182,7 @@ const UserProfile = ({ userInfo }) => {
         </div>
   
         <div className="user-profile-btn-group">
-          <Button onClick={() => navigate(`/userprofile/guesswhatyoulike/id=1`)}>
+          <Button onClick={() => navigate(`/guesswhatyoulike/:id`)}>
             Guess what you like
           </Button>
           <Button>Friend List</Button>

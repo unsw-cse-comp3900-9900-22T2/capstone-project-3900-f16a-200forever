@@ -10,6 +10,7 @@ import { useEffect } from "react";
 const {Meta} = Card;
 
 const GenresInHomepage = () => {
+  let navigate = useNavigate()
   const [genres, setGenres] = useState([])
 
   useEffect( () => {
@@ -60,8 +61,8 @@ const GenresInHomepage = () => {
       />
       <Space>
         {" "}
-        <Button>Go to forum to disscuss more</Button>
-        <Button>Go to get a badge</Button>
+        <Button   onClick={() => navigate("/forum")}>Go to forum to disscuss more</Button>
+        <Button onClick={()=> navigate('/events')}>Go to get a badge</Button>
       </Space>
     </div>
   );
