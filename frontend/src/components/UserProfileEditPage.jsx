@@ -80,12 +80,12 @@ const UserProfileEditPage = ({ userProfile, userInfo }) => {
     // console.log(userInfo)
     // todo add url here
     axios
-      .put("http://127.0.0.1:8080/user/userprofile", {
+      .put(`http://127.0.0.1:8080/user/userprofile?user_id=${userInfo.id}`, {
         email: userInfo["email"],
         token: userInfo.token,
         username: values.username,
         signature: values.signature,
-        image: null,
+        image: "",
         // current_password: values.curr_password,
         // new_password: values.password,
         // double_check: values.password
