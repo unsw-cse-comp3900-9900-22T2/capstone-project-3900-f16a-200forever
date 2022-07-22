@@ -26,6 +26,7 @@ const { Meta } = Card;
 
 const UserProfile = ({ userInfo }) => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [userProfile, setUserProfile] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {    
@@ -34,7 +35,7 @@ const UserProfile = ({ userInfo }) => {
     // todo change url here
     .get("http://127.0.0.1:8080/user/userprofile", {
       params: {
-        "user_id": userInfo.id
+        "user_id": id
       }
     })
     .then(function (response) {
@@ -75,7 +76,6 @@ const UserProfile = ({ userInfo }) => {
       });
     }
   };
-  const { id } = useParams();
 
   return (
     <>
@@ -181,16 +181,21 @@ const UserProfile = ({ userInfo }) => {
           </div>
         </div>
   
-        <div className="user-profile-btn-group">
-          <Button onClick={() => navigate(`/guesswhatyoulike/id=${userInfo.id}`)}>
-            Guess what you like
-          </Button>
-          <Button>Friend List</Button>
-          <Button>Edit banned list</Button>
-          <Button onClick={() => setIsEdit(true)}>
-            Edit profile
-          </Button>
-        </div>
+        {
+          userInfo.id === id ?
+          <div className="user-profile-btn-group">
+            <Button onClick={() => navigate(`/guesswhatyoulike/id=${userInfo.id}`)}>
+              Guess what you like
+            </Button>
+            <Button>Friend List</Button>
+            <Button>Edit banned list</Button>
+            <Button onClick={() => setIsEdit(true)}>
+              Edit profile
+            </Button>
+          </div>
+          :
+          null
+        }   
       </div>
         :
         <UserProfileEditPage userProfile={userProfile} userInfo={userInfo}></UserProfileEditPage>

@@ -18,8 +18,8 @@ function HomePage() {
           }}
         >
           <SearchComponent type={"movie name"} order={"descending"}></SearchComponent>
-          <Divider orientation="left">CURENTLY TRENDING MOVIES</Divider>
-          <CurrentlyTrendingMovies></CurrentlyTrendingMovies>
+          {/* <Divider orientation="left">CURENTLY TRENDING MOVIES</Divider> */}
+          {/* <CurrentlyTrendingMovies></CurrentlyTrendingMovies> */}
           <Divider orientation="left">GENRES</Divider>
           <GenresInHomepage></GenresInHomepage>
           

@@ -23,22 +23,26 @@ import { useInsertionEffect } from "react";
 import axios from "axios";
 import openNotification from "../components/Notification";
 import Title from "antd/lib/skeleton/Title";
+
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 
 const RecommendationInMovie = () => {
   const { id } = useParams();
-  const [recommendInfo, setrecommend] = useState([]);
-  const getList = (pageNum)=>{
+  const [movies, setMovies] = useState([]);
+
+  const getList = () =>{
+    // console.log(id)
     axios.get("http://127.0.0.1:8080/recommendation/genre",{
       params:{
         "movie_id": id.replace("id=", ""),
       }
     }).then(function (response) {
-      console.log(response.data.movies);
-      var list = response.data.movies.splice(0,5)
-      console.log(list)
-      setrecommend(list);
+      // console.log(response.data.movies);
+      // console.log(response.data.movies.splice(0, 5))
+      const temp = response.data.movies.splice(0, 5)
+      setMovies(temp)
+      console.log(temp)
     })
     // todo handle error
     .catch(function (error) {
@@ -52,6 +56,7 @@ const RecommendationInMovie = () => {
   useEffect(() => {
     getList()
   }, []);
+
   return (
     <div className="recommendation-component">
       <div className="recommendation-component-title">Related Movie</div>
@@ -67,11 +72,11 @@ const RecommendationInMovie = () => {
           xl: 6,
           xxl: 10,
         }}
-        dataSource={recommendInfo} 
+        dataSource={movies} 
         renderItem={(item) => (
           <List.Item>
             {
-              <Link to={`/movie/detail/id=${item.movie_id}`}>
+              <Link to={`/movie/detail/id=${item.id}`}>
                 <Card
                   hoverable
                   bordered={false}
@@ -83,14 +88,13 @@ const RecommendationInMovie = () => {
                     />
                   }
                 >
-                  <Meta title={item.movie_title} description={`rating: 0`} />
+                  <Meta title={item.title} description={`rating: 0`} />
                 </Card>
               </Link>
             }
           </List.Item>
         )}
       /> 
-      {/* <Pagination defaultCurrent={1} total={numItem} defaultPageSize={12} hideOnSinglePage onChange={changePage}/> */}
        </div> 
     </div>
   );

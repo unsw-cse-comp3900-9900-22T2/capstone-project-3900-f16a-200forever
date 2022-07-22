@@ -143,7 +143,7 @@ const SingleReview = ({ item, userInfo, loginStatus }) => {
       display === true ? 
         <Comment
         actions={actions}
-        author={<a onClick={() => {navigate("/")}}>{item.user_name}</a>}
+        author={<a onClick={() => {navigate(`/userprofile/${item.user_id}`)}}>{item.user_name}</a>}
         avatar={
           <Avatar
             src={ item.user_image !== null ? item.user_image : "https://joeschmoe.io/api/v1/random" }

@@ -17,6 +17,8 @@ const { Title, Text } = Typography;
 function MovieDetail({ userInfo, loginStatus }) {
   const { id } = useParams();
   const [movieInfo, setMovieInfo] = useState({});
+  const [rating, setRating] = useState(0.0);
+  const [a, seta] = useState(0);
 
   useEffect(() => {
     axios
@@ -29,6 +31,9 @@ function MovieDetail({ userInfo, loginStatus }) {
       .then(function (response) {
         console.log(response.data);
         setMovieInfo(response.data);
+        // console.log(response.data["total rating"] / response.data["rating count"])
+        setRating(parseFloat(response.data["total rating"] / response.data["rating count"]).toFixed(2))
+        seta(Math.floor(response.data["total rating"] / response.data["rating count"]));
       })
       // todo handle error
       .catch(function (error) {
@@ -112,12 +117,11 @@ function MovieDetail({ userInfo, loginStatus }) {
           <div className="movie-rating">
             <span>
               <div className="rating-text">
-                <Text>rating</Text>
+                <Text>rating: </Text>
               </div>
-
-              <Rate disabled defaultValue={movieInfo.rating} />
+              <Rate disabled defaultValue={3} />
               <div className="rating-number">
-                <Text>{movieInfo.rating}</Text>
+                <Text>{rating}</Text>
               </div>
             </span>
           </div>
