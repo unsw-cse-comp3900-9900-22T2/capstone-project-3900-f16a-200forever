@@ -7,10 +7,26 @@ import NavBar from "./components/NavBar/NavBar";
 import Home from './components/Home/Home';
 import NotFoundPage from './components/NotFoundPage/NotFoundPage';
 import Login from "./components/auth/Login";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [alertInfo, setAlertInfo] = useState({
+    "status": 0,
+    "msg": ""
+  })
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertInfo({
+      "status": 0,
+      "msg": ""
+    });
+  };
 
   const updateLoginStatus = (loginStatus) => {
     setLoginStatus(loginStatus);
@@ -36,11 +52,28 @@ function App() {
         <Container maxWidth={false} className={classes.rootContainer}>
         <Routes>  
           <Route path='' element={<Home />}/>
-          <Route path='/login' element={<Login setAuth={setAuth}/>}></Route>
+          <Route path='/login' element={<Login setAuth={setAuth} setAlertInfo={setAlertInfo}/>}></Route>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
       </Router>
+      <Snackbar open={alertInfo['status'] === 1 ? true : false} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          {alertInfo['msg']}
+        </Alert>
+      </Snackbar>
+      
+      <Snackbar open={alertInfo['status'] === 2 ? true : false} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+          {alertInfo['msg']}
+        </Alert>
+      </Snackbar>
+
+			<Snackbar open={alertInfo['status'] === 3 ? true : false} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          {alertInfo['msg']}
+        </Alert>
+      </Snackbar>
     </Fragment>
   );
 }
