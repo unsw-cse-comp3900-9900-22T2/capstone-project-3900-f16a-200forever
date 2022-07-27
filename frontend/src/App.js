@@ -20,6 +20,15 @@ function App() {
     setUserInfo(userInfo);
   };
 
+  localStorage.setItem('status', false);
+  function setAuth(token, id, username, email, status) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('id', id);
+    localStorage.setItem('username', username);
+    localStorage.setItem('email', email);
+    localStorage.setItem('status', status);
+  }
+
   return (
     <Fragment>
       <Router>
@@ -27,7 +36,7 @@ function App() {
         <Container maxWidth={false} className={classes.rootContainer}>
         <Routes>  
           <Route path='' element={<Home />}/>
-          <Route path='/login' element={<Login/>}></Route>
+          <Route path='/login' element={<Login setAuth={setAuth}/>}></Route>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
