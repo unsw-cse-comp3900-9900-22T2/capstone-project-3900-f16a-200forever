@@ -3,12 +3,14 @@ import { useState } from "react";
 import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Container } from '@mui/system';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import NavBar from "./components/NavBar/NavBar";
 import Home from './components/Home/Home';
 import NotFoundPage from './components/NotFoundPage/NotFoundPage';
 import Login from "./components/auth/Login";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Register from "./components/auth/Register";
+import ForgetPassword from "./components/auth/ForgetPassword";
 
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -52,7 +54,9 @@ function App() {
         <Container maxWidth={false} className={classes.rootContainer}>
         <Routes>  
           <Route path='' element={<Home />}/>
-          <Route path='/login' element={<Login setAuth={setAuth} setAlertInfo={setAlertInfo}/>}></Route>
+          <Route path='/login' element={<Login setAuth={setAuth} setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/register' element={<Register setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/forgetpassword' element={<ForgetPassword setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>

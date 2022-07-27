@@ -3,44 +3,52 @@ import { useNavigate } from "react-router-dom"
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import { useState } from "react";
 
-const Login = ({ setAuth, setAlertInfo }) => {
+const Register = ({ setAlertInfo }) => {
 	const navigate = useNavigate();
+	const [isError, setIsError] = useState(false);
 	
 	const submit = (event) => {
 		event.preventDefault();
     const data = new FormData(event.currentTarget);
 		if (!data.get("email").replace(/\s/g, '').length ||
-				!data.get("password").replace(/\s/g, '').length) {
+			!data.get("username").replace(/\s/g, '').length ||
+			!data.get("password").replace(/\s/g, '').length ||
+			!data.get("confirm_password").replace(/\s/g, '').length) {
 			setAlertInfo({
 				"status": 2,
 				"msg": "Please enter valid info"
 			});
 			return;
 		}
-
+		if (data.get("confirm_password") !== data.get("password")) {
+			setIsError(true);
+			setAlertInfo({
+				"status": 3,
+				"msg": "The two passwords that you entered do not match!"
+			});
+			return;
+		}
 		axios
-			.post("http://127.0.0.1:8080/login", {
-				email: data.get("email"),
-				password: data.get("password"),
-				is_admin: false
-			})
-			.then(function (response) {
-				console.log(response);
-				setAuth(response.data.token, response.data.id, response.data.name, data.get("email"), true)
+      .post("http://127.0.0.1:8080/register", {
+        name: data.get("username"),
+        email: data.get("email"),
+        password: data.get("password")
+      })
+      .then(function (response) {
 				setAlertInfo({
 					"status": 1,
-					"msg": "Login successfully!"
+					"msg": "Register successfully!"
 				});
-				navigate("/")
-			})
-			.catch(function (error) {
-				console.log(error.response.data);
+        navigate("/login");
+      })
+      .catch(function (error) {
 				setAlertInfo({
-					"status": 2,
+					"status": 3,
 					"msg": error.response.data.message
 				});
-			});
+      });
 	}
 
 	return (
@@ -50,7 +58,7 @@ const Login = ({ setAuth, setAlertInfo }) => {
 					component="form"
 					noValidate
 					autoComplete="off"
-					className="Login-Form"
+					className="Register-Form"
 					onSubmit={submit}
 				>
 					<Typography
@@ -60,7 +68,7 @@ const Login = ({ setAuth, setAlertInfo }) => {
 						sx={{ textAlign: "center" }}
 						fontFamily="inherit"
 					>
-						Login
+						Register
 					</Typography>
 					<TextField
 						margin="normal"
@@ -74,10 +82,29 @@ const Login = ({ setAuth, setAlertInfo }) => {
 						margin="normal"
 						required
 						fullWidth
+						id="username"
+						label="username"
+						name="username"
+					/>
+					<TextField
+						margin="normal"
+						required
+						fullWidth
 						id="password"
 						label="Password"
 						name="password"
 						type="password"
+					/>
+					<TextField
+						error={isError}
+						margin="normal"
+						required
+						fullWidth
+						id="confirm_password"
+						label="Confirm Password"
+						name="confirm_password"
+						type="password"
+						onChange={() => { setIsError(false) }}
 					/>
 					<Button
 						type="submit"
@@ -85,23 +112,15 @@ const Login = ({ setAuth, setAlertInfo }) => {
 						variant="contained"
 						sx={{ mt: 3 }}
 					>
-						Login
+						Submit
 					</Button>
 					<Button
 						fullWidth
 						variant="contained"
-						sx={{ mt: 1 }}
-						onClick={() => { navigate("/register")}}
+						sx={{ mt: 1, mb: 3 }}
+						onClick={() => { navigate("/login")}}
 					>
-						Register
-					</Button>
-					<Button
-						fullWidth
-						variant="text"
-						sx={{ mt: 1, mb: 2 }}
-						onClick={() => { navigate("/forgetpassword")}}
-					>
-						FORGET PASSWORD
+						To Login
 					</Button>
 				</Box>
 			</Paper>
@@ -109,4 +128,4 @@ const Login = ({ setAuth, setAlertInfo }) => {
 	)
 }
 
-export default Login;
+export default Register;
