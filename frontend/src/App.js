@@ -30,6 +30,7 @@ import ForumThreadPage from "./components/ForumThreadPage";
 import GetBadge from "./components/GetBadge";
 import BadgeQuestion from "./components/BadgeQuestion";
 import PostPage from "./components/PostPage";
+import FriendList from "./components/FriendList"
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
@@ -76,6 +77,7 @@ function App() {
             path="/badgequestion/:id"
             element={<BadgeQuestion loginStatus={loginStatus} userInfo={userInfo}/>}
           />
+          <Route path='/friendlist' element={<FriendList></FriendList>}/>
           <Route path="/post/:id" element={<PostPage></PostPage>}/>
         </Route>
         <Route
