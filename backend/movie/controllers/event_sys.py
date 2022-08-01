@@ -13,10 +13,12 @@ from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_an
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
+from movie.utils.user_util import get_admin_id, get_user_id
 from .api_models import EventNS
 import uuid
 from movie import db
 from flask import session
+
 
 event_ns = EventNS.event_ns
 
@@ -27,13 +29,15 @@ class EventCreate(Resource):
   @event_ns.expect(EventNS.event_create_form, validate=True)
   def post(self):
     data = event_ns.payload
-
+    """
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
 
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
     
     # check the user is admin
     if not user_is_admin(data['email']):
@@ -72,7 +76,7 @@ class GetAllEvents(Resource):
   @event_ns.response(200, "Successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):
-    events = db.session.query(Event.Events).all()
+    events = db.session.query(Event.Events).filter(Event.Events.event_status == 'open').all()
     events = convert_model_to_dict(events)
     return {"events": events}, 200
 
@@ -90,7 +94,13 @@ class GetEventDetail(Resource):
 
     if event == None:
       return {"message": f'Event {id} not found'}
-    return convert_object_to_dict(event), 200
+    
+    data = convert_object_to_dict(event)
+    questions = {}
+    for que in event.questions:
+      questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
+    data["questions"] = questions
+    return data, 200
 
 @event_ns.route('/edit')
 class EditEvent(Resource):
@@ -103,13 +113,15 @@ class EditEvent(Resource):
     args = parser.parse_args()
     id = args['id']
     data = event_ns.payload
-
+    """
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
 
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check the user is admin
     if not user_is_admin(data['email']):
@@ -146,6 +158,7 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
+    """
     # login or not
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
@@ -153,6 +166,7 @@ class AttempEvent(Resource):
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
+    """
     
     # check event valid
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
@@ -160,10 +174,10 @@ class AttempEvent(Resource):
       return {"message": "Event not exists"}, 400
 
     # attemp the event
-    user_id = session[data['email']]['id']
+    user_id = get_user_id(data['email'])
     data['user_id'] = user_id
     data['start_time'] = now
-    new = User.UserEevnt(data)
+    new = User.UserEvent(data)
     try:
       db.session.add(new)
       db.session.commit()
@@ -181,23 +195,26 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
+    """
     # login or not
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+    # if not user_has_login(data['email'], session):
+    #   return {"message": "the user has not logined"}, 400
 
     # check the user is valid or not
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
 
+    """
+
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
       return {"message": "The event not exists"}, 400
     duration = event.duration
-    user_id = session[data['email']]['id']
+    user_id = get_user_id(data['email'])
 
     # check the user have attemped the event or not
-    event_attemp = db.session.query(User.UserEevnt).filter(User.UserEevnt.event_id == data['event_id'], \
-      User.UserEevnt.user_id == user_id).first()
+    event_attemp = db.session.query(User.UserEvent).filter(User.UserEvent.event_id == data['event_id'], \
+      User.UserEvent.user_id == user_id).first()
     if event_attemp == None:
       return {"message": "The user haven't attemp the event before"}, 400
 
@@ -239,10 +256,10 @@ class AttempEvent(Resource):
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"message": "Failed"}, 400
+      return {"result": "Failed", "correctness": correctness, "require": event.require_correctness_amt}, 400
 
     # user get the event
     event_attemp.end_time = now
     event_attemp.event_status = 'passed'
     db.session.commit()
-    return {"message": "Passed"}, 200
+    return {"correctness": correctness, 'result': 'Pass', "require": event.require_correctness_amt}, 200
