@@ -13,7 +13,6 @@ import Register from "./components/auth/Register";
 import ForgetPassword from "./components/auth/ForgetPassword";
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [alertInfo, setAlertInfo] = useState({
     "status": 0,
@@ -28,10 +27,6 @@ function App() {
       "status": 0,
       "msg": ""
     });
-  };
-
-  const updateLoginStatus = (loginStatus) => {
-    setLoginStatus(loginStatus);
   };
 
   const updateUserInfo = (userInfo) => {
@@ -50,7 +45,7 @@ function App() {
   return (
     <Fragment>
       <Router>
-        <NavBar loginStatus={loginStatus} updateLoginStatus={updateLoginStatus}/>
+        <NavBar setAuth={setAuth}/>
         <Container maxWidth={false} className={classes.rootContainer}>
         <Routes>  
           <Route path='' element={<Home />}/>

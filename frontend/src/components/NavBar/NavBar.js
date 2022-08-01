@@ -15,19 +15,23 @@ import AdbIcon from '@mui/icons-material/Adb';
 import logo from "../../asset/new_logo.png";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { ButtonGroup } from '@mui/material';
+import axios from 'axios';
 import "./NavBar.css"
 
-const pages = [];
+const pages = ['ad'];
 const settings = ['Profile', 'Logout'];
 
-const ResponsiveAppBar = ({ loginStatus, updateLoginStatus}) => {
+const ResponsiveAppBar = ({ setAuth }) => {
   const navigate = useNavigate();
+
+  const loginStatus = localStorage.getItem("status")
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -39,6 +43,15 @@ const ResponsiveAppBar = ({ loginStatus, updateLoginStatus}) => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const logout = () => {
+    // todo
+    setAnchorElUser(null);
+  }
+
+  const handleSetting = (setting) => {
+    console.log(setting)
+  }
 
   return (
     <AppBar position="static">
@@ -93,11 +106,15 @@ const ResponsiveAppBar = ({ loginStatus, updateLoginStatus}) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {/* {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
-              ))}
+              ))} */}
+
+              <MenuItem key={"da"} onClick={() => { navigate("/search"); setAnchorElNav(null); } }>
+                <Typography textAlign="center">SEARCH</Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -158,11 +175,13 @@ const ResponsiveAppBar = ({ loginStatus, updateLoginStatus}) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              {/* todo */}
+              <MenuItem onClick={() => { navigate("/profile"); setAnchorElUser(null); }}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+              <MenuItem onClick={logout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
           }
