@@ -12,7 +12,7 @@ from movie.models import genre as Genre
 from movie import db
 import uuid
 from datetime import datetime
-from movie.utils.other_until import convert_model_to_dict, paging
+from movie.utils.other_until import convert_model_to_dict, paging, convert_object_to_dict
 from movie.utils.user_util import get_user_id
 
 thread_ns = ThreadNS.thread_ns
@@ -111,7 +111,7 @@ class ThreadManager(Resource):
     if args['page'] == None:
       args['page'] = 1
 
-    # default num of movies in one page is 10
+    # default num of threads in one page is 10
     if args['num_per_page'] == None:
       args['num_per_page'] = 10
 
@@ -120,6 +120,38 @@ class ThreadManager(Resource):
     threads = paging(args['page'], args['num_per_page'], threads)
 
     return {"threads": convert_model_to_dict(threads), "num_threads": num_threads}, 200
+
+
+@thread_ns.route('/thread')
+class ThreadController(Resource):
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('thread_id', type=str, required=True, location="args")
+    parser.add_argument('num_per_page', type=int, location='args')
+    parser.add_argument('page', type=int, location='args')
+    args = parser.parse_args()
+    print(args)
+
+    # check valid genre id
+    thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == args['thread_id']).first()
+    if thread == None:
+      return {"message": "Thread id invalid"}, 400
+
+    # default the first page is 1
+    if args['page'] == None:
+      args['page'] = 1
+
+    # default num of comments in one page is 10
+    if args['num_per_page'] == None:
+      args['num_per_page'] = 10
+
+    comments = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.thread_id == args['thread_id']).order_by(Thread.ThreadComment.comment_time.desc()).all()
+    num_comments = len(comments)
+    comments = paging(args['page'], args['num_per_page'], comments)
+
+    return {"thread": convert_object_to_dict(thread), "comments": convert_model_to_dict(comments), "num_comments": num_comments}, 200
 
 
 @thread_ns.route('/admin')
