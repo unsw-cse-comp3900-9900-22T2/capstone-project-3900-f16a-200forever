@@ -170,7 +170,7 @@ class FollowListManage(Resource):
 
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNs.follow_form, validate=True)
+  @user_ns.expect(UserNS.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
 
@@ -206,7 +206,7 @@ class FollowListManage(Resource):
 
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNs.follow_form, validate=True)
+  @user_ns.expect(UserNS.follow_form, validate=True)
   def delete(self):
     data = user_ns.payload
 
@@ -237,7 +237,7 @@ class FollowListManage(Resource):
 class FollowReview(Resource):
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNs.follow_form, validate=True)
+  @user_ns.expect(UserNS.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
 

@@ -31,7 +31,7 @@ class MovieNS:
 class PersonNS:
   person_ns = Namespace('Person', description="the api for person")
   
-class UserNs:
+class UserNS:
   user_ns = Namespace('User', escription="the api for user")
   follow_form = user_ns.model('Add follow',follow)
   user_edit_profile = user_ns.model('Edit profile', edit_profile)
