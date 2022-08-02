@@ -112,9 +112,7 @@ const ResponsiveAppBar = ({ setAuth }) => {
                 </MenuItem>
               ))} */}
 
-              <MenuItem key={"da"} onClick={() => { navigate("/search"); setAnchorElNav(null); } }>
-                <Typography textAlign="center">SEARCH</Typography>
-              </MenuItem>
+              
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -137,7 +135,7 @@ const ResponsiveAppBar = ({ setAuth }) => {
             {/* LOGO */}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -145,7 +143,20 @@ const ResponsiveAppBar = ({ setAuth }) => {
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
+
+            {/* <Button
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              SEARCH
+            </Button> */}
+            <Button
+              onClick={() => { navigate('/search'); handleCloseNavMenu(); }}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              SEARCH
+            </Button>
           </Box>
           {loginStatus === false ?
             <ButtonGroup variant="contained">

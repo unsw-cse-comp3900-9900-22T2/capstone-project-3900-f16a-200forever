@@ -11,6 +11,7 @@ import NotFoundPage from './components/NotFoundPage/NotFoundPage';
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import ForgetPassword from "./components/auth/ForgetPassword";
+import SearchPage from "./components/search/SearchPage";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -52,6 +53,7 @@ function App() {
           <Route path='/login' element={<Login setAuth={setAuth} setAlertInfo={setAlertInfo}/>}/>
           <Route path='/register' element={<Register setAlertInfo={setAlertInfo}/>}/>
           <Route path='/forgetpassword' element={<ForgetPassword setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/search' element={<SearchPage setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
