@@ -11,9 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const MovieCard = ({ data }) => {
 	const navigate = useNavigate();
   return (
-		// todo add url
-    <Card sx={{ maxWidth: 250, height: 520 }}
-			onClick={() => { console.log(data.id) }}>
+    <Card sx={{ maxWidth: 250 }}
+			onClick={() => { navigate(`/movie/details/${data.id}`) }}>
 			<CardActionArea>
 				<CardMedia
 					component="img"

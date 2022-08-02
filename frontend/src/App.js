@@ -12,6 +12,9 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import SearchPage from "./components/search/SearchPage";
+import MovieDetails from "./components/movie/MovieDetails";
+import GenrePage from "./components/genre/GenrePage";
+import GenreMovie from "./components/genre/GenreMovie";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -54,6 +57,9 @@ function App() {
           <Route path='/register' element={<Register setAlertInfo={setAlertInfo}/>}/>
           <Route path='/forgetpassword' element={<ForgetPassword setAlertInfo={setAlertInfo}/>}/>
           <Route path='/search' element={<SearchPage setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/movie/details/:id' element={<MovieDetails setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/genres' element={<GenrePage setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/genre/:genre/:id' element={<GenreMovie setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>

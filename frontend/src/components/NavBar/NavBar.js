@@ -111,7 +111,6 @@ const ResponsiveAppBar = ({ setAuth }) => {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))} */}
-
               
             </Menu>
           </Box>
@@ -153,9 +152,15 @@ const ResponsiveAppBar = ({ setAuth }) => {
             </Button> */}
             <Button
               onClick={() => { navigate('/search'); handleCloseNavMenu(); }}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ ml: 16, my: 2, color: 'white', display: 'block' }}
             >
               SEARCH
+            </Button>
+            <Button
+              onClick={() => { navigate('/genres'); handleCloseNavMenu(); }}
+              sx={{ ml: 4, my: 2, color: 'white', display: 'block' }}
+            >
+              GENRES
             </Button>
           </Box>
           {loginStatus === false ?
