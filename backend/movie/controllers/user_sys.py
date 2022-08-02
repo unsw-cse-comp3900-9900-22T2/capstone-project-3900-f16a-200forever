@@ -12,7 +12,7 @@ from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username
 from movie.utils.auth_util import user_has_login, user_is_valid
 import sqlite3
 user_ns = UserNS.user_ns
@@ -110,7 +110,7 @@ class UserProfileController(Resource):
     if not username_format_valid(username):
       return {"message": "Username must be 6-20 characters"}, 400
 
-    if not username_is_unique(username):
+    if not username_is_unique(username) and not current_username(user_id) == username:
       return {"message": "Username already taken"}, 400
 
     # edit pw

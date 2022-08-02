@@ -64,3 +64,7 @@ def get_badges(id):
   for badge in results:
     badges.append(badge.event_id)
   return badges
+
+def current_username(id):
+  user = db.session.query(User.Users).filter(User.Users.id == id).first()
+  return user.name
