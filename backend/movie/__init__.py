@@ -38,7 +38,7 @@ smptyserver.login(EMAIL, MAIL_PASS)
 from movie import controllers
 from movie import models
 from movie import error
-from movie.controllers import auth_bp, admin_bp, event_bp, movie_bp, person_bp, user_bp, genre_bp, review_bp, recommendation_bp, thread_bp
+from movie.controllers import auth_bp, admin_bp, event_bp, movie_bp, person_bp, user_bp, genre_bp, review_bp, recommendation_bp, thread_bp, wishlist_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
@@ -50,6 +50,7 @@ app.register_blueprint(genre_bp)
 app.register_blueprint(review_bp)
 app.register_blueprint(recommendation_bp)
 app.register_blueprint(thread_bp)
+app.register_blueprint(wishlist_bp)
 
 db.create_all()
 db.session.commit()

@@ -73,6 +73,7 @@ class WishlistMovie(db.Model):
   __tablename__ = 'r_wishlist_movie'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key=True)
   movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
+  added_time = db.Column('added_time', db.String(256), nullable=False)
 
   def __repr__(self):
     return '<WishlistMovie user id:{} movie id:{}>'.format(self.user_id, self.movie_id)
@@ -80,6 +81,7 @@ class WishlistMovie(db.Model):
   def __init__(self, data):
     self.user_id = data['user_id']
     self.movie_id = data['movie_id']
+    self.added_time = data['added_time']
 
 
 class WatchedlistMovie(db.Model):

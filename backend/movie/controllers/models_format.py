@@ -154,3 +154,9 @@ thread_comment = {
   "is_anonymous": fields.Integer,
   "reply_comment_id": fields.String
 }
+
+edit_list = {
+  "email": fields.String(required=True),
+  "token": fields.String(required=True),
+  "movie_id": fields.Integer(required=True)
+}
