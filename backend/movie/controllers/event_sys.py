@@ -65,7 +65,6 @@ class EventCreate(Resource):
     if not auth_correct:
       return {"message": message}, 400
 
-    
     # check the user is admin
     if not user_is_admin(data['email']):
       return {"message": "the user is not the admin, no permission"}, 400
