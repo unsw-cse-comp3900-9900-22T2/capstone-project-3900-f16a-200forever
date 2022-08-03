@@ -233,17 +233,20 @@ class AttempEvent(Resource):
     num = 0
     correctness = 0
     print(answers)
+    """
     if len(questions) != len(answers.keys()):
       # update the db
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
       return {"message": "Failed"}, 200
+    """
+
 
     for que in questions:
       # check the answer
       if que.id not in answers.keys():
-        return {"message":"Answer id is invalid"}, 400
+        continue
       if que.correct_answer == int(answers[que.id]):
         correctness+=1
       num+=1
