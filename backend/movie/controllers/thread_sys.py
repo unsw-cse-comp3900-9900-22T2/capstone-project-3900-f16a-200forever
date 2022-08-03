@@ -149,8 +149,22 @@ class ThreadController(Resource):
     comments = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.thread_id == args['thread_id']).order_by(Thread.ThreadComment.comment_time.desc()).all()
     num_comments = len(comments)
     comments = paging(args['page'], args['num_per_page'], comments)
+    
+    # get thread data
+    thread_data = convert_object_to_dict(thread)
+    thread_data["react_num"] = len(thread.thread_likes)
+    thread_data["user_email"] = thread.user.email
+    thread_data["user_image"] = get_image(thread.user.image)
 
-    return {"thread": convert_object_to_dict(thread), "comments": convert_model_to_dict(comments), "num_comments": num_comments}, 200
+    # get comment
+    comment_data = []
+    for co in comments:
+      tmp = convert_object_to_dict(co)
+      tmp["user_email"] = co.user.email
+      tmp["user_image"] = get_image(co.user.image)
+      comment_data.append(tmp)
+
+    return {"thread": thread_data, "comments": comment_data, "num_comments": num_comments}, 200
 
 
 @thread_ns.route('/admin')
