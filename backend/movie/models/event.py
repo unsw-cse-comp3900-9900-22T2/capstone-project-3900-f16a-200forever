@@ -11,7 +11,7 @@ class Events(db.Model):
   duration = db.Column('duration', db.Integer)
   deadline = db.Column('deadline', db.DateTime)
   image_description = db.Column('image_description', db.String(256))
-  image = db.Column('image', db.BLOB)
+  image = db.Column('image', db.String(256))
   description = db.Column('description', db.String(256))
   require_correctness_amt = db.Column('require_correctness_amt', db.Integer)
   admin_id = db.Column(db.Integer, db.ForeignKey('t_admins.id'), nullable=False)
