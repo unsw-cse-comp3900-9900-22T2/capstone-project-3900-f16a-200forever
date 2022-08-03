@@ -1,18 +1,13 @@
 from audioop import reverse
 from json import dumps
 from movie.utils.movie_util import movie_sort
-import movie
 from .api_models import MovieNS
 from flask_restx import Resource, reqparse
-from flask import session
 from movie import db
 from movie.models import movie as Movie
 from movie.models import person as Person
-from movie.utils.movie_util import format_movie_return_list, adjust_rating, get_movie_year, get_movie_rating
-from movie.utils.other_util import convert_object_to_dict, convert_model_to_dict, paging
-from movie.utils.user_util import user_id_valid
-from operator import attrgetter
-from sqlalchemy import and_, null, or_
+from movie.utils.movie_util import  get_movie_year, get_movie_rating
+from movie.utils.other_util import convert_object_to_dict,  paging
 from movie.models import genre as Genre
  
 movie_ns = MovieNS.movie_ns

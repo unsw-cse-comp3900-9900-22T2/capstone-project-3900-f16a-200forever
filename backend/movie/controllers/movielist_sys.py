@@ -1,12 +1,6 @@
-from operator import is_
-from attr import validate
 from movie.utils.auth_util import check_auth
-from sqlalchemy import true
 from movie.models import user as User
 from movie.models import movie as Movie
-from movie import app, request
-from flask import session, jsonify
-from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS

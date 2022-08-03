@@ -1,5 +1,3 @@
-import imp
-from tokenize import String
 from movie.controllers.api_models import RecommendationNS
 from movie import db
 from movie.models import movie as Movie

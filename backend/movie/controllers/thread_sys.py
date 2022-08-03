@@ -1,6 +1,5 @@
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
-from flask import session
 from movie.utils.auth_util import  check_auth
 from movie.models import thread as Thread
 from movie.models import user as User
@@ -154,6 +153,8 @@ class ThreadController(Resource):
 
     # post
     data['user_id'] = get_user_id(data['email'])
+    if data['user_id']== None:
+      return {"message": "user id not valie"}, 400
     data['id'] = str(uuid.uuid4())
     thread = Thread.Threads(data)
     db.session.add(thread)

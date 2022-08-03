@@ -5,7 +5,7 @@ from movie.models import movie as Movie
 from movie.models import review as Review
 from movie.models import user as User
 from sqlalchemy import func
-from movie.utils.other_util import paging, convert_object_to_dict
+from movie.utils.other_util import convert_object_to_dict
 from movie.utils.movie_util import movie_id_valid
 from movie.utils.auth_util import check_auth
 from movie.utils.review_util import user_reviewed_movie, calculate_weight, adjust_reviews

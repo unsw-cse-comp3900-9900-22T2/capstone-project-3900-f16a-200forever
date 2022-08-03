@@ -1,18 +1,12 @@
-from operator import is_
-from sqlalchemy import true
 from movie.models import user as User
-from movie import app, request
-from flask import session, jsonify
 from flask_restx import Resource
-from json import dumps
-from flask_restx import Resource, Api
+from flask_restx import Resource
 from movie.utils.auth_util import generate_token, pw_encode, \
                                   correct_email_format, \
                                   username_format_valid, username_is_unique, \
                                   email_exits, correct_password_format, generateOTP, \
                                   send_email, code_is_correct, get_user, password_is_correct, user_is_admin, check_auth
 from movie import db, redis_cli 
-from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
 import uuid
 

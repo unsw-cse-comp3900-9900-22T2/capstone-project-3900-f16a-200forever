@@ -1,24 +1,13 @@
-from operator import is_
-from attr import validate
-from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
-from sqlalchemy import true
+from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, pw_encode
 from movie.models import user as User
-from movie.models import movie as Movie
-from movie import app, request
-from flask import session, jsonify
-from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict, paging
 from movie.utils.auth_util import   check_auth
 from movie import db
-from flask import session
 from .api_models import UserNS
-import sqlite3
 from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id, get_image
-import sqlite3
-from datetime import datetime
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges,  current_username, get_user_id, get_image
 
 user_ns = UserNS.user_ns
 
