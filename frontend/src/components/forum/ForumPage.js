@@ -156,7 +156,7 @@ const ForumPage = ({ setAlertInfo }) => {
 						return (
 						<Item
 						// todo url
-							onClick={() => { navigate(`/forum/${post.id}`)}}>
+							onClick={() => { navigate(`/post/${post.id}`)}}>
 							<Typography variant="subtitle1" component="div" sx={{ ml: 4 }}>
 								Title: {post.title}
 							</Typography>

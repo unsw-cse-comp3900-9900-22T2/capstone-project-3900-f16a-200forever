@@ -17,6 +17,7 @@ import GenrePage from "./components/genre/GenrePage";
 import GenreMovie from "./components/genre/GenreMovie";
 import ForumHome from "./components/forum/ForumHome";
 import ForumPage from "./components/forum/ForumPage";
+import PostPage from "./components/forum/PostPage";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -66,6 +67,7 @@ function App() {
           <Route path='/genre/:genre/:id' element={<GenreMovie setAlertInfo={setAlertInfo}/>}/>
           <Route path='/forums' element={<ForumHome setAlertInfo={setAlertInfo}/>}/>
           <Route path='/forum/:genre/:id' element={<ForumPage setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/post/:id' element={<PostPage setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
