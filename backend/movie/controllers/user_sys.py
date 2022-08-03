@@ -93,7 +93,7 @@ class UserProfileController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check if user_id is valid
     this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
@@ -175,7 +175,7 @@ class FollowListManage(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
     
     # check follow valid
     follow = db.session.query(User.Users).filter(User.Users.id == data['follow_id']).first()
@@ -208,7 +208,7 @@ class FollowListManage(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check follow valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -232,10 +232,10 @@ class FollowReview(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
       
     if "page_num" not in data.keys() or "num_per_page" not in data.keys():
-      return {"message", "page_num and num_per_page should by provided, type are both int"}, 400
+      return {"message": "page_num and num_per_page should by provided, type are both int"}, 400
 
     # check the user in the follow list
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -310,7 +310,7 @@ class BannedlistController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     user_id = get_user_id(data['email'])
 
@@ -348,7 +348,7 @@ class BannedlistController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check ban valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()

@@ -107,7 +107,7 @@ class ThreadManager(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # thread exist
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
@@ -141,7 +141,7 @@ class ThreadManager(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check genre valid
     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == data['genre_id']).first()
@@ -173,7 +173,7 @@ class ThreadAdmin(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
@@ -244,7 +244,7 @@ class CommentThread(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:

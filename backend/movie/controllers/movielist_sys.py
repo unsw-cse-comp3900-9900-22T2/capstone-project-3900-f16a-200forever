@@ -57,7 +57,7 @@ class WishlistController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check if movie exists
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -97,7 +97,7 @@ class WishlistController(Resource):
     # check auth
     message, auth_correct = check_auth(data["email"], data['token'])
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check if movie already exists in wishlist
     movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
@@ -121,7 +121,7 @@ class WatchedMovieList(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -155,7 +155,7 @@ class WatchedMovieList(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
 
     # check the movie id valid
@@ -187,7 +187,7 @@ class DroppedMovieList(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -220,7 +220,7 @@ class DroppedMovieList(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
