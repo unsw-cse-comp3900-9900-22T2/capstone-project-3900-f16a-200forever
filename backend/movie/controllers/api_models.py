@@ -1,7 +1,7 @@
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
-  attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow, user_movie_list, review_post, review_delete, review_admin, \
-  review_admin_delete, edit_profile, thread_react, thread_comment, follow, banned
+  attemp_event, finish_event, delete_thread, change_admin, post_thread, follow, user_movie_list, review_post, review_delete, \
+  edit_profile, thread_react, thread_comment, follow, banned
   
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")
@@ -46,8 +46,7 @@ class ReviewNS:
   validation_check = review_ns.model("Validate", validation)
   review_create_form = review_ns.model('Review Post', review_post)
   review_delete_form = review_ns.model('Review Delete', review_delete)
-  review_admin_form = review_ns.model('Review Admin', review_admin)
-  review_admin_delete_form = review_ns.model('Review Admin Delete', review_admin_delete)
+  review_admin_form = review_ns.model('Review Admin', change_admin)
 
 class RecommendationNS:
   recommendation_ns = Namespace('Recommendation', description="the api for recommendation")
@@ -55,7 +54,7 @@ class RecommendationNS:
 class ThreadNS:
   thread_ns = Namespace('Thread', description="the api for thread")
   delete_thread_form = thread_ns.model('Delete thread', delete_thread)
-  forum_admin_form = thread_ns.model('Thread admin',forum_admin) 
+  forum_admin_form = thread_ns.model('Thread admin',change_admin) 
   post_thread_form = thread_ns.model('Post thread', post_thread)
   thread_react_form = thread_ns.model("React Thread", thread_react)
   thread_comment_form = thread_ns.model('Thread comment', thread_comment)

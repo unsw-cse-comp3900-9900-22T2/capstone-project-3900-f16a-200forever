@@ -37,7 +37,7 @@ def get_user_email(id):
 # id: id of the user
 # wishlist: the list of movie id
 def get_wishlist(id):
-  results = db.session.query(User.MovieWishLis).filter(User.MovieWishLis.user_id == id).all()
+  results = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == id).all()
   wishlist = []
   for movie in results:
     wishlist.append(movie.movie_id)

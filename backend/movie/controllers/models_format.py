@@ -84,10 +84,11 @@ delete_thread = {
   'token': fields.String(required=True)
 }
 
-forum_admin = {
+change_admin = {
   'user_email': fields.String(required=True),
   'admin_email': fields.String(required=True),
-  'token': fields.String(required=True)
+  'token': fields.String(required=True),
+  'become_admin': fields.Boolean(required=True)
 }
 
 post_thread = {
@@ -152,20 +153,6 @@ review_delete = {
   'review_id': fields.String(required=True)
 }
 
-review_admin = {
-  'user_email': fields.String(required=True),
-  'admin_email': fields.String(required=True),
-  'token': fields.String(required=True)
-}
-
-review_admin_delete = {
-  'user_email': fields.String(required=True),
-  'token': fields.String(required=True),
-  'movie_id': fields.Integer(required=True),
-  'admin_email': fields.String(required=True)
-}
-
-
 #----------------USER PROFILE------------------
 edit_profile = {
   'username': fields.String(required=True),
@@ -177,8 +164,3 @@ edit_profile = {
   'email': fields.String(required=True),
   'token': fields.String(required=True)
 }
-
-# Accept null values
-class NullableString(fields.String):
-    __schema_type__ = ['string', 'null']
-    __schema_example__ = 'nullable string'

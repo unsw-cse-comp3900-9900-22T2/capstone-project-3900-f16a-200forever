@@ -130,7 +130,7 @@ class logoutController(Resource):
     data = auth_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400

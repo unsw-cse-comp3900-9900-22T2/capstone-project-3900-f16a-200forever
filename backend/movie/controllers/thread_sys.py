@@ -16,7 +16,7 @@ thread_ns = ThreadNS.thread_ns
 
 #----------------GET ALL THREADS------------------
 @thread_ns.route('')
-class Threads(Resource):
+class ThreadManager(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):
@@ -55,7 +55,7 @@ class Threads(Resource):
 
 #----------------Thread Manager------------------
 @thread_ns.route('/thread')
-class ThreadManager(Resource):
+class ThreadController(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):
@@ -104,7 +104,7 @@ class ThreadManager(Resource):
   def delete(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -138,7 +138,7 @@ class ThreadManager(Resource):
     data = thread_ns.payload
     data['created_time'] = str(datetime.now())
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -167,11 +167,10 @@ class ThreadAdmin(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   @thread_ns.expect(ThreadNS.forum_admin_form, validate=True)
-  def post(self):
+  def put(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
-
+    message, auth_correct = check_auth(data["admin_email"], data['token'])
     if not auth_correct:
       return {"message": message}, 400
 
@@ -185,14 +184,25 @@ class ThreadAdmin(Resource):
     if user == None:
       return {"message": "The user not exist"}, 400
 
-    # check user has already be a admin
-    if user.is_forum_admin == 1:
-      return {"message": "The user is already a forum admin"}, 400
+    # promoting
+    if data['become_admin'] == True:
+      # check if user is already a forum admin
+      if user.is_forum_admin == 1:
+        return {"message": "The user is already a forum admin"}, 400
+      else:
+        # update to admin
+        user.is_forum_admin = 1
+    # demoting
+    else:
+      # check if user is already a forum admin
+      if user.is_forum_admin == 0:
+        return {"message": "The user is not a forum admin"}, 400
+      else:
+        # demote from admin
+        user.is_forum_admin = 0
 
-    # update to admin
-    user.is_forum_admin = 1
     db.session.commit()
-    return {'message': "Successfully"}, 200
+    return {"message": "Successfully"}, 200
 
 
 #----------------REACT THREAD-----------------
@@ -204,7 +214,7 @@ class ReactToComment(Resource):
   def post(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": str(message)}, 400
@@ -212,7 +222,7 @@ class ReactToComment(Resource):
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
-      return {"message": "Incalid user"}, 400
+      return {"message": "Invalid user"}, 400
     # check comment valid
     comment = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
     if comment == None:
@@ -229,7 +239,7 @@ class ReactToComment(Resource):
       db.session.commit()
       return {"is_remove": 0}, 200
 
-#----------------REACT COMMENT----------------
+#----------------COMMENT----------------
 @thread_ns.route('/comment')
 class CommentThread(Resource):
   @thread_ns.response(200, "Successfully")
@@ -241,21 +251,21 @@ class CommentThread(Resource):
     now = datetime.now()
     data['time'] = now
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
-      return {"message": "Incalid user"}, 400
+      return {"message": "Invalid user"}, 400
 
     # check thread id
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
     if thread == None:
       return {"message": "Thread Not Exist"},400
 
-    # check replay comment id
+    # check reply comment id
     if 'reply_comment_id' in data.keys():
       parent = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['reply_comment_id']).first()
       if parent == None or parent.thread_id != thread.id:
@@ -267,6 +277,34 @@ class CommentThread(Resource):
     db.session.add(comment)
     db.session.commit()
     return {"comment_id": data['id']}, 200
+
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.thread_comment_form, validate=True)
+  def delete(self):
+    data = thread_ns.payload
+    # check auth
+    message, auth_correct = check_auth(data['email'], data['token'])
+
+    if not auth_correct:
+      return {"message": str(message)}, 400
+    # check user valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {"message": "Invalid user"}, 400
+    # check comment valid
+    comment = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['comment_id']).first()
+    if comment == None:
+      return {"message": "Comment not exist"}, 400
+
+    # check comment belongs to user
+    if comment.user_id != user.id:
+      return {"message": "You can't delete this comment"}, 400
+
+    # delete comment
+    db.session.delete(comment)
+    db.session.commit()
+    return {"message": "Successfully"}, 200
 
 
     
