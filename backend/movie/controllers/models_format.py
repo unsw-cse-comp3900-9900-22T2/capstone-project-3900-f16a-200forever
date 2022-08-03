@@ -110,6 +110,12 @@ thread_comment = {
   "reply_comment_id": fields.String
 }
 
+delete_comment = {
+  'comment_id': fields.String(required=True),
+  'email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
 thread_react = {
   'email': fields.String(required=True),
   'token': fields.String(required=True),
