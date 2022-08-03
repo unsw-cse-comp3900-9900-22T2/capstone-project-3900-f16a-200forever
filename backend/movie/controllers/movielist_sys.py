@@ -58,7 +58,7 @@ class WishlistController(Resource):
     # check if movie exists
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
     if movie == None:
-      return {'message': 'Movie doesn\'t exist'}, 400
+      return {'message': 'Movie does not exist'}, 400
 
     # check if movie already exists in wishlist
     movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
@@ -124,7 +124,7 @@ class WatchedMovieList(Resource):
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
     if movie == None:
-      return {"message": "Invalid movie id"}, 400
+      return {"message": "Movie does not exist"}, 400
 
     # check the movie not in the watchedlist
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -161,7 +161,7 @@ class WatchedMovieList(Resource):
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
     if movie == None:
-      return {"message": "Invalid movie id"}, 400
+      return {"message": "Movie does not exist"}, 400
 
     # check the movie not in the watchedlist
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
