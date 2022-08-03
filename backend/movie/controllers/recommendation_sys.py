@@ -8,6 +8,7 @@ from movie.models import review as Review
 from flask_restx import Resource, reqparse
 from movie.utils.other_util import convert_model_to_dict
 from movie.utils.recommendation_util import get_genre_director_movie
+from movie.utils.movie_util import remove_movie_in_the_list
 from random import randint
 from random import seed
 
@@ -106,11 +107,4 @@ class RecommendUser(Resource):
 
       return {"movies": convert_model_to_dict(top40_movies)}, 200    
 
-def remove_movie_in_the_list(user, movies):
-  result = []
-  for movie in movies:
-    if movie not in user.user_wish_list and movie not in  user.user_dropped_list \
-    and movie not in user.user_watched_list:
-      result.append(movie)
 
-  return result
