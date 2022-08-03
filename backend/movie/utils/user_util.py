@@ -64,3 +64,8 @@ def get_badges(id):
   for badge in results:
     badges.append(badge.event_id)
   return badges
+
+def get_image(image):
+  if image is not None:
+      return str(image.decode())
+  return image

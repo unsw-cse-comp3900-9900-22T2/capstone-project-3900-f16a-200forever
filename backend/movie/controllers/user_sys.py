@@ -14,7 +14,7 @@ from movie.utils.auth_util import user_has_login, user_is_valid
 from movie import db
 from flask import session
 from .api_models import UserNS
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, get_image
 import sqlite3
 
 user_ns = UserNS.user_ns
@@ -62,9 +62,7 @@ class UserProfileController(Resource):
     badges = get_badges(user_id)
 
     # id, username, profile picture, signature, wishlist, watchlist, droplist, badges
-    image = None
-    if profile_picture is not None:
-      image = str(profile_picture.decode())
+    image = get_image(profile_picture)
     
     user_profile = {
       'id': user_id, #str
@@ -160,7 +158,7 @@ class FollowListManage(Resource):
       user = fo.follower
       data = {}
       data['email'] = user.email
-      data['image'] = user.image
+      data['image'] = get_image(user.image)
       data['id'] = user.id
       data['name'] = user.name
       result.append(data)
@@ -172,7 +170,7 @@ class FollowListManage(Resource):
   @user_ns.expect(UserNS.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
-
+    """
     # check user login
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
@@ -181,14 +179,15 @@ class FollowListManage(Resource):
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
 
-    # check follow itself
-    if data['email'] == data['follow_email']:
-      return {"message": "Cannot follow self"}, 400
-
+    """
     # check follow valid
-    follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
+    follow = db.session.query(User.Users).filter(User.Users.id == data['follow_id']).first()
     if follow == None:
       return {"message": "Follow email invalid"}, 400
+
+    # check follow itself
+    if data['email'] == follow.email:
+      return {"message": "Cannot follow self"}, 400
 
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     
@@ -208,23 +207,21 @@ class FollowListManage(Resource):
   @user_ns.expect(UserNS.follow_form, validate=True)
   def delete(self):
     data = user_ns.payload
-
-    # check user login
+    """
+    # check user login  
     if not user_has_login(data['email'], session):
         return {"message": "the user has not logined"}, 400
 
     # check token valid
     if not user_is_valid(data):
         return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check follow valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
 
-    follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
-    if follow == None:
-      return {"message": "Follow email invalid"}, 400
-    
-    follow_rel = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == follow.id).first()
+    follow_rel = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == data['follow_id']).first()
     if follow_rel == None:
       return {"message": "Haven't followed before"}, 400
 
@@ -248,7 +245,8 @@ class FollowReview(Resource):
     if not user_is_valid(data):
         return {"message": "the token is incorrect"}, 400
     """
-
+    if "page_num" not in data.keys() or "num_per_page" not in data.keys():
+      return {"message", "page_num and num_per_page should by provided, type are both int"}, 400
 
     # check the user in the follow list
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -274,9 +272,8 @@ class FollowReview(Resource):
       review.update(movie)
       review["user_email"] = re.user.email
       review['user_id'] = re.user.id
+      review["user_image"] = get_image(re.user.image)
       review["user_image"] = re.user.image
-      if review["user_image"] is not None:
-        review["user_image"]  = str(review["user_image"] .decode())
       reviews.append(review)
       print(review)
 

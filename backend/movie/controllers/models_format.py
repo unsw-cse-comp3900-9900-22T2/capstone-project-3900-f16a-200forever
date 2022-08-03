@@ -73,8 +73,8 @@ follow = {
   'email': fields.String(required=True), 
   'token': fields.String(required=True), 
   'follow_id': fields.String(required=True),
-  "page_num": fields.Integer(required=True),
-  "num_per_page": fields.Integer(required=True)
+  "page_num": fields.Integer,
+  "num_per_page": fields.Integer
 }
 
 class Question_Form(fields.Raw):
