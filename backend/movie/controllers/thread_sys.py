@@ -16,7 +16,7 @@ thread_ns = ThreadNS.thread_ns
 
 #----------------GET ALL THREADS------------------
 @thread_ns.route('')
-class Threads(Resource):
+class ThreadManager(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):
@@ -55,7 +55,7 @@ class Threads(Resource):
 
 #----------------Thread Manager------------------
 @thread_ns.route('/thread')
-class ThreadManager(Resource):
+class ThreadController(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):
@@ -167,13 +167,12 @@ class ThreadAdmin(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   @thread_ns.expect(ThreadNS.forum_admin_form, validate=True)
-  def post(self):
+  def put(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
-
+    message, auth_correct = check_auth(data["user_email"], data['token'])
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
@@ -185,14 +184,25 @@ class ThreadAdmin(Resource):
     if user == None:
       return {"message": "The user not exist"}, 400
 
-    # check user has already be a admin
-    if user.is_forum_admin == 1:
-      return {"message": "The user is already a forum admin"}, 400
+    # promoting
+    if data['become_admin'] == True:
+      # check if user is already a forum admin
+      if user.is_forum_admin == 1:
+        return {"message": "The user is already a forum admin"}, 400
+      else:
+        # update to admin
+        user.is_forum_admin = 1
+    # demoting
+    else:
+      # check if user is already a forum admin
+      if user.is_forum_admin == 0:
+        return {"message": "The user is not a forum admin"}, 400
+      else:
+        # demote from admin
+        user.is_forum_admin = 0
 
-    # update to admin
-    user.is_forum_admin = 1
     db.session.commit()
-    return {'message': "Successfully"}, 200
+    return {"message": "Successfully"}, 200
 
 
 #----------------REACT THREAD-----------------
@@ -229,7 +239,7 @@ class ReactToComment(Resource):
       db.session.commit()
       return {"is_remove": 0}, 200
 
-#----------------REACT COMMENT----------------
+#----------------COMMENT----------------
 @thread_ns.route('/comment')
 class CommentThread(Resource):
   @thread_ns.response(200, "Successfully")
