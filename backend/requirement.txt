@@ -39,4 +39,5 @@ Werkzeug==2.0.3
 wrapt==1.12.1
 fuzzywuzzy==0.18.0
 python-Levenshtein==0.12.2
-
+flask-restx==0.5.1
+Flask==1.1.2

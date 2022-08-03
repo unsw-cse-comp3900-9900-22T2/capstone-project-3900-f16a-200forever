@@ -1,6 +1,5 @@
 from audioop import reverse
 from json import dumps
-from numpy import require
 from movie.utils.movie_until import movie_sort
 import movie
 from .api_models import MovieNS

@@ -1,6 +1,4 @@
 from operator import is_
-from attr import validate
-from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
 from movie import app, request
