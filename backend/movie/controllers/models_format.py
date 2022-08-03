@@ -84,7 +84,7 @@ delete_thread = {
   'token': fields.String(required=True)
 }
 
-forum_admin = {
+change_admin = {
   'user_email': fields.String(required=True),
   'admin_email': fields.String(required=True),
   'token': fields.String(required=True),
@@ -152,20 +152,6 @@ review_delete = {
   'token': fields.String(required=True),
   'review_id': fields.String(required=True)
 }
-
-review_admin = {
-  'user_email': fields.String(required=True),
-  'admin_email': fields.String(required=True),
-  'token': fields.String(required=True)
-}
-
-review_admin_delete = {
-  'user_email': fields.String(required=True),
-  'token': fields.String(required=True),
-  'movie_id': fields.Integer(required=True),
-  'admin_email': fields.String(required=True)
-}
-
 
 #----------------USER PROFILE------------------
 edit_profile = {

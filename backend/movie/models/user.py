@@ -19,6 +19,7 @@ class Users(db.Model):
   validation_code = db.Column('validation_code', db.String(256))
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
   is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
+  is_review_admin = db.Column('is_review_admin', db.Integer, nullable=False)
   user_review_likes_rel = db.relationship(
       "Reviews",
       secondary='r_review_likes',

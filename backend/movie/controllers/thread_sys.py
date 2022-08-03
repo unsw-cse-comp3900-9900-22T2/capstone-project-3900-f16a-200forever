@@ -170,7 +170,7 @@ class ThreadAdmin(Resource):
   def put(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["user_email"], data['token'])
+    message, auth_correct = check_auth(data["admin_email"], data['token'])
     if not auth_correct:
       return {"message": message}, 400
 

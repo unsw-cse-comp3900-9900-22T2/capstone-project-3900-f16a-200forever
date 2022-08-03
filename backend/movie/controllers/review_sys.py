@@ -296,20 +296,20 @@ class ReviewController(Resource):
         "message": "Delete review success"
     }, 200 
 
-#---------------PROMOTE ADMIN---------------
+#---------------MANAGE REVIEW ADMIN---------------
 @review_ns.route('/admin')
 class ReviewAdmin(Resource):
   @review_ns.response(200, "Successfully")
   @review_ns.response(400, 'Something went wrong')
   @review_ns.expect(ReviewNS.review_admin_form, validate=True)
-  def post(self):
+  def put(self):
     data = review_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data["admin_email"], data['token'])
 
-    if not auth_correct:
-      return {"message": message}, 400
+    #if not auth_correct:
+    #  return {"message": message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
@@ -321,11 +321,22 @@ class ReviewAdmin(Resource):
     if user == None:
       return {"message": "The user does not exist"}, 400
 
-    # check user has already be a admin
-    if user.is_review_admin == 1:
-      return {"message": "The user is already a review admin"}, 400
+    # promoting
+    if data['become_admin'] == True:
+      # check if user is already a review admin
+      if user.is_review_admin == 1:
+        return {"message": "The user is already a review admin"}, 400
+      else:
+        # update to admin
+        user.is_review_admin = 1
+    # demoting
+    else:
+      # check if user is already a review admin
+      if user.is_review_admin == 0:
+        return {"message": "The user is not a review admin"}, 400
+      else:
+        # demote from admin
+        user.is_review_admin = 0
 
-    # update to admin
-    user.is_review_admin = 1
     db.session.commit()
     return {'message': "User is now review admin"}, 200
