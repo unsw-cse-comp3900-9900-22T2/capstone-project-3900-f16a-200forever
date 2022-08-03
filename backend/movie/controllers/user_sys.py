@@ -4,14 +4,11 @@ from attr import validate
 from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
 from sqlalchemy import true
 from movie.models import user as User
-<<<<<<< HEAD
 from movie.models import movie as Movie
-=======
 from movie import app, request
 from flask import session, jsonify
 from json import dumps
 from flask_restx import Resource, reqparse
->>>>>>> 46f1a531c8044649d81f8669c6003e59ad1df505
 from movie import db
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict, paging
 from movie.utils.auth_util import user_has_login, user_is_valid
