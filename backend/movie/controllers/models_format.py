@@ -134,7 +134,7 @@ follow = {
 banned = {
   'email': fields.String(required=True), 
   'token': fields.String(required=True), 
-  'banned_email': fields.String(required=True)
+  'banned_id': fields.String(required=True)
 }
 
 #----------------MOVIE LIST------------------
