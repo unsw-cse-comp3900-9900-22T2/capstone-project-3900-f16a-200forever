@@ -107,7 +107,7 @@ class ThreadController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # thread exist
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
@@ -141,7 +141,7 @@ class ThreadController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check genre valid
     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == data['genre_id']).first()
@@ -254,18 +254,18 @@ class CommentThread(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
-      return {"message": "Incalid user"}, 400
+      return {"message": "Invalid user"}, 400
 
     # check thread id
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
     if thread == None:
       return {"message": "Thread Not Exist"},400
 
-    # check replay comment id
+    # check reply comment id
     if 'reply_comment_id' in data.keys():
       parent = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['reply_comment_id']).first()
       if parent == None or parent.thread_id != thread.id:
@@ -277,6 +277,34 @@ class CommentThread(Resource):
     db.session.add(comment)
     db.session.commit()
     return {"comment_id": data['id']}, 200
+
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.thread_comment_form, validate=True)
+  def delete(self):
+    data = thread_ns.payload
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
+
+    if not auth_correct:
+      return {"message": str(message)}, 400
+    # check user valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {"message": "Invalid user"}, 400
+    # check comment valid
+    comment = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['comment_id']).first()
+    if comment == None:
+      return {"message": "Comment not exist"}, 400
+
+    # check comment belongs to user
+    if comment.user_id != user.id:
+      return {"message": "You can't delete this comment"}, 400
+
+    # delete comment
+    db.session.delete(comment)
+    db.session.commit()
+    return {"message": "Successfully"}, 200
 
 
     

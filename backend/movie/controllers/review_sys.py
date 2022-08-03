@@ -150,7 +150,7 @@ class ReactToReview(Resource):
         message, auth_correct = check_auth(data["email"], data['token'])
 
         if not auth_correct:
-          return {"message", message}, 400
+          return {"message": message}, 400
 
 
         user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -217,7 +217,7 @@ class ReviewController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check rating between 1-5
     if rating < 1 or rating > 5:
@@ -265,7 +265,7 @@ class ReviewController(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check review valid
     review = db.session.query(Review.Reviews).filter(Review.Reviews.id == review_id).first()
@@ -309,7 +309,7 @@ class ReviewAdmin(Resource):
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()

@@ -55,5 +55,5 @@ def get_genre_director_movie(genre_ids, directors, by):
     query = query.filter(or_(Movie.MovieGenre.genre_id.in_(genre_ids), Person.MovieDirector.person_id.in_(directors)))
 
   # sort
-  movies = query.order_by(Movie.Movies.total_rating.desc()).limit(20)
+  movies = query.order_by(Movie.Movies.total_rating.desc()).limit(20).all()
   return movies
