@@ -31,6 +31,7 @@ class Events(db.Model):
     self.description = data['description']
     self.require_correctness_amt = data['require_correctness_amt']
     self.admin_id = data['admin_id']
+    self.event_status = 'open'
 
 class Questions(db.Model):
   __tablename__ = 't_questions'
