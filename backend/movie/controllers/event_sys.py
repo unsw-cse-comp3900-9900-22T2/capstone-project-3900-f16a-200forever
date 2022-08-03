@@ -63,7 +63,7 @@ class EventCreate(Resource):
     data = event_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -114,7 +114,7 @@ class EditEvent(Resource):
     data = event_ns.payload
  
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -157,7 +157,7 @@ class AttempEvent(Resource):
     data = event_ns.payload
  
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -191,7 +191,7 @@ class AttempEvent(Resource):
     data = event_ns.payload
  
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400

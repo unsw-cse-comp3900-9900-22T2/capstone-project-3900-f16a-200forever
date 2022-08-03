@@ -147,7 +147,7 @@ class ReactToReview(Resource):
 
  
         # check auth
-        message, auth_correct = check_auth(data["email"], data['token'])
+        message, auth_correct = check_auth(data['email'], data['token'])
 
         if not auth_correct:
           return {"message": message}, 400
@@ -214,7 +214,7 @@ class ReviewController(Resource):
 
  
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -262,7 +262,7 @@ class ReviewController(Resource):
     #user_id = get_user_id(email)
  
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400

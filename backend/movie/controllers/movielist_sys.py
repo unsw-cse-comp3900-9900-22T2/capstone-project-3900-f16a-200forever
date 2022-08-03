@@ -54,7 +54,7 @@ class WishlistController(Resource):
     user_id = get_user_id(data['email'])
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -95,7 +95,7 @@ class WishlistController(Resource):
     user_id = get_user_id(data['email'])
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
     if not auth_correct:
       return {"message": message}, 400
 
@@ -118,7 +118,7 @@ class WatchedMovieList(Resource):
   def post(self):
     data = user_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -152,7 +152,7 @@ class WatchedMovieList(Resource):
   def delete(self):
     data = user_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -184,7 +184,7 @@ class DroppedMovieList(Resource):
     data = user_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -217,7 +217,7 @@ class DroppedMovieList(Resource):
     data = user_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400

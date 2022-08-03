@@ -104,7 +104,7 @@ class ThreadController(Resource):
   def delete(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -138,7 +138,7 @@ class ThreadController(Resource):
     data = thread_ns.payload
     data['created_time'] = str(datetime.now())
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -214,7 +214,7 @@ class ReactToComment(Resource):
   def post(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": str(message)}, 400
@@ -251,7 +251,7 @@ class CommentThread(Resource):
     now = datetime.now()
     data['time'] = now
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -284,7 +284,7 @@ class CommentThread(Resource):
   def delete(self):
     data = thread_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": str(message)}, 400

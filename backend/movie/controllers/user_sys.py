@@ -90,7 +90,7 @@ class UserProfileController(Resource):
     data = user_ns.payload
     email = data['email']
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -172,7 +172,7 @@ class FollowListManage(Resource):
   def post(self):
     data = user_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -205,7 +205,7 @@ class FollowListManage(Resource):
   def delete(self):
     data = user_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -229,7 +229,7 @@ class FollowReview(Resource):
   def post(self):
     data = user_ns.payload
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -307,7 +307,7 @@ class BannedlistController(Resource):
     data = user_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
@@ -345,7 +345,7 @@ class BannedlistController(Resource):
     data = user_ns.payload
 
     # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
+    message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
       return {"message": message}, 400
