@@ -7,7 +7,7 @@ from movie.models import user as User
 from movie.models import review as Review
 from flask_restx import Resource, reqparse
 from movie.utils.other_util import convert_model_to_dict
-from movie.utils.recommendation_util import initialise_movies, top_twenty, calculate_genre, calculate_director, get_genre_director_movie
+from movie.utils.recommendation_util import get_genre_director_movie
 from random import randint
 from random import seed
 
