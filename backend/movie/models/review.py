@@ -10,9 +10,6 @@ class Reviews(db.Model):
     created_time = db.Column('created_time', db.String(256), nullable=False)
     rating = db.Column('rating', db.Integer, nullable=False)
     weight = db.Column('weight', db.Float(20), nullable=False)
-    # relationships
-    # review_likes = db.ralationship('ReviewLikes', backref='reviews', lazy=True)
-    # review_unlikes = db.relationship('ReviewUnlikes', backref='reviews', lazy=True)
     review_user_likes_rel = db.relationship(
         "Users",
         secondary='r_review_likes',

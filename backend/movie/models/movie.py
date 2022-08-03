@@ -16,8 +16,6 @@ class Movies(db.Model):
   total_rating = db.Column('total_rating', db.Float(20))
   rating_count = db.Column('rating_count', db.Integer)
   events = db.relationship('Events', secondary='r_event_movie', back_populates='movies', lazy=True)
-  #movie_director_rel = db.relationship('Persons', secondary='r_movie_director', back_populates='person_movie_rel', lazy=True)
-  #movie_actor_rel = db.relationship('Persons', secondary='r_movie_actor', back_populates='actor_movie_rel', lazy=True)
   movie_genre = db.relationship('Genres', secondary='r_movie_genre', back_populates='genre_movie', lazy=True)
   images = db.relationship('MovieImages', backref='movie', lazy=True)
   movie_director_rel = db.relationship(

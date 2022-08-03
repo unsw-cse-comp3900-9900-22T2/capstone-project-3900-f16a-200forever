@@ -3,16 +3,6 @@ from sqlalchemy import true
 from movie import db
 from movie.models.movie import Movies
 
-"""
-event_movie_relationship = db.Table(
-  'r_movie_event',
-  db.Column('event_id', db.String(32), db.ForeignKey('t_events.id'), primary_key=True),
-  db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
-)
-"""
-
-
-
 class Events(db.Model):
   __tablename__ = 't_events'
   id = db.Column('id', db.String(256), primary_key=True)

@@ -29,23 +29,6 @@ class Threads(db.Model):
     self.is_anonymous = data['is_anonymous']
     self.content = data['content']
 
-"""
-class Categories(db.Model):
-  __tablename__ = 't_categories'
-  id = db.Column('id', db.String(256), primary_key=True)
-  #genre_id = db.Column('genre_id', db.Integer, db.ForeignKey('t_genres.id'), nullable=False)
-  name = db.Column('name', db.String(256), nullable=False)
-
-  def __repr__(self):
-    return '<Category: id{} name{}>'.format(self.id, self.name)
-  
-  def __init__(self, data):
-    self.id = data['id']
-    self.genre_id = data['genre_id']
-    self.name = data['name']
-"""
-
-
 class ThreadComment(db.Model):
   __tablename__ ='t_thread_comment'
   id = db.Column('id', db.String(256), primary_key=True)
