@@ -88,28 +88,21 @@ class SearchMovie(Resource):
     elif args['type'] == 'actor':
       kw = args["keywords"]
       result = []
+      actor_query = db.session.query(
+        Person.MovieActor, Person.Persons, Movie.Movies, 
+      ).filter(
+        Person.MovieActor.movie_id == Movie.Movies.id,
+      ).filter(
+        Person.MovieActor.person_id == Person.Persons.id,
+      ).filter(
+        Person.Persons.name.ilike(f'%{kw}%'))
+
+      result = []
+      # sort by rating
       if args['order'] == 'ascending':
-        result = db.session.query(
-          Person.MovieActor, Person.Persons, Movie.Movies, 
-        ).filter(
-          Person.MovieActor.movie_id == Movie.Movies.id,
-        ).filter(
-          Person.MovieActor.person_id == Person.Persons.id,
-        ).filter(
-          Person.Persons.name.ilike(f'%{kw}%')
-        ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
-        ).all()
+        result = actor_query.order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title).all()
       else:
-        result = db.session.query(
-          Person.MovieActor, Person.Persons, Movie.Movies, 
-        ).filter(
-          Person.MovieActor.movie_id == Movie.Movies.id,
-        ).filter(
-          Person.MovieActor.person_id == Person.Persons.id,
-        ).filter(
-          Person.Persons.name.ilike(f'%{kw}%')
-        ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
-        ).all()
+        result = actor_query.order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title).all()
       matched_movies += result
 
     total_num = len(matched_movies)
@@ -118,7 +111,7 @@ class SearchMovie(Resource):
 
     movies = []
     for movie in matched_movies:
-      if args['type'] == 'director':
+      if args['type'] == 'director' or args['type'] == 'actor':
         print(movie)
         movie = movie.Movies
       (rating_count, total_rating) = get_movie_rating(args['user_id'], movie)
