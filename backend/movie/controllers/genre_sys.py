@@ -48,6 +48,8 @@ class GenreMovie(Resource):
     ).filter(Genre.Genres.id == genre_id).filter(Movie.Movies.id == Movie.MovieGenre.movie_id,
     ).filter(Genre.Genres.id == Movie.MovieGenre.genre_id).all()
     total_num = len(genre_movie_result)
+    if total_num == 0:
+      return {'message': 'Invalid genre id!'}, 400
     movies_lst = []
     for movie in genre_movie_result:
         movie_info = {}

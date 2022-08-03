@@ -91,6 +91,7 @@ def check_auth(email, token):
     return "the user has not logined", False
   real = str(real.decode())
   if real != token:
+    print(real)
     return "the token is incorrect", False
   return "", True
   

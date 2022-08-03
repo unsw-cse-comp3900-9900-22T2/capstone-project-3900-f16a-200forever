@@ -220,6 +220,7 @@ class AttempEvent(Resource):
 
     # check the time 
     diff = (now - event_attemp.start_time).seconds
+    print(duration*60)
     if diff > duration*60:
       # update the db
       event_attemp.end_time = now
@@ -251,7 +252,7 @@ class AttempEvent(Resource):
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"result": "Failed", "correctness": correctness, "require": event.require_correctness_amt}, 400
+      return {"result": "Failed", "correctness": correctness, "require": event.require_correctness_amt}, 200
 
     # user get the event
     event_attemp.end_time = now
