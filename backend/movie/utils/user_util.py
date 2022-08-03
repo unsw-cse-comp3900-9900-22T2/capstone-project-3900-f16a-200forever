@@ -4,6 +4,7 @@ from movie import db
 import movie.models.user as User
 import movie.models.admin as Admin
 
+# check the user exist or not
 def user_id_valid(id):
   user = db.session.query(User.Users).filter(User.Users.id == id).first()
   print(user)
@@ -11,26 +12,30 @@ def user_id_valid(id):
     return False
   return True
 
+# get the id of the admin
 def get_admin_id(email):
   user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
   if user == None:
     raise Exception("Admin doesn't exist")
   return user.id
 
+# get the id of the user
 def get_user_id(email):
   user = db.session.query(User.Users).filter(User.Users.email == email).first()
   if user == None:
     raise Exception("User doesn't exist")
   return user.id
 
+# get the email of the user
 def get_user_email(id):
   user = db.session.query(User.Users).filter(User.Users.id == id).first()
   if user == None:
     raise Exception("User doesn't exist")
   return user.email
 
-# Unordered TODO find out what order to do, fix formatting
-# Returns a list of movies in user wishlist
+# get the wishlistdlist of the given user
+# id: id of the user
+# wishlist: the list of movie id
 def get_wishlist(id):
   results = db.session.query(User.MovieWishLis).filter(User.MovieWishLis.user_id == id).all()
   wishlist = []
@@ -39,7 +44,9 @@ def get_wishlist(id):
 
   return wishlist
 
-
+# get the watchedlist of the given user
+# id: id of the user
+# watchedlist: the list of movie id
 def get_watchedlist(id):
   results = db.session.query(User.MovieWatchedList).filter(User.MovieWatchedList.user_id == id).all()
   watchedlist = []
@@ -49,6 +56,9 @@ def get_watchedlist(id):
   return watchedlist
 
 
+# get the dropped list of the given user
+# id: id of the user
+# droppedlist: the list of movie id
 def get_droppedlist(id):
   results = db.session.query(User.MovieDroppedList).filter(User.MovieDroppedList.user_id == id).all()
   droppedlist = []
@@ -57,7 +67,9 @@ def get_droppedlist(id):
 
   return droppedlist
 
-
+# get all the event that the user pass
+# id: id of the user
+# badges: the list of the event id
 def get_badges(id):
   results = db.session.query(User.UserEvent).filter(User.UserEvent.user_id == id).filter(User.UserEvent.event_status.like(f'%passed%')).all()
   badges = []
@@ -65,10 +77,14 @@ def get_badges(id):
     badges.append(badge.event_id)
   return badges
 
+# get the username of the give user
+# id: the id of the user
 def current_username(id):
   user = db.session.query(User.Users).filter(User.Users.id == id).first()
   return user.name
 
+# decode the image and convert into string
+# arg image: byte type
 def get_image(image):
   if image is not None:
       return str(image.decode())
