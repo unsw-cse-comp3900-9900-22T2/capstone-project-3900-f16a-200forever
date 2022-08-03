@@ -309,7 +309,7 @@ class WatchedMovieList(Resource):
   @user_ns.expect(UserNS.movie_list_form, validate=True)
   def post(self):
     data = user_ns.payload
-
+    """
     # check user login
     if not user_has_login(data['email'], session):
         return {"message": "the user has not logined"}, 400
@@ -317,6 +317,7 @@ class WatchedMovieList(Resource):
     # check user token valid
     if not user_is_valid(data):
         return {"message": "the token is incorrect"}, 400
+    """
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -346,7 +347,7 @@ class WatchedMovieList(Resource):
   @user_ns.expect(UserNS.movie_list_form, validate=True)
   def delete(self):
     data = user_ns.payload
-
+    """
     # check user login
     if not user_has_login(data['email'], session):
         return {"message": "the user has not logined"}, 400
@@ -354,6 +355,8 @@ class WatchedMovieList(Resource):
     # check user token valid
     if not user_is_valid(data):
         return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
