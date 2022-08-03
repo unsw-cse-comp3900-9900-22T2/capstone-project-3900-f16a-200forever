@@ -55,7 +55,6 @@ class RCMGenre(Resource):
     return {"movies": movies_lst}, 200  
 
 
-# TODO only recommended from reviews right now
 # Gives 20 recommendations
 @recommendation_ns.route('/user')
 class RecommendUser(Resource):
@@ -74,25 +73,34 @@ class RecommendUser(Resource):
     user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if user == None:
       return {"message": "Invalid user id"}, 400
-    
 
     # check if user has reviewed any movies
-    reviews = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id).all()
-    print(reviews)
+    reviews = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id
+    ).order_by(Review.Reviews.rating.desc()).all()
+    
+    # has no review, return 20 movies randomly
     if len(reviews) == 0:
       offset = randint(0, 25799)
       movies = db.session.query(Movie.Movies).limit(20).offset(offset).all()
     else:
-      movies = [re.movies for re in reviews]
-      genres = []
-      directors = []
-      for movie in movies:
-        tmp = [genre.id for genre in movie.movie_genre]
+      # get the top40 movies start from the review with the highest the rating
+      # until get 40 movies, and return top 20
+      top40_movies = []
+      for review in reviews:
+        print(review)
+        genres = []
+        directors = []
+        
+        tmp = [genre.id for genre in review.movies.movie_genre]
         genres+=tmp
-        tmp = [director.id for director in movie.movie_director_rel]
+        tmp = [director.id for director in review.movies.movie_director_rel]
         directors+=tmp
-      # get all movies
-      movies = get_genre_director_movie(genres, directors, by)
-      print(genres, directors)
+        # get all movies
+        movies = get_genre_director_movie(genres, directors, by)
+        top40_movies+=movies
+        if len(top40_movies) == 40:
+          break
+      top40_movies.sort(key=lambda x: x.total_rating)
+      top40_movies.reverse()
       #rec_movies = top_twenty(all_movies)
-    return {"movies": convert_model_to_dict(movies)}, 200    
+      return {"movies": convert_model_to_dict(top40_movies)}, 200    
