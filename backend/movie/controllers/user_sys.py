@@ -113,7 +113,7 @@ class UserProfileController(Resource):
         if not correct_password_format(data['new_password']):
           return {"message": "password formact not correct"}, 400
         if data['double_check'] != data['new_password']:
-          return {"message": "2 password are not the same"}, 400
+          return {"message": "2 passwords are not the same"}, 400
         this_user.password = pw_encode(data['new_password'])
 
     this_user.name = username
