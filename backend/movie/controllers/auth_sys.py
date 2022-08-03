@@ -158,7 +158,6 @@ class SendEmail(Resource):
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     user.validation_code = code
     db.session.commit()
-    print(code)
     return {"message": "code has been send"}, 200
 
 @auth_ns.route('/reset_password')

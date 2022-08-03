@@ -31,7 +31,6 @@ class SearchMovie(Resource):
     parser.add_argument('page', type=int, location='args')
     parser.add_argument('user_id', type=str, location="args")
     args = parser.parse_args()
-    print(args)
 
     # defualt the first page is 1
     if args['page'] == None:
@@ -153,12 +152,10 @@ class MovieDetails(Resource):
     parser.add_argument('movie_id', type=int, required=True, location="args")
     parser.add_argument('user_id', type=str, location="args")
     args = parser.parse_args()
-    print(args)
     movie_id = args['movie_id']
 
     select_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
     if select_movie == None:
-      print("fjdklas")
       return {'message': 'Cannot find movie'}, 400
   
     movie_genre = []

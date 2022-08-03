@@ -13,7 +13,7 @@ from movie import db
 import uuid
 from datetime import datetime
 from movie.utils.other_util import convert_model_to_dict, paging, convert_object_to_dict
-from movie.utils.user_util import get_user_id
+from movie.utils.user_util import get_user_id, get_image
 
 thread_ns = ThreadNS.thread_ns
 
@@ -92,7 +92,6 @@ class ThreadManager(Resource):
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
     args = parser.parse_args()
-    print(args)
 
     # check valid genre id
     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == args['genre_id']).first()
@@ -131,7 +130,6 @@ class ThreadController(Resource):
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
     args = parser.parse_args()
-    print(args)
 
     # check valid genre id
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == args['thread_id']).first()
