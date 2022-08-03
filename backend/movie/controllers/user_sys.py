@@ -2,7 +2,6 @@ from operator import is_
 import sqlite3
 from attr import validate
 from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
-from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
 from movie import app, request
@@ -266,11 +265,23 @@ class FollowReview(Resource):
 
     # get the reviews 
     result = follow.reviews
-    result.sort(key=lambda x: x.created_time)
-    result.reverse()
-
-    # paging
-    result  = convert_model_to_dict(result)
     result = paging(data['page_num'], data['num_per_page'], result)
+    reviews = []
+    for re in result:
+      review = convert_object_to_dict(re)
+      review["review_id"] = review.pop("id")
+      movie = convert_object_to_dict(re.movies)
+      review.update(movie)
+      review["user_email"] = re.user.email
+      review['user_id'] = re.user.id
+      review["user_image"] = re.user.image
+      if review["user_image"] is not None:
+        review["user_image"]  = str(review["user_image"] .decode())
+      reviews.append(review)
+      print(review)
+
+    reviews.sort(key=lambda x: x["created_time"])
+    reviews.reverse()
+    print(reviews)
     
-    return {"reviews": result}, 200
+    return {"reviews": reviews}, 200
