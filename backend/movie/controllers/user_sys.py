@@ -221,7 +221,7 @@ class DroppedMovieList(Resource):
     args = parser.parse_args()
     email = args['email']
 
-    # 1. check the user is valid or not
+    # check the user is valid or not
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
       return {"message": "User do not exist!"},400
@@ -236,13 +236,13 @@ class DroppedMovieList(Resource):
   def post(self):
     data = user_ns.payload
 
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # # check user login
+    # if not user_has_login(data['email'], session):
+    #     return {"message": "the user has not logined"}, 400
 
-    # check user token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
+    # # check user token valid
+    # if not user_is_valid(data):
+    #     return {"message": "the token is incorrect"}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -260,7 +260,6 @@ class DroppedMovieList(Resource):
     if movie in user.user_wish_list:
       user.user_wish_list.remove(movie)
 
-    # check the movie in the dropped list or the wish list
     user.user_dropped_list.append(movie)
     db.session.commit()
     return {"message": "Succeffully"}, 200
@@ -271,13 +270,13 @@ class DroppedMovieList(Resource):
   def delete(self):
     data = user_ns.payload
 
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # # check user login
+    # if not user_has_login(data['email'], session):
+    #     return {"message": "the user has not logined"}, 400
 
-    # check user token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
+    # # check user token valid
+    # if not user_is_valid(data):
+    #     return {"message": "the token is incorrect"}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -291,5 +290,87 @@ class DroppedMovieList(Resource):
 
     # check the movie in the dropped list or the wish list
     user.user_dropped_list.remove(movie)
+    db.session.commit()
+    return {"message": "Succeffully"}, 200
+
+@user_ns.route("/wishlist")
+class WishMovieList(Resource):
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('email', type=str, location='args', required=True)
+    args = parser.parse_args()
+    email = args['email']
+
+    # check the user is valid or not
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if user == None:
+      return {"message": "User do not exist!"},400
+
+    # return
+    result = convert_model_to_dict(user.user_wish_list)
+    return {"movies": result}, 200
+
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.movie_list_form, validate=True)
+  def post(self):
+    data = user_ns.payload
+
+    # # check user login
+    # if not user_has_login(data['email'], session):
+    #     return {"message": "the user has not logined"}, 400
+
+    # # check user token valid
+    # if not user_is_valid(data):
+    #     return {"message": "the token is incorrect"}, 400
+
+    # check the movie id valid
+    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
+    if movie == None:
+      return {"message": "Invalid movie id"}, 400
+
+    # check the movie not in the wishlist
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if movie in user.user_wish_list:
+      return {"message": "Movie already in wish list"}, 400
+
+    if movie in user.user_watched_list:
+      return {"message": "Movie already in watched list"}, 400
+
+    if movie in user.user_dropped_list:
+      return {"message": "Movie already in dropped list"}, 400
+    
+    user.user_wish_list.append(movie)
+    db.session.commit()
+    return {"message": "Succeffully"}, 200
+  
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNs.movie_list_form, validate=True)
+  def delete(self):
+    data = user_ns.payload
+
+    # # check user login
+    # if not user_has_login(data['email'], session):
+    #     return {"message": "the user has not logined"}, 400
+
+    # # check user token valid
+    # if not user_is_valid(data):
+    #     return {"message": "the token is incorrect"}, 400
+
+    # check the movie id valid
+    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
+    if movie == None:
+      return {"message": "Invalid movie id"}, 400
+
+    # check the movie not in the wishlist
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if movie not in user.user_wish_list:
+      return {"message": "Movie do not in wish list"}, 400
+
+    # check the movie in the wish list or the watched list or the dropped list
+    user.user_wish_list.remove(movie)
     db.session.commit()
     return {"message": "Succeffully"}, 200
