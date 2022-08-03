@@ -9,8 +9,8 @@ from movie.models import event as Event
 from movie.models import movie as Movie
 from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_admin, check_correct_answer,  check_auth
-from movie.utils.movie_until import movie_id_valid, format_movie_return_list
-from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
+from movie.utils.movie_util import movie_id_valid, format_movie_return_list
+from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
 from movie.utils.user_util import get_admin_id, get_user_id
 from .api_models import EventNS

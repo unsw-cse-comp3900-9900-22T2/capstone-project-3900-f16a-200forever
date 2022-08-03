@@ -1,4 +1,4 @@
-from movie.utils.other_until import convert_object_to_dict, convert_model_to_dict
+from movie.utils.other_util import convert_object_to_dict, convert_model_to_dict
 from sqlalchemy import inspect
 from movie import db
 import movie.models.user as User
