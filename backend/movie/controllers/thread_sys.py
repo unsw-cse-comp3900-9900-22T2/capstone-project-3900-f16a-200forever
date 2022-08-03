@@ -9,11 +9,7 @@ from movie.models import genre as Genre
 from movie import db
 import uuid
 from datetime import datetime
-<<<<<<< HEAD
-from movie.utils.other_util import convert_model_to_dict, paging, convert_object_to_dict
-=======
 from movie.utils.other_util import paging, convert_object_to_dict
->>>>>>> 26c75808649a43fe4ea1b1f8034b70755253dfd7
 from movie.utils.user_util import get_user_id, get_image
 
 thread_ns = ThreadNS.thread_ns
