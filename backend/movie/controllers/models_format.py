@@ -160,3 +160,9 @@ user_movie_list = {
   'token': fields.String(required=True), 
   'movie_id': fields.Integer(required=True)
 }
+
+banned = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'banned_email': fields.String(required=True)
+}

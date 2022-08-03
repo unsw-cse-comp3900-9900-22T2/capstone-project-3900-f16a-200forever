@@ -234,72 +234,97 @@ class WishlistController(Resource):
 
     return {"message:" : "Successfully deleted movie from wishlist"}, 200
 
-'''
-@user_ns.route('/banlist')
-class BanlistController(Resource):
+
+@user_ns.route('/bannedlist')
+class BannedlistController(Resource):
   @user_ns.response(200, "Successfully")
-  @user_ns.response(400, 'Something went wrong')
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @user_ns.response(400, "Something wrong")
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('email', type=str, location='args', required=True)
+    args = parser.parse_args()
+    email = args['email']
+    user_id = get_user_id(email)
+
+    # 1. check the user is valid or not
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if user == None:
+      return {"message": "the user not exist"},400
+    
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
+
+    return {"list": banned}, 200
+
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNS.banned_form, validate=True)
   def post(self):
     data = user_ns.payload
-    user_id = get_user_id(data['email'])
 
-    """
-    # login
+    '''
+    # check user login
     if not user_has_login(data['email'], session):
       return {"message": "the user has not logined"}, 400
 
-    # valid token
+    # check token valid
     if not user_is_valid(data):
       return {"message": "the token is incorrect"}, 400
-    """
+    '''
+    user_id = get_user_id(data['email'])
 
-    # check if movie already exists in wishlist
-    movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
-    if movie != None:
-      return {'message': 'Movie already in wishlist'}, 400
+    # check ban itself
+    if data['email'] == data['banned_email']:
+      return {"message": "Cannot ban self"}, 400
 
-    # check if movie is in watched list
-    movie = db.session.query(User.MovieWatchedList).filter(User.MovieWatchedList.user_id == user_id, User.MovieWatchedList.movie_id == data['movie_id']).first()
-    if movie != None:
-      return {'message': 'Movie in watched list cannot be added to wishlist'}, 400
+    # check banned email valid
+    banned = db.session.query(User.Users).filter(User.Users.email == data['banned_email']).first()
+    if banned == None:
+      return {"message": "Banned email invalid"}, 400
 
-    movie = db.session.query(User.MovieDroppedList).filter(User.MovieDroppedList.user_id == user_id, User.MovieDroppedList.movie_id == data['movie_id']).first()
-    if movie != None:
-      return {'message': 'Movie in dropped list cannot be added to wishlist'}, 400
+    banned_id = get_user_id(data['banned_email'])
+    
+    # check if user already in banned list
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id, User.BannedList.banned_user_id == banned_id).first()
+    if banned != None:
+      return {'message': 'User already in banned list'}, 400
 
     data['user_id'] = user_id
-    data['added_time'] = datetime.now()
-    entry = User.MovieWishList(data)
+    data['banned_user_id'] = banned_id
+    entry = User.BannedList(data)
     db.session.add(entry)
     db.session.commit()
 
-    return {"message:" : "Successfully added movie to wishlist"}, 200
-
+    return {"message": "Successfully"}, 200
 
   @user_ns.response(200, "Successfully")
-  @user_ns.response(400, 'Something went wrong')
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @user_ns.response(400, "Something wrong")
+  @user_ns.expect(UserNS.banned_form, validate=True)
   def delete(self):
     data = user_ns.payload
-    user_id = get_user_id(data['email'])
 
-    """
-    # login
+    '''
+    # check user login
     if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+        return {"message": "the user has not logined"}, 400
 
-    # valid token
+    # check token valid
     if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
+        return {"message": "the token is incorrect"}, 400
+    '''
 
-    # check if movie already exists in wishlist
-    movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
-    if movie == None:
-      return {'message': 'Movie not in wishlist'}, 400
+    # check ban valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {"message": "User email invalid"}
 
-    db.session.delete(movie)
+    banned = db.session.query(User.Users).filter(User.Users.email == data['banned_email']).first()
+    if banned == None:
+      return {"message": "Banned email invalid"}, 400
+    
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == banned.id).first()
+    if banned == None:
+      return {"message": "Haven't banned before"}, 400
+
+    db.session.delete(banned)
     db.session.commit()
-
-    return {"message:" : "Successfully deleted movie from wishlist"}, 200'''
+    return {"message": "Successfully"}, 200
