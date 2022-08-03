@@ -23,12 +23,6 @@ class Genres(Resource):
   @genre_ns.response(400, 'Something went wrong')
   def get(self):
     genres_result = db.session.query(Genre.Genres).all()
-    # genres = []
-    # for genre in genres_result:
-    # 	genre_info = {}
-    # 	genre_info['id'] = genre.id
-    # 	genre_info['name'] = genre.name
-    # 	genres.append(genre_info)
     genres = {'genres': convert_model_to_dict(genres_result)}
 
     return genres, 200

@@ -4,7 +4,7 @@ from config import SECRET, EMAIL
 import hashlib
 from flask import session
 import re
-from movie import db
+from movie import db, redis_cli
 from movie.models import user as User
 from movie.models import admin as Admin
 import smtplib
@@ -31,7 +31,6 @@ def send_email(email, code):
   smptyserver.sendmail(EMAIL, [email], msg.as_string())
 
 def generate_token(email):
-  """
   d = {
     'data': {
       'email': email,
@@ -40,11 +39,6 @@ def generate_token(email):
   }
   token = jwt.encode(d, SECRET, algorithm='HS256').decode('utf-8')
   return token
-  """
-  # TODO:
-
-  return "123"
-
 
 
 def pw_encode(password):
@@ -60,18 +54,6 @@ def pw_encode(password):
 
 
 
-def user_is_valid(data):
-  return True
-  """
-  email = data['email']
-  token = data['token']
-  real_token = session[email]["token"]
-  print(real_token)
-  print(token)
-  if real_token != token:
-    return False
-  return True
-  """
 
 def user_is_admin(email):
   if email in session.keys() and session[email]['admin']:
@@ -85,15 +67,30 @@ def check_correct_answer(value):
   if value != 1 and value != 2 and value != 3:
     return False
   return True
-    
-def user_has_login(email, session):
-  return False
-  """
-  if email not in session.keys():
+
+
+def user_is_valid(data):
+  email = data['email']
+  token = data['token']
+  real_token = str(redis_cli.get(email).decode())
+  print(real_token)
+  print(token)
+  if real_token != token:
     return False
   return True
-  """
 
+def user_has_login(data, session):
+  pass
+
+def check_auth(email, token):
+  real = redis_cli.get(email)
+  if real == None:
+    return "the user has not logined", False
+  real = str(real.decode())
+  if real != token:
+    return "the token is incorrect", False
+  return "", True
+  
 def correct_email_format(email):
   pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
   if re.fullmatch(pattern, email):

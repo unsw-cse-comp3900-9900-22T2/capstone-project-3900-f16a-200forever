@@ -7,7 +7,7 @@ from movie.models import user as User
 from sqlalchemy import func
 from movie.utils.other_until import paging, convert_object_to_dict
 from movie.utils.movie_until import movie_id_valid
-from movie.utils.auth_util import user_is_valid, user_has_login
+from movie.utils.auth_util import user_is_valid, user_has_login, check_auth
 from movie.utils.review_util import user_reviewed_movie, calculate_weight
 from movie.utils.user_util import get_user_id
 from movie.models import admin as Admin
@@ -158,13 +158,13 @@ class ReactToReview(Resource):
         reaction = args['reaction']
 
         data = review_ns.payload
-        """
-        if not user_has_login(data['email'], session):
-          return {"message": "the user has not logined"}, 400
 
-        # check the user is valid or not
-        if not user_is_valid(data):
-          return {"message": "the token is incorrect"}, 400"""
+ 
+        # check auth
+        message, auth_correct = check_auth(data["email"], data['token'])
+
+        if not auth_correct:
+          return {"message", message}, 400
 
 
         user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -226,14 +226,12 @@ class ReviewController(Resource):
     rating = data['rating']
     user_id = get_user_id(email)
 
+ 
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check if logged in
-    '''if not user_has_login(email, session):
-      return {"message": "the user has not logined"}, 400
-
-    # check token
-    if not user_is_valid(data):
-      return {"message": "Invalid user id"}, 400'''
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check rating between 1-5
     if rating < 1 or rating > 5:
@@ -276,14 +274,12 @@ class ReviewController(Resource):
     email = data['email']
     review_id = data['review_id']
     #user_id = get_user_id(email)
+ 
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check if logged in
-    '''if not user_has_login(email, session):
-      return {"message": "the user has not logined"}, 400
-
-    # check token
-    if not user_is_valid(data):
-      return {"message": "Invalid user id"}, 400'''
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check review valid
     review = db.session.query(Review.Reviews).filter(Review.Reviews.id == review_id).first()
@@ -323,15 +319,11 @@ class ReviewAdmin(Resource):
   def post(self):
     data = review_ns.payload
 
-    '''
-    # check admin has login
-    if not user_has_login(data['admin_email'], session):
-      return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check admin valid
-    data['email'] = data['admin_email']
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400 '''
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()

@@ -11,7 +11,7 @@ from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict, paging
-from movie.utils.auth_util import user_has_login, user_is_valid
+from movie.utils.auth_util import user_has_login, user_is_valid, check_auth
 from movie import db
 from flask import session
 from .api_models import UserNS
@@ -87,15 +87,11 @@ class UserProfileController(Resource):
     user_id = args['user_id']
     data = user_ns.payload
     email = data['email']
-    """
-    # check if logged in
-    if not user_has_login(email, session):
-      return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check token
-    if not user_is_valid(data):
-      return {"message": "Token is not correct"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
 
 
     this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
@@ -171,16 +167,12 @@ class FollowListManage(Resource):
   @user_ns.expect(UserNS.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check token valid
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-
-    """
+    if not auth_correct:
+      return {"message", message}, 400
+    
     # check follow valid
     follow = db.session.query(User.Users).filter(User.Users.id == data['follow_id']).first()
     if follow == None:
@@ -208,16 +200,11 @@ class FollowListManage(Resource):
   @user_ns.expect(UserNS.follow_form, validate=True)
   def delete(self):
     data = user_ns.payload
-    """
-    # check user login  
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
-    """
-
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check follow valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
@@ -237,15 +224,11 @@ class FollowReview(Resource):
   @user_ns.expect(UserNS.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
     if "page_num" not in data.keys() or "num_per_page" not in data.keys():
       return {"message", "page_num and num_per_page should by provided, type are both int"}, 400
 
@@ -309,15 +292,11 @@ class WatchedMovieList(Resource):
   @user_ns.expect(UserNS.movie_list_form, validate=True)
   def post(self):
     data = user_ns.payload
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check user token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -347,15 +326,11 @@ class WatchedMovieList(Resource):
   @user_ns.expect(UserNS.movie_list_form, validate=True)
   def delete(self):
     data = user_ns.payload
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check user token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
 
 
     # check the movie id valid

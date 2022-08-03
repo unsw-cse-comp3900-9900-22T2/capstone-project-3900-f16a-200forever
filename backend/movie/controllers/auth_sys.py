@@ -10,8 +10,8 @@ from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
                                   user_has_login, correct_email_format, \
                                   username_format_valid, username_is_unique, \
                                   email_exits, correct_password_format, generateOTP, \
-                                  send_email, code_is_correct, get_user, password_is_correct, user_is_admin
-from movie import db
+                                  send_email, code_is_correct, get_user, password_is_correct, user_is_admin, check_auth
+from movie import db, redis_cli 
 from movie.models import admin as Admin
 from .api_models import AuthNS, AdminNS
 import uuid
@@ -58,16 +58,7 @@ class ResetPasswordController(Resource):
     code = data['validation_code']
     new_pw = data['new_password']
 
-    # check the user has login or not
-    #if email not in session.keys():
-    #  return {"message": "The user has not logined"}, 400
-
-    #check the token
-    #if not user_is_valid(data):
-    #  return {"message": "Invalid token"}, 400
-
     # check the user old password
-    #user = get_user(email, session[email]["admin"])
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
       return {"message": "Invalid user"}, 400
@@ -135,7 +126,7 @@ class RegisterController(Resource):
     # generate token, save to redis
     token = generate_token(email)
     print(token)
-    session[email] = {'token': token, "id": new_user.id, "admin": False}
+    redis_cli.set(email, token)
 
     return {
         'token': generate_token(email),
@@ -162,8 +153,8 @@ class LoginController(Resource):
       return {"message": "The user not registered"}, 400
       
     # check the user has login or not
-    if user_has_login(email, session):
-      print(session[email]['token'])
+    if redis_cli.get(email) != None:
+      print(redis_cli.get(email))
       return {"message": "The user has logined"}, 400
 
     curr_user = get_user(email, is_admin)
@@ -175,8 +166,8 @@ class LoginController(Resource):
       return {"message": "Wrong password"}, 400
 
     token = generate_token(email)
+    redis_cli.set(email, token)
     print(token)
-    session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
 
     return {
         'id': curr_user.id,
@@ -192,17 +183,15 @@ class logoutController(Resource):
   def post(self):
     data = auth_ns.payload
 
-    # if not user_has_login(data['email'], session):
-    #   return {"message": "the user has not logined"}, 400
-    
-    # if not user_is_valid(data):
-    #   return {"message": "the token is incorrect"}, 400
-    try:
-      session.pop(data['email'])
-    except:
-      pass
+    message, auth_correct = check_auth(data["email"], data['token'])
+
+    if not auth_correct:
+      return {"message", message}, 400
+
+    redis_cli.delete(data['email'])
     return {"message": "logout successfully"}, 200
 
+#TODO::::::::::::
 
 @auth_ns.route('/forgot_password')
 class ForgotPassword(Resource):

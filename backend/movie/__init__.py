@@ -7,6 +7,7 @@ import redis
 import smtplib
 from email.mime.text import MIMEText
 from config import EMAIL, SMTP_SERVER, MAIL_PASS
+from redis import Redis
 
 def defaultHandler(err):
     response = err.get_response()
@@ -33,6 +34,11 @@ Session(app)
 # smtp
 smptyserver = smtplib.SMTP(SMTP_SERVER)
 smptyserver.login(EMAIL, MAIL_PASS)
+
+# redis
+redis_pool= redis.ConnectionPool(host="127.0.0.1", port= 6379, db= 0)
+redis_cli = redis.Redis(connection_pool= redis_pool)
+print(redis_cli)
 
 
 from movie import controllers

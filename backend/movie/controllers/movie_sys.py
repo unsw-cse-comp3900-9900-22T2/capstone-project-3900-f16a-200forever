@@ -22,13 +22,6 @@ class SearchMovie(Resource):
   @movie_ns.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    # parser.add_argument('by_title', type=str, location='args')
-    # parser.add_argument('by_description', type=str, location='args')
-    # parser.add_argument('by_director', type=str, location='args')
-    # parser.add_argument('by_actor', type=str, location='args')
-    # parser.add_argument('order', choices=['asc', 'desc'], type=str, location='args')
-    # parser.add_argument('page', type=int, location='args')
-    # parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('type', type=str, location='args')
     parser.add_argument("keywords", type=str, location='args')
     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
@@ -110,28 +103,7 @@ class SearchMovie(Resource):
         ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
         ).all()
       matched_movies += result
-
-    # search by actor
-    # elif args['by_actor'] != None and args['by_actor'] != '':
-    #   kw = args['by_actor']
-    #   #result = db.session.query(Movie.Movies).filter(Person.Persons.name.ilike("%{kw}%"))
-    #   result = db.session.query(
-    #     Person.MovieActor, Person.Persons, Movie.Movies, 
-    #   ).filter(
-    #     Person.MovieActor.movie_id == Movie.Movies.id,
-    #   ).filter(
-    #     Person.MovieActor.person_id == Person.Persons.id,
-    #   ).filter(
-    #     Person.Persons.name.ilike(f'%{kw}%')
-    #   ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
-    #   ).all()
-      
-    #   matched_movies += result
-     
-    # sort 
-    #TODO: current sort not consider the banned
     
-
     total_num = len(matched_movies)
     # paging
     matched_movies = paging(args['page'], args['num_per_page'], matched_movies)
@@ -154,8 +126,6 @@ class SearchMovie(Resource):
         year = movie.Movies.release_time.split('-')[0]
       data = convert_object_to_dict(movie.Movies)
       data['release_time'] = year
-      #data['actors'] = convert_model_to_dict(movie.MovieActor)
-      #data['directors'] = convert_model_to_dict(movie.MovieDirector)
       print(data)
       movies.append(data)
 

@@ -5,7 +5,7 @@ from attr import validate
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
-from movie.utils.auth_util import user_has_login, user_is_valid
+from movie.utils.auth_util import user_has_login, user_is_valid, check_auth
 from movie.models import thread as Thread
 from movie.models import user as User
 from movie.models import admin as Admin
@@ -25,15 +25,11 @@ class ThreadManager(Resource):
   @thread_ns.expect(ThreadNS.delete_thread_form, validate=True)
   def delete(self):
     data = thread_ns.payload
-    """
-    # login
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # valid token
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
 
 
     # thread exist
@@ -64,15 +60,11 @@ class ThreadManager(Resource):
   def post(self):
     data = thread_ns.payload
     data['created_time'] = str(datetime.now())
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check user valid
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
 
 
     # check genre valid
@@ -100,17 +92,11 @@ class ThreadAdmin(Resource):
   @thread_ns.expect(ThreadNS.forum_admin_form, validate=True)
   def post(self):
     data = thread_ns.payload
-    """
-    # check admin has login
-    if not user_has_login(data['admin_email'], session):
-      return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check admin valid
-    data['email'] = data['admin_email']
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
-
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
@@ -150,16 +136,11 @@ class ReactToComment(Resource):
   @thread_ns.expect(ThreadNS.comment_react_form, validate=True)
   def post(self):
     data = thread_ns.payload
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
-
-    # check user valid
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
@@ -190,16 +171,11 @@ class CommentThread(Resource):
 
     now = datetime.now()
     data['time'] = now
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    """
-    # check user login
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
-
-    # check user valid
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
+    if not auth_correct:
+      return {"message", message}, 400
     # check user valid
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()

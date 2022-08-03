@@ -8,7 +8,7 @@ from movie.models import user as User
 from movie.models import event as Event
 from movie.models import movie as Movie
 from fuzzywuzzy import process
-from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
+from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login, check_auth
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
@@ -28,14 +28,12 @@ class EventCreate(Resource):
   @event_ns.expect(EventNS.event_create_form, validate=True)
   def post(self):
     data = event_ns.payload
-    """
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
 
-    # check the user is valid or not
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
+
+    if not auth_correct:
+      return {"message", message}, 400
 
     
     # check the user is admin
@@ -112,15 +110,12 @@ class EditEvent(Resource):
     args = parser.parse_args()
     id = args['id']
     data = event_ns.payload
-    """
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+ 
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check the user is valid or not
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
-
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check the user is admin
     if not user_is_admin(data['email']):
@@ -157,16 +152,13 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
-    """
-    # login or not
-    if not user_has_login(data['email'], session):
-      return {"message": "the user has not logined"}, 400
+ 
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check the user is valid or not
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-    """
-    
+    if not auth_correct:
+      return {"message", message}, 400
+
     # check event valid
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
@@ -194,17 +186,12 @@ class AttempEvent(Resource):
   def post(self):
     now = datetime.now()
     data = event_ns.payload
-    """
-    # login or not
-    # if not user_has_login(data['email'], session):
-    #   return {"message": "the user has not logined"}, 400
+ 
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # check the user is valid or not
-    if not user_is_valid(data):
-      return {"message": "the token is incorrect"}, 400
-
-    """
-
+    if not auth_correct:
+      return {"message", message}, 400
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
       return {"message": "The event not exists"}, 400
