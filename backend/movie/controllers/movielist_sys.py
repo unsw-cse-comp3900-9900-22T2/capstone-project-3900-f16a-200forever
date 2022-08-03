@@ -7,14 +7,13 @@ from .api_models import UserNS
 from movie.utils.other_util import convert_model_to_dict
 from movie.utils.user_util import get_user_id
 
-
-user_ns = UserNS.user_ns
+movielist = UserNS.user_ns
 
 #--------------------GET MOVIE LIST --------------------
-@user_ns.route("/movielist")
+@movielist.route("/movielist")
 class MovieList(Resource):
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
     parser.add_argument('email', type=str, location='args', required=True)
@@ -38,13 +37,13 @@ class MovieList(Resource):
     return {"movies": result}, 200
 
 #--------------------MANAGE WISH LIST--------------------
-@user_ns.route('/wishlist')
+@movielist.route('/wishlist')
 class WishlistController(Resource):
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, 'Something went wrong')
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, 'Something went wrong')
+  @movielist.expect(UserNS.movie_list_form, validate=True)
   def post(self):
-    data = user_ns.payload
+    data = movielist.payload
     user_id = get_user_id(data['email'])
     if user_id == None:
       return {"message": "user id not valie"}, 400
@@ -83,11 +82,11 @@ class WishlistController(Resource):
     return {"message:" : "Successfully added movie to wishlist"}, 200
 
 
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, 'Something went wrong')
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, 'Something went wrong')
+  @movielist.expect(UserNS.movie_list_form, validate=True)
   def delete(self):
-    data = user_ns.payload
+    data = movielist.payload
     user_id = get_user_id(data['email'])
     if user_id == None:
       return {"message": "user id not valie"}, 400
@@ -108,13 +107,13 @@ class WishlistController(Resource):
     return {"message:" : "Successfully deleted movie from wishlist"}, 200
       
 #--------------------MANAGE WATCHED LIST--------------------
-@user_ns.route("/watchedlist")
+@movielist.route("/watchedlist")
 class WatchedMovieList(Resource):
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, "Something wrong")
+  @movielist.expect(UserNS.movie_list_form, validate=True)
   def post(self):
-    data = user_ns.payload
+    data = movielist.payload
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])
 
@@ -144,11 +143,11 @@ class WatchedMovieList(Resource):
     db.session.commit()
     return {"message": "Succeffully"}, 200
     
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, "Something wrong")
+  @movielist.expect(UserNS.movie_list_form, validate=True)
   def delete(self):
-    data = user_ns.payload
+    data = movielist.payload
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])
 
@@ -173,13 +172,13 @@ class WatchedMovieList(Resource):
     return {"message": "Succeffully"}, 200
 
 #--------------------MANAGE DROPPED LIST--------------------
-@user_ns.route("/droppedlist")
+@movielist.route("/droppedlist")
 class DroppedMovieList(Resource):
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, "Something wrong")
+  @movielist.expect(UserNS.movie_list_form, validate=True)
   def post(self):
-    data = user_ns.payload
+    data = movielist.payload
 
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])
@@ -208,11 +207,11 @@ class DroppedMovieList(Resource):
     db.session.commit()
     return {"message": "Succeffully"}, 200
 
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @movielist.response(200, "Successfully")
+  @movielist.response(400, "Something wrong")
+  @movielist.expect(UserNS.movie_list_form, validate=True)
   def delete(self):
-    data = user_ns.payload
+    data = movielist.payload
 
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])

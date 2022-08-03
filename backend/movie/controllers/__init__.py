@@ -9,6 +9,7 @@ from .genre_sys import genre_ns
 from .review_sys import review_ns
 from .recommendation_sys import recommendation_ns
 from .thread_sys import thread_ns
+from .movielist_sys import movielist
 from flask_restx import Api
 from flask import Blueprint
 
@@ -38,6 +39,7 @@ person_api.add_namespace(person_ns, path='/person')
 user_bp = Blueprint("user", __name__)
 user_api = Api(user_bp, version='1.0', title="User API", description="Movie Forever api.")
 user_api.add_namespace(user_ns, path='/user')
+user_api.add_namespace(movielist, path='/user')
 
 # genre 
 genre_bp = Blueprint("genre", __name__)
