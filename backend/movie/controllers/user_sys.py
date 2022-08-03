@@ -1,10 +1,10 @@
 from operator import is_
-import sqlite3
 from attr import validate
 from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
 from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
+from movie.models import movie as Movie
 from movie import app, request
 from flask import session, jsonify
 from json import dumps
@@ -12,9 +12,11 @@ from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id
 from movie.utils.auth_util import user_has_login, user_is_valid
 import sqlite3
+from datetime import datetime
+
 user_ns = UserNS.user_ns
 
 @user_ns.route("/events")
@@ -138,3 +140,166 @@ class UserProfileController(Resource):
     return {
         "message": "Edit profile success"
     }, 200
+
+@user_ns.route('/wishlist')
+class WishlistController(Resource):
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, "Something wrong")
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('email', type=str, location='args', required=True)
+    args = parser.parse_args()
+    email = args['email']
+
+    # 1. check the user is valid or not
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if user == None:
+      return {"message": "the user not exist"},400
+
+    # return
+    result = convert_model_to_dict(user.user_wish_list)
+    return {"movies": result}, 200
+
+
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, 'Something went wrong')
+  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  def post(self):
+    data = user_ns.payload
+    user_id = get_user_id(data['email'])
+
+    """
+    # login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # valid token
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    """
+
+    # check if movie exists
+
+    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
+    if movie == None:
+      return {'message': 'Movie doesn\'t exist'}, 400
+
+    # check if movie already exists in wishlist
+    movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
+    if movie != None:
+      return {'message': 'Movie already in wishlist'}, 400
+
+    # check if movie is in watched list
+    movie = db.session.query(User.MovieWatchedList).filter(User.MovieWatchedList.user_id == user_id, User.MovieWatchedList.movie_id == data['movie_id']).first()
+    if movie != None:
+      return {'message': 'Movie in watched list cannot be added to wishlist'}, 400
+
+    movie = db.session.query(User.MovieDroppedList).filter(User.MovieDroppedList.user_id == user_id, User.MovieDroppedList.movie_id == data['movie_id']).first()
+    if movie != None:
+      return {'message': 'Movie in dropped list cannot be added to wishlist'}, 400
+
+    print(data['movie_id'])
+    data['user_id'] = user_id
+    entry = User.MovieWishList(data)
+    db.session.add(entry)
+    db.session.commit()
+
+    return {"message:" : "Successfully added movie to wishlist"}, 200
+
+
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, 'Something went wrong')
+  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  def delete(self):
+    data = user_ns.payload
+    user_id = get_user_id(data['email'])
+
+    """
+    # login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # valid token
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    """
+
+    # check if movie already exists in wishlist
+    movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
+    if movie == None:
+      return {'message': 'Movie not in wishlist'}, 400
+
+    db.session.delete(movie)
+    db.session.commit()
+
+    return {"message:" : "Successfully deleted movie from wishlist"}, 200
+
+'''
+@user_ns.route('/banlist')
+class BanlistController(Resource):
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, 'Something went wrong')
+  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  def post(self):
+    data = user_ns.payload
+    user_id = get_user_id(data['email'])
+
+    """
+    # login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # valid token
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    """
+
+    # check if movie already exists in wishlist
+    movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
+    if movie != None:
+      return {'message': 'Movie already in wishlist'}, 400
+
+    # check if movie is in watched list
+    movie = db.session.query(User.MovieWatchedList).filter(User.MovieWatchedList.user_id == user_id, User.MovieWatchedList.movie_id == data['movie_id']).first()
+    if movie != None:
+      return {'message': 'Movie in watched list cannot be added to wishlist'}, 400
+
+    movie = db.session.query(User.MovieDroppedList).filter(User.MovieDroppedList.user_id == user_id, User.MovieDroppedList.movie_id == data['movie_id']).first()
+    if movie != None:
+      return {'message': 'Movie in dropped list cannot be added to wishlist'}, 400
+
+    data['user_id'] = user_id
+    data['added_time'] = datetime.now()
+    entry = User.MovieWishList(data)
+    db.session.add(entry)
+    db.session.commit()
+
+    return {"message:" : "Successfully added movie to wishlist"}, 200
+
+
+  @user_ns.response(200, "Successfully")
+  @user_ns.response(400, 'Something went wrong')
+  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  def delete(self):
+    data = user_ns.payload
+    user_id = get_user_id(data['email'])
+
+    """
+    # login
+    if not user_has_login(data['email'], session):
+      return {"message": "the user has not logined"}, 400
+
+    # valid token
+    if not user_is_valid(data):
+      return {"message": "the token is incorrect"}, 400
+    """
+
+    # check if movie already exists in wishlist
+    movie = db.session.query(User.MovieWishList).filter(User.MovieWishList.user_id == user_id, User.MovieWishList.movie_id == data['movie_id']).first()
+    if movie == None:
+      return {'message': 'Movie not in wishlist'}, 400
+
+    db.session.delete(movie)
+    db.session.commit()
+
+    return {"message:" : "Successfully deleted movie from wishlist"}, 200'''
