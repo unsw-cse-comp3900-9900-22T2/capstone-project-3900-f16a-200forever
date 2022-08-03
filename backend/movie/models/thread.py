@@ -28,7 +28,6 @@ class Threads(db.Model):
     self.is_anonymous = data['is_anonymous']
     self.content = data['content']
 
-
 class ThreadComment(db.Model):
   __tablename__ ='t_thread_comment'
   id = db.Column('id', db.String(256), primary_key=True)

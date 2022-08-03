@@ -7,21 +7,17 @@ class Persons(db.Model):
   name = db.Column('name', db.String(256), nullable=False)
   gender = db.Column('gender', db.Integer)
   profile_path = db.Column('profile_path', db.String(256))
-  #director_movie_rel = db.relationship('Movies', secondary='r_movie_actor', back_populates='movie_director_rel', lazy=True)
-  #actor_movie_rel = db.relationship('Movies', secondary='r_movie_actor', back_populates='movie_actor_rel', lazy=True)
   director_movie_rel = db.relationship(
         "Movies",
         secondary='r_movie_director', 
         back_populates="movie_director_rel",
         lazy=True,
-        #overlaps="actor_movie_re, movie_director_rel"
         overlaps="actor_movie_rel"
   )
   actor_movie_rel = db.relationship(
         "Movies",
         secondary='r_movie_actor',
         back_populates="movie_actor_rel",
-        #overlaps=" director_movie_rel, movie_actor_rel"
         overlaps=" director_movie_rel"
   )
   def __repr__(self):

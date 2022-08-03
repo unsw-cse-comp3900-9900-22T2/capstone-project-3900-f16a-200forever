@@ -13,17 +13,12 @@ class Users(db.Model):
   id = db.Column('id', db.String(256), primary_key=True)
   name = db.Column('name', db.String(256), nullable=False)
   email = db.Column('email', db.String(256), unique=True, nullable=False)
-  #public_status = db.Column('public_status', db.Boolean)
   signature = db.Column('signature', db.String(256))
   image = db.Column('image', db.String(256))
   password = db.Column('password', db.String(256), nullable=False)
   validation_code = db.Column('validation_code', db.String(256))
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
   is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
-  # relationships from reviews
-  #reviews = db.relationship('Reviews', backref='users', lazy=True)
-  #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
-  #review_unlikes = db.relationship('ReviewUnlikes', backref='users', lazy=True)
   user_review_likes_rel = db.relationship(
       "Reviews",
       secondary='r_review_likes',
@@ -71,9 +66,7 @@ class Users(db.Model):
   user_follower_list = db.relationship('FollowList', foreign_keys="FollowList.follow_id", backref='follower', lazy=True)
   user_banned_list = db.relationship('BannedList', foreign_keys="BannedList.user_id", backref='banned_own', lazy=True)
   user_be_banned_list = db.relationship('BannedList',foreign_keys="BannedList.banned_user_id",  backref='banner', lazy=True)
-  #user_dropped_list = db.relationship('MovieDroppedList', backref='users', lazy=True)
-  #user_watched_list = db.relationship('MovieWatchedList', backref='users', lazy=True)
-  #user_wish_list = db.relationship('MovieWishList', backref='users', lazy=True)
+
   comment_likes = db.relationship('ThreadLikes', backref='user', lazy=True)
 
   def __repr__(self):
