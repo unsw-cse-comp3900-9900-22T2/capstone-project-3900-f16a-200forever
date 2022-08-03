@@ -222,7 +222,7 @@ class ReactToComment(Resource):
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
-      return {"message": "Incalid user"}, 400
+      return {"message": "Invalid user"}, 400
     # check comment valid
     comment = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
     if comment == None:

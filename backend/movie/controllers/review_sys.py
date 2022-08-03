@@ -219,9 +219,9 @@ class ReviewController(Resource):
     if not auth_correct:
       return {"message": message}, 400
 
-    # check rating between 1-5
-    if rating < 1 or rating > 5:
-      return {"message": "Rating should be 1-5"}, 400
+    # check rating between 0-5
+    if rating < 0 or rating > 5:
+      return {"message": "Rating should be 0-5"}, 400
 
     # check valid user and movie ids
     if not movie_id_valid(movie):
