@@ -26,7 +26,7 @@ def create_event(event_id, event):
     for que in list(questions):
       que = dict(que)
       if not check_correct_answer(int(que['correct_answer'])):
-        return {'message': 'correct_answer must be 1 or 2 or 3'}, 400
+        return False
       que_id = str(uuid.uuid4())
       que['id'] = que_id
       que['event_id'] = event['id']

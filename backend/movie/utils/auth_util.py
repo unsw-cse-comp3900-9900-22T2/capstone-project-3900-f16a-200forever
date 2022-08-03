@@ -74,7 +74,8 @@ def user_is_admin(email):
 # Return:
 #     (boolean) True if the answer is valid, False otherwise
 def check_correct_answer(value):
-  if value != 1 and value != 2 and value != 3:
+  print(value)
+  if value <=1 or value >3:
     return False
   return True
 
