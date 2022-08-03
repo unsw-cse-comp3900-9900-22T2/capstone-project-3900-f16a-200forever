@@ -1,3 +1,4 @@
+import datetime
 from movie.utils.auth_util import check_auth
 from movie.models import user as User
 from movie.models import movie as Movie
@@ -139,7 +140,9 @@ class WatchedMovieList(Resource):
       user.user_wish_list.remove(movie)
 
     # check the movie in the dropped list or the wish list
-    user.user_watched_list.append(movie)
+    data['user_id'] = user.id
+    entry = User.MovieWatchedList(data)
+    db.session.add(entry)
     db.session.commit()
     return {"message": "Succeffully"}, 200
     
@@ -202,8 +205,9 @@ class DroppedMovieList(Resource):
     if movie in user.user_wish_list:
       user.user_wish_list.remove(movie)
 
-    # check the movie in the dropped list or the wish list
-    user.user_dropped_list.append(movie)
+    data['user_id'] = user.id
+    entry = User.MovieDroppedList(data)
+    db.session.add(entry)
     db.session.commit()
     return {"message": "Succeffully"}, 200
 
