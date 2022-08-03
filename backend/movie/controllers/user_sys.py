@@ -123,6 +123,7 @@ class FollowListManage(Resource):
     db.session.commit()
     return {"message": "Successfully"}, 200
 
+# watched list
 @user_ns.route("/watchedlist")
 class WatchedMovieList(Resource):
   @user_ns.response(200, "Successfully")
@@ -210,7 +211,7 @@ class WatchedMovieList(Resource):
     db.session.commit()
     return {"message": "Succeffully"}, 200
     
-
+# dropped list
 @user_ns.route("/droppedlist")
 class DroppedMovieList(Resource):
   @user_ns.response(200, "Successfully")
@@ -293,6 +294,8 @@ class DroppedMovieList(Resource):
     db.session.commit()
     return {"message": "Succeffully"}, 200
 
+
+# wish list
 @user_ns.route("/wishlist")
 class WishMovieList(Resource):
   @user_ns.response(200, "Successfully")
