@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
 from sqlalchemy.orm import backref
 from datetime import datetime
 
-
+#--------------------USER-------------------
 class Users(db.Model):
   __tablename__ = 't_users'
   id = db.Column('id', db.String(256), primary_key=True)
@@ -57,8 +57,6 @@ class Users(db.Model):
     lazy=True,
     overlaps = "user_watched_list, user_dropped_list"
   )
-
-
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   threads = db.relationship('Threads', backref='user', lazy=True)
   thread_comments = db.relationship('ThreadComment', backref='user', lazy=True)
@@ -66,7 +64,6 @@ class Users(db.Model):
   user_follower_list = db.relationship('FollowList', foreign_keys="FollowList.follow_id", backref='follower', lazy=True)
   user_banned_list = db.relationship('BannedList', foreign_keys="BannedList.user_id", backref='banned_own', lazy=True)
   user_be_banned_list = db.relationship('BannedList',foreign_keys="BannedList.banned_user_id",  backref='banner', lazy=True)
-
   comment_likes = db.relationship('ThreadLikes', backref='user', lazy=True)
 
   def __repr__(self):
@@ -79,7 +76,7 @@ class Users(db.Model):
     self.password = data['password']
     self.is_forum_admin = 0
     
-
+#--------------------USER EVENT-------------------
 class UserEvent(db.Model):
   __tablename__ = 'r_user_event'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
@@ -97,7 +94,7 @@ class UserEvent(db.Model):
     self.event_status = 'attemping'
     self.start_time = data['start_time']
  
-
+#--------------------FOLLOW LIST & BANNED LIST--------------------
 class FollowList(db.Model):
   __tablename__ = 'r_follow_list'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
@@ -122,6 +119,8 @@ class BannedList(db.Model):
     self.user_id = data['user_id']
     self.banned_user_id = data['banned_user_id']
 
+
+#--------------------MOVIE LIST--------------------
 class MovieDroppedList(db.Model):
   __tablename__ = 'r_droppedlist_movie'
   movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True, nullable=False)
