@@ -354,4 +354,4 @@ class ReviewAdmin(Resource):
         user.is_review_admin = 0
 
     db.session.commit()
-    return {'message': "User is now review admin"}, 200
+    return {'message': "User now is not a review admin"}, 200
