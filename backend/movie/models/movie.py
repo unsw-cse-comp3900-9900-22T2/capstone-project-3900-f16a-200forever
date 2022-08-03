@@ -78,7 +78,7 @@ class MovieGenre(db.Model):
   movie_id = db.Column('movie_id', db.Integer, db.ForeignKey('t_movies.id'), primary_key=True)
 
   def __repr__(self):
-    return '<MovieGenre movie id: {} genren id: {}>'.format(self.movie_id, self.genre_id)
+    return '<MovieGenre movie id: {} genre id: {}>'.format(self.movie_id, self.genre_id)
 
   def __init__(self, data):
     self.genre_id = data['genre_id']

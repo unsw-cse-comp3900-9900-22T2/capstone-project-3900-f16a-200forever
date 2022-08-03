@@ -12,3 +12,11 @@ Worked on coding. Mainly Initializing project and some auth frontend.
 
 Week5
 Worked on coding. Auth, movie, event part
+
+Week6
+Worked on the frontend re-build with material ui library.
+Discussed and assign frontend workload with frontend developer.
+
+Week7
+Worked on the interaction between frontend and backend.
+Worked on the pages of user profile, genre search and other pages.

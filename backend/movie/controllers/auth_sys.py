@@ -1,6 +1,4 @@
 from operator import is_
-from attr import validate
-from numpy import require, str_
 from sqlalchemy import true
 from movie.models import user as User
 from movie import app, request
@@ -164,7 +162,8 @@ class LoginController(Resource):
       return {"message": "The user not registered"}, 400
       
     # check the user has login or not
-    if email in session.keys():
+    if user_has_login(email, session):
+      print(session[email]['token'])
       return {"message": "The user has logined"}, 400
 
     curr_user = get_user(email, is_admin)
@@ -180,6 +179,7 @@ class LoginController(Resource):
     session[email] = {'token': token, "id": curr_user.id, "admin": is_admin}
 
     return {
+        'id': curr_user.id,
         'token': token,
         'name': curr_user.name
     }, 200

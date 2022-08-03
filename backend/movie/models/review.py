@@ -37,7 +37,7 @@ class Reviews(db.Model):
         self.movie_id = data['movie_id']
         self.user_id = data['user_id']
         self.review_content = data['review_content']
-        self.create_time = data['create_time']
+        self.created_time = data['created_time']
         self.rating = data['rating']
         self.weight = data['weight']
 

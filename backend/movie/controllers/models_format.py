@@ -45,7 +45,7 @@ finish_event = {
   'email': fields.String(required=True),
   'token': fields.String(required=True),
   'event_id': fields.String(required=True),
-  'answers': fields.Raw()
+  'answers': fields.Raw(required=True)
 }
 
 delete_thread = {
@@ -72,7 +72,9 @@ post_thread = {
 follow = {
   'email': fields.String(required=True), 
   'token': fields.String(required=True), 
-  'follow_email': fields.String(required=True)
+  'follow_id': fields.String(required=True),
+  "page_num": fields.Integer,
+  "num_per_page": fields.Integer
 }
 
 user_movie_list = {
@@ -84,7 +86,7 @@ user_movie_list = {
 class Question_Form(fields.Raw):
   def format(self, value):
     return {  
-      'id': fields.String(required=True),
+      'id': fields.String(),
       'content': fields.String(required=True),
       'choice_1': fields.String(required=True),
       'choice_2': fields.String(required=True),
@@ -106,12 +108,63 @@ event_detail = {
   'questions': fields.List(Question_Form(required=True)), 
   'movies': fields.List(fields.Integer, required=True)
 }
-"""
-user_profile = {
-  'id': fields.String(required=True),
-  'username': fields.String(required=True),
-  'p'
-}
-"""
 
-    
+# Accept null values
+class NullableString(fields.String):
+    __schema_type__ = ['string', 'null']
+    __schema_example__ = 'nullable string'
+
+
+edit_profile = {
+  'username': fields.String(required=True),
+  'signature': fields.String,
+  'image': fields.String,
+  'current_password': fields.String,
+  'new_password': fields.String,
+  'double_check': fields.String,
+  'email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+review_post = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'rating': fields.Integer(required=True),
+  'review_content': fields.String(required=True)
+}
+
+review_delete = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'review_id': fields.String(required=True)
+}
+
+review_admin = {
+  'user_email': fields.String(required=True),
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+review_admin_delete = {
+  'user_email': fields.String(required=True),
+  'token': fields.String(required=True),
+  'movie_id': fields.Integer(required=True),
+  'admin_email': fields.String(required=True)
+}
+
+comment_react = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  "comment_id": fields.String(required=True)
+}
+
+
+thread_comment = {
+  "email": fields.String(required=True),
+  'token': fields.String(required=True),
+  "content": fields.String(required=True),
+  "thread_id": fields.String(required=True),
+  "is_anonymous": fields.Integer,
+  "reply_comment_id": fields.String
+}
