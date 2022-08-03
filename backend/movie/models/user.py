@@ -60,6 +60,7 @@ class Users(db.Model):
   )
   events =  db.relationship('Events', secondary='r_user_event', back_populates='users', lazy=True)
   threads = db.relationship('Threads', backref='user', lazy=True)
+  reviews = db.relationship('Reviews', backref='user', lazy=True)
   thread_comments = db.relationship('ThreadComment', backref='user', lazy=True)
   user_follow_list = db.relationship('FollowList', foreign_keys="FollowList.user_id", backref='follow_own', lazy=True)
   user_follower_list = db.relationship('FollowList', foreign_keys="FollowList.follow_id", backref='follower', lazy=True)

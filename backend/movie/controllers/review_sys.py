@@ -47,11 +47,13 @@ class ReviewSort(Resource):
       return {"message": "Invalid movie id"}, 400
 
 
-    query_like =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.user_id)).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id
+    query_like =  db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewLikes.user_id)
+    ).outerjoin(Review.ReviewLikes, Review.ReviewLikes.review_id == Review.Reviews.id
     ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
     ).group_by(Review.Reviews.id)
 
-    query_unlike = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewUnlikes.user_id)).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
+    query_unlike = db.session.query(Review.Reviews, User.Users, func.count(Review.ReviewUnlikes.user_id)
+    ).outerjoin(Review.ReviewUnlikes, Review.ReviewUnlikes.review_id == Review.Reviews.id
     ).filter(Review.Reviews.movie_id == movie_id, Review.Reviews.user_id == User.Users.id
     ).group_by(Review.Reviews.id)
 
@@ -109,6 +111,8 @@ class ReviewSort(Resource):
     # format:
     total_num = len(all_reviews)
     result = []
+    print(all_reviews)
+
     for review in all_reviews:
       data = convert_object_to_dict(review[0])
       user = review[1]
@@ -159,8 +163,10 @@ class ReactToReview(Resource):
 
         data = {'review_id': review_id, 'user_id': user.id}
         is_remove = -1
-        like = db.session.query(Review.ReviewLikes).filter(Review.ReviewLikes.review_id == review_id, Review.ReviewLikes.user_id == user.id).first()
-        unlike = db.session.query(Review.ReviewUnlikes).filter(Review.ReviewUnlikes.review_id == review_id, Review.ReviewUnlikes.user_id == user.id).first()
+        like = db.session.query(Review.ReviewLikes
+        ).filter(Review.ReviewLikes.review_id == review_id, Review.ReviewLikes.user_id == user.id).first()
+        unlike = db.session.query(Review.ReviewUnlikes
+        ).filter(Review.ReviewUnlikes.review_id == review_id, Review.ReviewUnlikes.user_id == user.id).first()
         # positive reaction
         if reaction == "like":
           # delete the like
@@ -245,7 +251,7 @@ class ReviewController(Resource):
     if this_movie.rating_count == None:
       this_movie.rating_count = 0
     this_movie.rating_count += data['weight']
-    print(new_review)
+    print(new_review.weight)
     db.session.add(new_review)
     db.session.commit()
 
@@ -261,6 +267,7 @@ class ReviewController(Resource):
     data = review_ns.payload
     email = data['email']
     review_id = data['review_id']
+
     #user_id = get_user_id(email)
  
     # check auth
@@ -294,10 +301,10 @@ class ReviewController(Resource):
     db.session.delete(review)
 
     # delete likes and unlikes for this review
-    likes = db.session.query(Review.ReviewLikes).filter(Review.ReviewLikes.review_id == review.id).all()
-    db.session.delete(likes)
-    unlikes = db.session.query(Review.ReviewUnlikes).filter(Review.ReviewUnlikes.review_id == review.id).all()
-    db.session.delete(unlikes)
+    #likes = db.session.query(Review.ReviewLikes).filter(Review.ReviewLikes.review_id == review.id).all()
+    #db.session.delete(likes)
+    #unlikes = db.session.query(Review.ReviewUnlikes).filter(Review.ReviewUnlikes.review_id == review.id).all()
+    #db.session.delete(unlikes)
     db.session.commit()
 
     return {
