@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router-dom";
 
-const GenrePage = ({ setAlertInfo }) => {
+const ForumHome = ({ setAlertInfo }) => {
 	const navigate = useNavigate();
 	const [genres, setGenres] = useState([]);
 
@@ -20,12 +20,11 @@ const GenrePage = ({ setAlertInfo }) => {
 				console.log(response.data);
 				setGenres(response.data.genres);
 			})
-			// todo handle error
 			.catch(function (error) {
 				console.log(error.response);
 				setAlertInfo({
 					status: 3,
-					msg: error.response.data.message
+					msg: error.response.message,
 				});
 			});
   }, [])
@@ -33,7 +32,7 @@ const GenrePage = ({ setAlertInfo }) => {
 	return (
 		<>
 			<Typography variant="h2" component="div" sx={{ mb: 4 }}>
-				All Genres
+				All Forums
 			</Typography>
 			<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
 				{genres.map((genre) => {
@@ -48,8 +47,8 @@ const GenrePage = ({ setAlertInfo }) => {
 							<CardActions>
 								<Button 
 									size="small"
-									onClick={() => { navigate(`/genre/${genre.name.toLowerCase()}/${genre.id}`)}}>
-									View movies
+									onClick={() => { navigate(`/forum/${genre.name.toLowerCase()}/${genre.id}`)}}>
+									View Forum
 								</Button>
 							</CardActions>
 						</Card>
@@ -60,4 +59,4 @@ const GenrePage = ({ setAlertInfo }) => {
 	)
 };
   
-export default GenrePage;
+export default ForumHome;

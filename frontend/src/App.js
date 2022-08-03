@@ -15,9 +15,12 @@ import SearchPage from "./components/search/SearchPage";
 import MovieDetails from "./components/movie/MovieDetails";
 import GenrePage from "./components/genre/GenrePage";
 import GenreMovie from "./components/genre/GenreMovie";
+import ForumHome from "./components/forum/ForumHome";
+import ForumPage from "./components/forum/ForumPage";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
+  const [loginStatus, setLoginStatus] = useState(false);
   const [alertInfo, setAlertInfo] = useState({
     "status": 0,
     "msg": ""
@@ -44,12 +47,13 @@ function App() {
     localStorage.setItem('username', username);
     localStorage.setItem('email', email);
     localStorage.setItem('status', status);
+    setLoginStatus(status);
   }
 
   return (
     <Fragment>
       <Router>
-        <NavBar setAuth={setAuth}/>
+        <NavBar setAuth={setAuth} loginStatus={loginStatus} setAlertInfo={setAlertInfo}/>
         <Container maxWidth={false} className={classes.rootContainer}>
         <Routes>  
           <Route path='' element={<Home />}/>
@@ -60,6 +64,8 @@ function App() {
           <Route path='/movie/details/:id' element={<MovieDetails setAlertInfo={setAlertInfo}/>}/>
           <Route path='/genres' element={<GenrePage setAlertInfo={setAlertInfo}/>}/>
           <Route path='/genre/:genre/:id' element={<GenreMovie setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/forums' element={<ForumHome setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/forum/:genre/:id' element={<ForumPage setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>

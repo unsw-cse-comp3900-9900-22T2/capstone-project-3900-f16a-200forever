@@ -33,7 +33,7 @@ function getResult(id, order, page, setResult, setTotal, setAlertInfo) {
       console.log(error.response);
       setAlertInfo({
         status: 3,
-        msg: "An error occur",
+        msg: error.response.data.message
       });
     });
 }

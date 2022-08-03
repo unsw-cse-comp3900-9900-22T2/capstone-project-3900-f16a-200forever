@@ -18,13 +18,9 @@ import { ButtonGroup } from '@mui/material';
 import axios from 'axios';
 import "./NavBar.css"
 
-const pages = ['ad'];
-const settings = ['Profile', 'Logout'];
-
-const ResponsiveAppBar = ({ setAuth }) => {
+const ResponsiveAppBar = ({ setAuth, loginStatus, setAlertInfo }) => {
   const navigate = useNavigate();
 
-  const loginStatus = localStorage.getItem("status")
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -45,12 +41,27 @@ const ResponsiveAppBar = ({ setAuth }) => {
   };
 
   const logout = () => {
-    // todo
     setAnchorElUser(null);
-  }
-
-  const handleSetting = (setting) => {
-    console.log(setting)
+    axios
+      .post("http://127.0.0.1:8080/logout", {
+        email: localStorage.getItem("email"),
+        token: localStorage.getItem("token")
+      })
+      .then(function (response) {
+        setAuth("", "", "", "", false)
+        navigate("/");
+        setAlertInfo({
+          status: 1,
+          msg: "Logout!",
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+        setAlertInfo({
+          status: 3,
+          msg: error.response.data.message
+        });
+      });
   }
 
   return (
@@ -134,16 +145,6 @@ const ResponsiveAppBar = ({ setAuth }) => {
             {/* LOGO */}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
-
             {/* <Button
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block' }}
@@ -162,7 +163,14 @@ const ResponsiveAppBar = ({ setAuth }) => {
             >
               GENRES
             </Button>
+            <Button
+              onClick={() => { navigate('/forums'); handleCloseNavMenu(); }}
+              sx={{ ml: 4, my: 2, color: 'white', display: 'block' }}
+            >
+              FORUMS
+            </Button>
           </Box>
+          
           {loginStatus === false ?
             <ButtonGroup variant="contained">
               <Button onClick={() => navigate("/login")}>LOGIN</Button>
@@ -191,7 +199,6 @@ const ResponsiveAppBar = ({ setAuth }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {/* todo */}
               <MenuItem onClick={() => { navigate("/profile"); setAnchorElUser(null); }}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
