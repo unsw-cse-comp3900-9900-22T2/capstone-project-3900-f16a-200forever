@@ -2,7 +2,7 @@ from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
   attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow, user_movie_list, review_post, review_delete, review_admin, \
   review_admin_delete, edit_profile, thread_react, thread_comment, follow, banned
-
+  
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")
   auth_login = auth_ns.model('Auth Login', login)

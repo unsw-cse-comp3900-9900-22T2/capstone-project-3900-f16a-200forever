@@ -63,5 +63,5 @@ recommendation_api.add_namespace(recommendation_ns, path='/recommendation')
 
 # thread
 thread_bp = Blueprint('thread', __name__)
-thread_api = Api(thread_bp, version='1.0', title="recommendation API", description="Movie Forever api.")
+thread_api = Api(thread_bp, version='1.0', title="thread API", description="Movie Forever api.")
 thread_api.add_namespace(thread_ns, path='/thread')

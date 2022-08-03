@@ -9,6 +9,7 @@ from json import dumps
 
 person_ns = PersonNS.person_ns
 
+#----------------PERSON DETAIL------------------
 @person_ns.route("/detail")
 class PersonDetail(Resource):
   @person_ns.response(200, "Successfully")

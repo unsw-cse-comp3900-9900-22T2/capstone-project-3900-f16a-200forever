@@ -17,6 +17,7 @@ from movie.models import genre as Genre
 
 genre_ns = GenreNS.genre_ns
 
+#--------------------GET GENRE LIST --------------------
 @genre_ns.route('/all')
 class Genres(Resource):
   @genre_ns.response(200, 'Successfully retrieved genres')
@@ -27,6 +28,7 @@ class Genres(Resource):
 
     return genres, 200
 
+#--------------------GET MOVIE LIST --------------------
 @genre_ns.route('/genremovies')
 class GenreMovie(Resource):
   @genre_ns.response(200, 'Successfully retrieved movies of this genre')

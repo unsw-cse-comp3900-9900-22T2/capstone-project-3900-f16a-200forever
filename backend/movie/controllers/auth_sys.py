@@ -20,67 +20,7 @@ import uuid
 auth_ns = AuthNS.auth_ns
 admin_ns = AdminNS.admin_ns
 
-@auth_ns.route('/sendemail')
-class SendEmail(Resource):
-  @auth_ns.response(200, "Send Email Successfully")
-  @auth_ns.response(400, "Something wrong")
-  @auth_ns.expect(AuthNS.auth_send_email, validate=True) 
-  def post(self):
-    data = auth_ns.payload
-    email = data['email']
-
-    # check email format
-    if not correct_email_format(email):
-      return {"message": "Email format not correct"}, 400
-
-    # send vertification code
-    code = str(generateOTP())
-    try:
-      send_email(email, code)
-    except:
-      return {"message": "Send email failed, try again pls"}, 400
-
-    # update validation code
-    user = db.session.query(User.Users).filter(User.Users.email == email).first()
-    user.validation_code = code
-    db.session.commit()
-    print(code)
-    return {"message": "code has been send"}, 200
-
-@auth_ns.route('/reset_password')
-class ResetPasswordController(Resource):
-  @auth_ns.response(200, "Password reset")
-  @auth_ns.response(400, "Something wrong")
-  @auth_ns.expect(AuthNS.auth_reset_password, validate=True)
-  def post(self):
-    data = auth_ns.payload
-    email = data['email']
-    code = data['validation_code']
-    new_pw = data['new_password']
-
-    # check the user old password
-    user = db.session.query(User.Users).filter(User.Users.email == email).first()
-    if user == None:
-      return {"message": "Invalid user"}, 400
-      
-    # check the validation code
-    if not code_is_correct(user, code):
-      return {"message": "Incorrect validation code"}, 400
-
-    # check password format
-    if not correct_password_format(new_pw):
-      return {"message": "The password is too short, at least 8 characters"}, 400
-
-    # encode pw
-    data['new_password'] = pw_encode(new_pw)
-
-    # update db
-    user.password = data['new_password']
-    db.session.commit()
-
-    return {"message": "Password updated"}, 200
-
-
+#--------------------REGISTER LOGIN LOGOUT--------------------
 @auth_ns.route('/register')
 class RegisterController(Resource):
   @auth_ns.response(200, "Login Successfully")
@@ -192,7 +132,67 @@ class logoutController(Resource):
     redis_cli.delete(data['email'])
     return {"message": "logout successfully"}, 200
 
-#TODO::::::::::::
+
+#-----------------RESET/FORGOT PASSWORD-----------------
+@auth_ns.route('/sendemail')
+class SendEmail(Resource):
+  @auth_ns.response(200, "Send Email Successfully")
+  @auth_ns.response(400, "Something wrong")
+  @auth_ns.expect(AuthNS.auth_send_email, validate=True) 
+  def post(self):
+    data = auth_ns.payload
+    email = data['email']
+
+    # check email format
+    if not correct_email_format(email):
+      return {"message": "Email format not correct"}, 400
+
+    # send vertification code
+    code = str(generateOTP())
+    try:
+      send_email(email, code)
+    except:
+      return {"message": "Send email failed, try again pls"}, 400
+
+    # update validation code
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    user.validation_code = code
+    db.session.commit()
+    print(code)
+    return {"message": "code has been send"}, 200
+
+@auth_ns.route('/reset_password')
+class ResetPasswordController(Resource):
+  @auth_ns.response(200, "Password reset")
+  @auth_ns.response(400, "Something wrong")
+  @auth_ns.expect(AuthNS.auth_reset_password, validate=True)
+  def post(self):
+    data = auth_ns.payload
+    email = data['email']
+    code = data['validation_code']
+    new_pw = data['new_password']
+
+    # check the user old password
+    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    if user == None:
+      return {"message": "Invalid user"}, 400
+      
+    # check the validation code
+    if not code_is_correct(user, code):
+      return {"message": "Incorrect validation code"}, 400
+
+    # check password format
+    if not correct_password_format(new_pw):
+      return {"message": "The password is too short, at least 8 characters"}, 400
+
+    # encode pw
+    data['new_password'] = pw_encode(new_pw)
+
+    # update db
+    user.password = data['new_password']
+    db.session.commit()
+
+    return {"message": "Password updated"}, 200
 
 @auth_ns.route('/forgot_password')
 class ForgotPassword(Resource):
