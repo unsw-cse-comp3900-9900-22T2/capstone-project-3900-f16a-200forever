@@ -153,10 +153,10 @@ review_admin_delete = {
   'admin_email': fields.String(required=True)
 }
 
-comment_react = {
+thread_react = {
   'email': fields.String(required=True),
   'token': fields.String(required=True),
-  "comment_id": fields.String(required=True)
+  "thread_id": fields.String(required=True)
 }
 
 
@@ -167,4 +167,10 @@ thread_comment = {
   "thread_id": fields.String(required=True),
   "is_anonymous": fields.Integer,
   "reply_comment_id": fields.String
+}
+
+banned = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'banned_email': fields.String(required=True)
 }

@@ -80,7 +80,7 @@ class RecommendUser(Resource):
     print(reviews)
     if len(reviews) == 0:
       offset = randint(0, 25799)
-      rec_movies = db.session.query(Movie.Movies).limit(20).offset(offset).all()
+      movies = db.session.query(Movie.Movies).limit(20).offset(offset).all()
     else:
       movies = [re.movies for re in reviews]
       genres = []

@@ -133,26 +133,27 @@ class ThreadAdmin(Resource):
 class ReactToComment(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
-  @thread_ns.expect(ThreadNS.comment_react_form, validate=True)
+  @thread_ns.expect(ThreadNS.thread_react_form, validate=True)
   def post(self):
     data = thread_ns.payload
     # check auth
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": str(message)}, 400
+
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
       return {"message": "Incalid user"}, 400
     # check comment valid
-    comment = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['comment_id']).first()
+    comment = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
     if comment == None:
-      return {"message": "Comment not exist"}, 400
+      return {"message": "Thread not exist"}, 400
 
-    react = db.session.query(Thread.CommentLikes).filter(Thread.CommentLikes.comment_id == data['comment_id'], Thread.CommentLikes.user_id == user.id).first()
+    react = db.session.query(Thread.ThreadLikes).filter(Thread.ThreadLikes.thread_id == data['thread_id'], Thread.ThreadLikes.user_id == user.id).first()
     if react == None:
-      new_react = Thread.CommentLikes({'user_id': user.id, 'comment_id': data['comment_id']})
+      new_react = Thread.ThreadLikes({'user_id': user.id, 'thread_id': data['thread_id']})
       db.session.add(new_react)
       db.session.commit()
       return {"is_remove": 1}, 200

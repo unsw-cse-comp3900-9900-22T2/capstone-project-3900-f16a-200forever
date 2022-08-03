@@ -73,7 +73,7 @@ class Users(db.Model):
   #user_dropped_list = db.relationship('MovieDroppedList', backref='users', lazy=True)
   #user_watched_list = db.relationship('MovieWatchedList', backref='users', lazy=True)
   #user_wish_list = db.relationship('MovieWishList', backref='users', lazy=True)
-  comment_likes = db.relationship('CommentLikes', backref='user', lazy=True)
+  comment_likes = db.relationship('ThreadLikes', backref='user', lazy=True)
 
   def __repr__(self):
     return '<User {} {}>'.format(self.name, self.email)

@@ -12,9 +12,8 @@ class Threads(db.Model):
   title = db.Column('title', db.String(100), nullable=False)
   content = db.Column('content', db.String(10000), nullable=False)
   comments = db.relationship("ThreadComment", backref="thread", lazy=True)
+  thread_likes = db.relationship("ThreadLikes", backref="thread", lazy=True)
   
-  
-
   def __repr__(self):
     return '<Thread: id{} user_id{}>'.format(self.id, self.user_id)
   
@@ -29,22 +28,6 @@ class Threads(db.Model):
     self.is_anonymous = data['is_anonymous']
     self.content = data['content']
 
-"""
-class Categories(db.Model):
-  __tablename__ = 't_categories'
-  id = db.Column('id', db.String(256), primary_key=True)
-  #genre_id = db.Column('genre_id', db.Integer, db.ForeignKey('t_genres.id'), nullable=False)
-  name = db.Column('name', db.String(256), nullable=False)
-
-  def __repr__(self):
-    return '<Category: id{} name{}>'.format(self.id, self.name)
-  
-  def __init__(self, data):
-    self.id = data['id']
-    self.genre_id = data['genre_id']
-    self.name = data['name']
-"""
-
 
 class ThreadComment(db.Model):
   __tablename__ ='t_thread_comment'
@@ -56,7 +39,6 @@ class ThreadComment(db.Model):
   content = db.Column('content', db.String(256), nullable=False)
   is_anonymous = db.Column('is_anonymous', db.Integer, nullable=False)  
   comments = db.relationship("ThreadComment", remote_side=[id])
-  comment_likes = db.relationship("CommentLikes", backref="ThreadComment", lazy=True)
 
   def __repr__(self):
     return '<Comment: user_id{} comment_id{}>'.format(self.user_id, self.thread_id)
@@ -73,16 +55,17 @@ class ThreadComment(db.Model):
     self.content = data['content']
     self.is_anonymous = data['is_anonymous']
 
-class CommentLikes(db.Model):
-  __tablename__ = 'r_comment_likes'
+
+class ThreadLikes(db.Model):
+  __tablename__ = 'r_thread_likes'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), nullable=False, primary_key = True)
-  comment_id = db.Column('comment_id', db.String(256), db.ForeignKey('t_thread_comment.id'), nullable=False, primary_key = True)
+  thread_id = db.Column('thread_id', db.String(256), db.ForeignKey('t_threads.id'), nullable=False, primary_key = True)
 
   def __repr__(self):
-    return '<CommentLikes: user_id{} comment_id{}>'.format(self.user_id, self.comment_id)
+    return '<ThreadLikes: user_id{} thread_id{}>'.format(self.user_id, self.thread_id)
 
   def __init__(self, data):
     self.user_id = data['user_id']
-    self.comment_id = data['comment_id']
+    self.thread_id = data['thread_id']
 
 

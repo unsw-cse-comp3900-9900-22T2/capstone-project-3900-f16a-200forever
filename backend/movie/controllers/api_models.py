@@ -1,7 +1,7 @@
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
   attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow, user_movie_list, review_post, review_delete, review_admin, \
-  review_admin_delete, edit_profile, comment_react, thread_comment, follow
+  review_admin_delete, edit_profile, thread_react, thread_comment, follow, banned
 
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")
@@ -34,6 +34,7 @@ class UserNS:
   movie_list_form = user_ns.model('Movie List', user_movie_list)
   follow_form = user_ns.model('Add follow',follow)
   user_edit_profile = user_ns.model('Edit profile', edit_profile)
+  banned_form = user_ns.model('Add ban', banned)
 
 
 class GenreNS:
@@ -56,5 +57,5 @@ class ThreadNS:
   delete_thread_form = thread_ns.model('Delete thread', delete_thread)
   forum_admin_form = thread_ns.model('Thread admin',forum_admin) 
   post_thread_form = thread_ns.model('Post thread', post_thread)
-  comment_react_form = thread_ns.model("React Thread", comment_react)
+  thread_react_form = thread_ns.model("React Thread", thread_react)
   thread_comment_form = thread_ns.model('Thread comment', thread_comment)
