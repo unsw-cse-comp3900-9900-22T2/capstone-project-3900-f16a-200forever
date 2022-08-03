@@ -10,7 +10,11 @@ from movie.utils.auth_util import user_is_admin, check_auth
 from movie.utils.movie_util import format_movie_return_list
 from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
+<<<<<<< HEAD
 from movie.utils.user_util import  get_user_id
+=======
+from movie.utils.user_util import get_user_id
+>>>>>>> 97e51f2969d1bd69e6902841c59afc63b58fc04f
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -41,7 +45,7 @@ class GetEventDetail(Resource):
     event = db.session.query(Event.Events).filter(Event.Events.id == id).first()
 
     if event == None:
-      return {"message": f'Event {id} not found'}
+      return {"message": f'Event {id} not found'}, 400
     
     data = convert_object_to_dict(event)
     questions = {}
