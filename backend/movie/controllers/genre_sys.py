@@ -1,6 +1,6 @@
 from audioop import reverse
 from json import dumps
-from movie.utils.movie_until import movie_sort
+from movie.utils.movie_util import movie_sort
 import movie
 from .api_models import MovieNS
 from .api_models import GenreNS
@@ -9,8 +9,8 @@ from flask import session
 from movie import db
 from movie.models import movie as Movie
 from movie.models import person as Person
-from movie.utils.movie_until import format_movie_return_list
-from movie.utils.other_until import convert_object_to_dict, convert_model_to_dict, paging
+from movie.utils.movie_util import format_movie_return_list
+from movie.utils.other_util import convert_object_to_dict, convert_model_to_dict, paging
 from operator import attrgetter
 from sqlalchemy import and_, null, or_
 from movie.models import genre as Genre

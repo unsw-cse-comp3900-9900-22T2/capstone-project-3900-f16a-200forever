@@ -3,8 +3,8 @@ from .api_models import PersonNS
 from flask_restx import Resource, reqparse
 from movie.models import person as Person
 from movie import db
-from movie.utils.other_until import convert_object_to_dict
-from movie.utils.person_until import get_gender
+from movie.utils.other_util import convert_object_to_dict
+from movie.utils.person_util import get_gender
 from json import dumps
 
 person_ns = PersonNS.person_ns

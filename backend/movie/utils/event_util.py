@@ -4,7 +4,7 @@ from movie.models import event as Event
 from movie.models import movie as Movie
 from movie.utils.auth_util import  user_is_admin, check_correct_answer
 import uuid
-from movie.utils.movie_until import movie_id_valid
+from movie.utils.movie_util import movie_id_valid
 
 from movie.utils.user_util import get_admin_id
 

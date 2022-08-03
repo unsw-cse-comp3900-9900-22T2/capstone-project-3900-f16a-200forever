@@ -9,13 +9,13 @@ from flask import session, jsonify
 from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
-from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict, paging
+from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict, paging
 from movie.utils.auth_util import   check_auth
 from movie import db
 from flask import session
 from .api_models import UserNS
 import sqlite3
-from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
+from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict
 from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id, get_image
 import sqlite3
 from datetime import datetime

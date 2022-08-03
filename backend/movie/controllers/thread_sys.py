@@ -12,8 +12,8 @@ from movie.models import genre as Genre
 from movie import db
 import uuid
 from datetime import datetime
-from movie.utils.other_until import convert_model_to_dict, paging, convert_object_to_dict
-from movie.utils.user_util import get_user_id,get_image
+from movie.utils.other_util import convert_model_to_dict, paging, convert_object_to_dict
+from movie.utils.user_util import get_user_id
 
 thread_ns = ThreadNS.thread_ns
 

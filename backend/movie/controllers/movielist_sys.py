@@ -10,7 +10,7 @@ from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS
-from movie.utils.other_until import convert_model_to_dict
+from movie.utils.other_util import convert_model_to_dict
 from movie.utils.user_util import get_user_id
 
 
