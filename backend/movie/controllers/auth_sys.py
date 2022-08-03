@@ -68,8 +68,7 @@ class RegisterController(Resource):
     #print(token)
     #redis_cli.set(email, token)
 
-    return {"message": "Successfullly"
-    }, 200
+    return {"message": "Successfully registered"}, 200
 
 
 
