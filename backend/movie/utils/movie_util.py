@@ -4,7 +4,7 @@ import movie.models.user as User
 import movie.models.review as Review
 from movie import db
 
-# check movie id is valie or not
+# check movie id is valid or not
 def movie_id_valid(id):
   movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == id).first()
   if movie == None:
