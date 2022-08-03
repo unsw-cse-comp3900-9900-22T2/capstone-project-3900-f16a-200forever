@@ -25,7 +25,6 @@ class ThreadManager(Resource):
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
     args = parser.parse_args()
-    print(args)
 
     # check valid genre id
     genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == args['genre_id']).first()
@@ -65,7 +64,6 @@ class ThreadController(Resource):
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
     args = parser.parse_args()
-    print(args)
 
     # check valid genre id
     thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == args['thread_id']).first()

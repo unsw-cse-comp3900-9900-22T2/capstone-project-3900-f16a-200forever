@@ -8,6 +8,9 @@ from movie.utils.movie_util import movie_id_valid
 
 from movie.utils.user_util import get_admin_id
 
+# Create an event and add it to the database
+# Args: event_id (string), event (datbase type)
+# Return: Boolean
 def create_event(event_id, event):
   try:
     event['id'] = event_id
