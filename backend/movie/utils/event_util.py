@@ -22,6 +22,10 @@ def create_event(event_id, event):
     # add question
     questions = event['questions']
     del event['questions']
+
+    # check amount
+    if len(questions) < event['require_correctness_amt']: 
+      return False
     for que in list(questions):
       que = dict(que)
       if not check_correct_answer(int(que['correct_answer'])):
