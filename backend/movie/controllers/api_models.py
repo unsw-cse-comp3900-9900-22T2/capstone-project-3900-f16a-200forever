@@ -1,13 +1,10 @@
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
-<<<<<<< HEAD
-  attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow, user_movie_list, review_post, review_delete, review_admin, \
-  review_admin_delete, edit_profile, comment_react, thread_comment, follow
-=======
-  review_post, review_delete, review_admin, review_admin_delete, edit_profile, attemp_event, finish_event, delete_thread, forum_admin, post_thread, \
-  comment_react, thread_comment, user_movie_list, banned
+  attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow, user_movie_list, review_post, review_delete, \
+  review_admin, review_admin_delete, edit_profile, comment_react, thread_comment, follow, review_post, review_delete, review_admin, \
+  review_admin_delete, edit_profile, attemp_event, finish_event, delete_thread, forum_admin, post_thread, comment_react, thread_comment, \
+  user_movie_list, banned
 from numpy import require
->>>>>>> backend3-william
 
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")
