@@ -76,3 +76,13 @@ def get_movie_rating(user_id, select_movie):
     rating_count = select_movie.rating_count
     total_rating = select_movie.total_rating
   return (rating_count, total_rating)
+
+# remove the movie in the given movie list that in user's droplist, watchlist, wishlit
+def remove_movie_in_the_list(user, movies):
+  result = []
+  for movie in movies:
+    if movie not in user.user_wish_list and movie not in  user.user_dropped_list \
+    and movie not in user.user_watched_list:
+      result.append(movie)
+
+  return result
