@@ -24,7 +24,7 @@ class SearchMovie(Resource):
   @movie_ns.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('type', choices=['movie name', 'description', 'director'], type=str, location='args')
+    parser.add_argument('type', choices=['movie name', 'description', 'director', 'actor'], type=str, location='args', required=True)
     parser.add_argument("keywords", type=str, location='args')
     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args',default='ascending')
     parser.add_argument('num_per_page', type=int, location='args',default=12)
@@ -83,6 +83,33 @@ class SearchMovie(Resource):
         result = director_query.order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title).all()
       else:
         result = director_query.order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title).all()
+      matched_movies += result
+
+    elif args['type'] == 'actor':
+      kw = args["keywords"]
+      result = []
+      if args['order'] == 'ascending':
+        result = db.session.query(
+          Person.MovieActor, Person.Persons, Movie.Movies, 
+        ).filter(
+          Person.MovieActor.movie_id == Movie.Movies.id,
+        ).filter(
+          Person.MovieActor.person_id == Person.Persons.id,
+        ).filter(
+          Person.Persons.name.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
+        ).all()
+      else:
+        result = db.session.query(
+          Person.MovieActor, Person.Persons, Movie.Movies, 
+        ).filter(
+          Person.MovieActor.movie_id == Movie.Movies.id,
+        ).filter(
+          Person.MovieActor.person_id == Person.Persons.id,
+        ).filter(
+          Person.Persons.name.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
+        ).all()
       matched_movies += result
 
     total_num = len(matched_movies)
