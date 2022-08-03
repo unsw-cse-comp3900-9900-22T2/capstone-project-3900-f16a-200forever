@@ -290,6 +290,12 @@ class ReviewController(Resource):
     this_movie.rating_count -= review.weight
     this_movie.total_rating -= review.rating
     db.session.delete(review)
+
+    # delete likes and unlikes for this review
+    likes = db.session.query(Review.ReviewLikes).filter(Review.ReviewLikes.review_id == review.id).all()
+    db.session.delete(likes)
+    unlikes = db.session.query(Review.ReviewUnlikes).filter(Review.ReviewUnlikes.review_id == review.id).all()
+    db.session.delete(unlikes)
     db.session.commit()
 
     return {
