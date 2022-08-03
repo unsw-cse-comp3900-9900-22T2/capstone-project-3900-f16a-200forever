@@ -16,14 +16,16 @@ def user_id_valid(id):
 def get_admin_id(email):
   user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
   if user == None:
-    raise Exception("Admin doesn't exist")
+    #raise Exception("Admin doesn't exist")
+    return None
   return user.id
 
 # get the id of the user
 def get_user_id(email):
   user = db.session.query(User.Users).filter(User.Users.email == email).first()
   if user == None:
-    raise Exception("User doesn't exist")
+    #raise Exception("User doesn't exist")
+    return None
   return user.id
 
 # get the email of the user

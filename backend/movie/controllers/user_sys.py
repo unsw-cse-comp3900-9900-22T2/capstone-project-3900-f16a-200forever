@@ -313,6 +313,8 @@ class BannedlistController(Resource):
       return {"message": message}, 400
 
     user_id = get_user_id(data['email'])
+    if user_id == None:
+      return {"message": "user id not valie"}, 400
 
     # check ban itself
     if data['email'] == data['banned_email']:
@@ -324,6 +326,8 @@ class BannedlistController(Resource):
       return {"message": "Banned email invalid"}, 400
 
     banned_id = get_user_id(data['banned_email'])
+    if banned_id == None:
+      return {"message": "user id not valie"}, 400
     
     # check if user already in banned list
     banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id, User.BannedList.banned_user_id == banned_id).first()

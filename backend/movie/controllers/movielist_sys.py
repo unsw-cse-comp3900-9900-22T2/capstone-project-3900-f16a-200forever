@@ -52,6 +52,8 @@ class WishlistController(Resource):
   def post(self):
     data = user_ns.payload
     user_id = get_user_id(data['email'])
+    if user_id == None:
+      return {"message": "user id not valie"}, 400
 
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])
@@ -93,6 +95,8 @@ class WishlistController(Resource):
   def delete(self):
     data = user_ns.payload
     user_id = get_user_id(data['email'])
+    if user_id == None:
+      return {"message": "user id not valie"}, 400
 
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])
