@@ -171,10 +171,9 @@ class MovieDetails(Resource):
     # adjust for banned list
     (rating_count, total_rating) = get_movie_rating(args['user_id'], select_movie)
     movie_detail = convert_object_to_dict(select_movie)
-    movie_detail['total rating'] = total_rating
-    movie_detail['rating count'] = rating_count
+    movie_detail['total_rating'] = total_rating
+    movie_detail['rating_count'] = rating_count
     movie_detail['actors']: movie_actors
     movie_detail['directors']: movie_directors
-
 
     return movie_detail, 200
