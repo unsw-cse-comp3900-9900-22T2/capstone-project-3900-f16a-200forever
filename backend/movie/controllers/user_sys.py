@@ -17,7 +17,6 @@ from .api_models import UserNS
 import sqlite3
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id, get_image
-from movie.utils.auth_util import user_has_login, user_is_valid
 import sqlite3
 from datetime import datetime
 
@@ -34,7 +33,7 @@ class UserEvent(Resource):
     args = parser.parse_args()
     email = args['email']
 
-    # 1. check the user is valid or not
+    # 1. check if user_id is valid
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
       return {"message": "the user not exist"},400
@@ -51,12 +50,10 @@ class UserProfileController(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('user_id', type=str, required=True, location="args")
     args = parser.parse_args()
-    print(args)
     user_id = args['user_id']
 
     this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if this_user == None:
-      print("none")
       return {"message": "User doesn\'t exist"}, 400
 
     username = this_user.name
@@ -98,17 +95,18 @@ class UserProfileController(Resource):
     if not auth_correct:
       return {"message", message}, 400
 
-
+    # check if user_id is valid
     this_user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if this_user == None:
       return {"message": "User doesn\'t exist"}, 400
     
+    # check if user has permission to edit
     if this_user.email != email:
       return {"message": "No permission"}, 400
 
     username = data['username']
 
-    # check user name
+    # check new username validity
     if not username_format_valid(username):
       return {"message": "Username must be 6-20 characters"}, 400
 
@@ -130,7 +128,7 @@ class UserProfileController(Resource):
         this_user.password = pw_encode(data['new_password'])
 
     this_user.name = username
-    # 
+    # update signature and image if supplied
     if 'signature' in data.keys():
       this_user.signature = data['signature']
     if 'image' in data.keys():
@@ -147,12 +145,12 @@ class FollowListManage(Resource):
   @user_ns.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('email', type=str, location='args', required=True)
+    parser.add_argument('user_id', type=str, location='args', required=True)
     args = parser.parse_args()
-    email = args['email']
+    user_id = args['user_id']
 
     # 1. check the user is valid or not
-    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if user == None:
       return {"message": "the user not exist"},400
     
@@ -281,20 +279,18 @@ class BannedlistController(Resource):
   @user_ns.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('email', type=str, location='args', required=True)
+    parser.add_argument('user_id', type=str, location='args', required=True)
     args = parser.parse_args()
-    email = args['email']
-    user_id = get_user_id(email)
+    user_id = args['user_id']
 
     # 1. check the user is valid or not
-    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if user == None:
       return {"message": "the user not exist"},400
     
-    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
     result = []
-    for fo in user.user_banned_list:
-      user = fo.banner
+    for ban in user.user_banned_list:
+      user = ban.banner
       data = {}
       data['email'] = user.email
       data['image'] = get_image(user.image)
