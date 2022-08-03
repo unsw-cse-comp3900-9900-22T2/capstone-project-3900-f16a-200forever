@@ -171,6 +171,9 @@ class AttempEvent(Resource):
 
     # attemp the event
     user_id = get_user_id(data['email'])
+    if user_id == None:
+      return {"message": "user id not valie"}, 400
+
     data['user_id'] = user_id
     data['start_time'] = now
     new = User.UserEvent(data)
@@ -202,6 +205,8 @@ class AttempEvent(Resource):
       return {"message": "The event not exists"}, 400
     duration = event.duration
     user_id = get_user_id(data['email'])
+    if user_id == None:
+      return {"message": "user id not valie"}, 400
 
     # check the user have attemped the event or not
     event_attemp = db.session.query(User.UserEvent).filter(User.UserEvent.event_id == data['event_id'], \

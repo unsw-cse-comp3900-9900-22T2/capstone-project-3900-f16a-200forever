@@ -211,6 +211,8 @@ class ReviewController(Resource):
     movie = data['movie_id']
     rating = data['rating']
     user_id = get_user_id(email)
+    if user_id == None:
+      return {"message": "user id not valie"}, 400
 
  
     # check auth
