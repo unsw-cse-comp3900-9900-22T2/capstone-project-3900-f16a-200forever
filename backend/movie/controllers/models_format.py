@@ -1,7 +1,6 @@
-from xml.dom.minidom import Element
-from attr import field
 from flask_restx import fields
 
+#---------------AUTH------------------
 login = {
     "email": fields.String(required=True),
     "password": fields.String(required=True),
@@ -25,6 +24,7 @@ validation = {
   'email': fields.String(required=True),
   'token': fields.String(required=True)
 }
+
 send_email = {
   'email': fields.String(required=True)
 }
@@ -34,6 +34,8 @@ register = {
   'email': fields.String(required=True),
   'password': fields.String(required=True)
 }
+
+#----------------EVENT------------------
 
 attemp_event = {
   'email': fields.String(required=True),
@@ -46,41 +48,6 @@ finish_event = {
   'token': fields.String(required=True),
   'event_id': fields.String(required=True),
   'answers': fields.Raw(required=True)
-}
-
-delete_thread = {
-  'thread_id': fields.String(required=True),
-  'email': fields.String(required=True),
-  'token': fields.String(required=True)
-}
-
-forum_admin = {
-  'user_email': fields.String(required=True),
-  'admin_email': fields.String(required=True),
-  'token': fields.String(required=True)
-}
-
-post_thread = {
-  'email': fields.String(required=True), 
-  'token': fields.String(required=True), 
-  'genre_id': fields.Integer(required=True),
-  'is_anonymous': fields.Integer(required=True),
-  'title': fields.String(required=True), 
-  'content': fields.String(required=True)
-}
-
-follow = {
-  'email': fields.String(required=True), 
-  'token': fields.String(required=True), 
-  'follow_id': fields.String(required=True),
-  "page_num": fields.Integer,
-  "num_per_page": fields.Integer
-}
-
-user_movie_list = {
-  'email': fields.String(required=True), 
-  'token': fields.String(required=True), 
-  'movie_id': fields.Integer(required=True)
 }
 
 class Question_Form(fields.Raw):
@@ -109,22 +76,67 @@ event_detail = {
   'movies': fields.List(fields.Integer, required=True)
 }
 
-# Accept null values
-class NullableString(fields.String):
-    __schema_type__ = ['string', 'null']
-    __schema_example__ = 'nullable string'
+#----------------THREAD------------------
 
-
-edit_profile = {
-  'username': fields.String(required=True),
-  'signature': fields.String,
-  'image': fields.String,
-  'current_password': fields.String,
-  'new_password': fields.String,
-  'double_check': fields.String,
+delete_thread = {
+  'thread_id': fields.String(required=True),
   'email': fields.String(required=True),
   'token': fields.String(required=True)
 }
+
+forum_admin = {
+  'user_email': fields.String(required=True),
+  'admin_email': fields.String(required=True),
+  'token': fields.String(required=True)
+}
+
+post_thread = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'genre_id': fields.Integer(required=True),
+  'is_anonymous': fields.Integer(required=True),
+  'title': fields.String(required=True), 
+  'content': fields.String(required=True)
+}
+
+thread_comment = {
+  "email": fields.String(required=True),
+  'token': fields.String(required=True),
+  "content": fields.String(required=True),
+  "thread_id": fields.String(required=True),
+  "is_anonymous": fields.Integer,
+  "reply_comment_id": fields.String
+}
+
+thread_react = {
+  'email': fields.String(required=True),
+  'token': fields.String(required=True),
+  "thread_id": fields.String(required=True)
+}
+
+#----------------USER LIST-----------------
+follow = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'follow_id': fields.String(required=True),
+  "page_num": fields.Integer,
+  "num_per_page": fields.Integer
+}
+
+banned = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'banned_email': fields.String(required=True)
+}
+
+#----------------MOVIE LIST------------------
+user_movie_list = {
+  'email': fields.String(required=True), 
+  'token': fields.String(required=True), 
+  'movie_id': fields.Integer(required=True)
+}
+
+#----------------MOVIE REVIEW------------------
 
 review_post = {
   'email': fields.String(required=True),
@@ -153,30 +165,20 @@ review_admin_delete = {
   'admin_email': fields.String(required=True)
 }
 
-thread_react = {
+
+#----------------USER PROFILE------------------
+edit_profile = {
+  'username': fields.String(required=True),
+  'signature': fields.String,
+  'image': fields.String,
+  'current_password': fields.String,
+  'new_password': fields.String,
+  'double_check': fields.String,
   'email': fields.String(required=True),
-  'token': fields.String(required=True),
-  "thread_id": fields.String(required=True)
+  'token': fields.String(required=True)
 }
 
-
-thread_comment = {
-  "email": fields.String(required=True),
-  'token': fields.String(required=True),
-  "content": fields.String(required=True),
-  "thread_id": fields.String(required=True),
-  "is_anonymous": fields.Integer,
-  "reply_comment_id": fields.String
-}
-
-user_movie_list = {
-  'email': fields.String(required=True), 
-  'token': fields.String(required=True), 
-  'movie_id': fields.Integer(required=True)
-}
-
-banned = {
-  'email': fields.String(required=True), 
-  'token': fields.String(required=True), 
-  'banned_email': fields.String(required=True)
-}
+# Accept null values
+class NullableString(fields.String):
+    __schema_type__ = ['string', 'null']
+    __schema_example__ = 'nullable string'

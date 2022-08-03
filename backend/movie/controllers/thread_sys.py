@@ -1,6 +1,3 @@
-import imp
-
-from attr import validate
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
@@ -12,78 +9,18 @@ from movie.models import genre as Genre
 from movie import db
 import uuid
 from datetime import datetime
+<<<<<<< HEAD
 from movie.utils.other_util import convert_model_to_dict, paging, convert_object_to_dict
+=======
+from movie.utils.other_util import paging, convert_object_to_dict
+>>>>>>> 26c75808649a43fe4ea1b1f8034b70755253dfd7
 from movie.utils.user_util import get_user_id, get_image
 
 thread_ns = ThreadNS.thread_ns
 
+#----------------GET ALL THREADS------------------
 @thread_ns.route('')
 class ThreadManager(Resource):
-  @thread_ns.response(200, "Successfully")
-  @thread_ns.response(400, 'Something went wrong')
-  @thread_ns.expect(ThreadNS.delete_thread_form, validate=True)
-  def delete(self):
-    data = thread_ns.payload
-    # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
-
-    if not auth_correct:
-      return {"message", message}, 400
-
-
-    # thread exist
-    thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
-    if thread == None:
-      return {'message': 'The thread not exist'}, 400
-
-    # thread own by the user
-    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
-    admin = None
-    if user == None:
-      admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['email']).first()
-   
-    if user != None and thread.user_id != user.id and user.is_forum_admin != 1:
-      return {"message": 'No permission'}, 400
-
-    if user == None and admin == None:
-      return {"message": 'No permission'}, 400
-    
-    # delete the thread
-    db.session.delete(thread)
-    db.session.commit()
-    return {"message": 'Delete thread successfully'}, 200
-
-  @thread_ns.response(200, "Successfully")
-  @thread_ns.response(400, 'Something went wrong')
-  @thread_ns.expect(ThreadNS.post_thread_form, validate=True)
-  def post(self):
-    data = thread_ns.payload
-    data['created_time'] = str(datetime.now())
-    # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
-
-    if not auth_correct:
-      return {"message", message}, 400
-
-
-    # check genre valid
-    genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == data['genre_id']).first()
-    if genre == None:
-      return {"message": "Genre id invalid"}, 400
-    
-    # check is_anonymous
-    if data['is_anonymous'] != 0 and data['is_anonymous'] != 1:
-      return {"message": "Invalid is_anonymous value"}, 400
-
-    # post
-    data['user_id'] = get_user_id(data['email'])
-    data['id'] = str(uuid.uuid4())
-    thread = Thread.Threads(data)
-    db.session.add(thread)
-    db.session.commit()
-    return {"thread_id": data['id']}, 200
-
-
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):
@@ -120,6 +57,7 @@ class ThreadManager(Resource):
     return {"threads": thread_result, "num_threads": num_threads}, 200
 
 
+#----------------Thread Manager------------------
 @thread_ns.route('/thread')
 class ThreadController(Resource):
   @thread_ns.response(200, "Successfully")
@@ -147,10 +85,87 @@ class ThreadController(Resource):
     comments = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.thread_id == args['thread_id']).order_by(Thread.ThreadComment.comment_time.desc()).all()
     num_comments = len(comments)
     comments = paging(args['page'], args['num_per_page'], comments)
+    
+    # get thread data
+    thread_data = convert_object_to_dict(thread)
+    thread_data["react_num"] = len(thread.thread_likes)
+    thread_data["user_email"] = thread.user.email
+    thread_data["user_image"] = get_image(thread.user.image)
 
-    return {"thread": convert_object_to_dict(thread), "comments": convert_model_to_dict(comments), "num_comments": num_comments}, 200
+    # get comment
+    comment_data = []
+    for co in comments:
+      tmp = convert_object_to_dict(co)
+      tmp["user_email"] = co.user.email
+      tmp["user_image"] = get_image(co.user.image)
+      comment_data.append(tmp)
+
+    return {"thread": thread_data, "comments": comment_data, "num_comments": num_comments}, 200
+
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.delete_thread_form, validate=True)
+  def delete(self):
+    data = thread_ns.payload
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
+
+    if not auth_correct:
+      return {"message", message}, 400
+
+    # thread exist
+    thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
+    if thread == None:
+      return {'message': 'The thread not exist'}, 400
+
+    # thread own by the user
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    admin = None
+    if user == None:
+      admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['email']).first()
+   
+    if user != None and thread.user_id != user.id and user.is_forum_admin != 1:
+      return {"message": 'No permission'}, 400
+
+    if user == None and admin == None:
+      return {"message": 'No permission'}, 400
+    
+    # delete the thread
+    db.session.delete(thread)
+    db.session.commit()
+    return {"message": 'Delete thread successfully'}, 200
+
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  @thread_ns.expect(ThreadNS.post_thread_form, validate=True)
+  def post(self):
+    data = thread_ns.payload
+    data['created_time'] = str(datetime.now())
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
+
+    if not auth_correct:
+      return {"message", message}, 400
+
+    # check genre valid
+    genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == data['genre_id']).first()
+    if genre == None:
+      return {"message": "Genre id invalid"}, 400
+    
+    # check is_anonymous
+    if data['is_anonymous'] != 0 and data['is_anonymous'] != 1:
+      return {"message": "Invalid is_anonymous value"}, 400
+
+    # post
+    data['user_id'] = get_user_id(data['email'])
+    data['id'] = str(uuid.uuid4())
+    thread = Thread.Threads(data)
+    db.session.add(thread)
+    db.session.commit()
+    return {"thread_id": data['id']}, 200
 
 
+#----------------MANAGE THREAD ADMIN-----------------
 @thread_ns.route('/admin')
 class ThreadAdmin(Resource):
   @thread_ns.response(200, "Successfully")
@@ -183,18 +198,8 @@ class ThreadAdmin(Resource):
     db.session.commit()
     return {'message': "Successfully"}, 200
 
-"""
-@thread_ns.route('/categories')
-class ThreadAdmin(Resource):
-  @thread_ns.response(200, "Successfully")
-  @thread_ns.response(400, 'Something went wrong')
-  @thread_ns.expect(ThreadNS.forum_admin_form, validate=True)
-  def get(self):
-    categories = db.session.query(Thread.Categories).all()
-    categories = convert_model_to_dict(categories)
-    return {"categories": categories}, 200
-"""
 
+#----------------REACT THREAD-----------------
 @thread_ns.route('/react')
 class ReactToComment(Resource):
   @thread_ns.response(200, "Successfully")
@@ -228,6 +233,7 @@ class ReactToComment(Resource):
       db.session.commit()
       return {"is_remove": 0}, 200
 
+#----------------REACT COMMENT----------------
 @thread_ns.route('/comment')
 class CommentThread(Resource):
   @thread_ns.response(200, "Successfully")
@@ -243,7 +249,6 @@ class CommentThread(Resource):
 
     if not auth_correct:
       return {"message", message}, 400
-    # check user valid
     # check user valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
