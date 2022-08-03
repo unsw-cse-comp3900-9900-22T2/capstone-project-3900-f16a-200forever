@@ -280,7 +280,7 @@ class CommentThread(Resource):
 
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
-  @thread_ns.expect(ThreadNS.thread_comment_form, validate=True)
+  @thread_ns.expect(ThreadNS.delete_comment_form, validate=True)
   def delete(self):
     data = thread_ns.payload
     # check auth
@@ -297,8 +297,8 @@ class CommentThread(Resource):
     if comment == None:
       return {"message": "Comment not exist"}, 400
 
-    # check comment belongs to user
-    if comment.user_id != user.id:
+    # check comment belongs to user and user is an admin or not
+    if user.is_forum_admin == 0 and comment.user_id != user.id:
       return {"message": "You can't delete this comment"}, 400
 
     # delete comment

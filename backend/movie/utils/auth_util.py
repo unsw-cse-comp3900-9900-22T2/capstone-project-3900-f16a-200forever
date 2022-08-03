@@ -78,7 +78,7 @@ def check_correct_answer(value):
     return False
   return True
 
-# It will check if the user is an auth
+# It will check if the user is logged in and if the token is valid
 # Args:
 #     email (string): user email
 #     token: token
