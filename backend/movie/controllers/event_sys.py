@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from unittest import result
 from flask_restx import Resource, reqparse
 from datetime import datetime
 from movie.models import user as User
@@ -10,7 +11,7 @@ from movie.utils.auth_util import user_is_admin, check_auth
 from movie.utils.movie_util import format_movie_return_list
 from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
-from movie.utils.user_util import  get_user_id
+from movie.utils.user_util import  get_user_id, get_image
 from .api_models import EventNS
 import uuid
 from movie import db
@@ -25,8 +26,12 @@ class GetAllEvents(Resource):
   @event_ns.response(400, "Something wrong")
   def get(self):
     events = db.session.query(Event.Events).filter(Event.Events.event_status == 'open').all()
-    events = convert_model_to_dict(events)
-    return {"events": events}, 200
+    result = []
+    for event in events:
+      tmp = convert_object_to_dict(event)
+      tmp['image'] = get_image(tmp['image'])
+      result.append(tmp)
+    return {"events": result}, 200
 
 #--------------------GET EVENT DETAIL--------------------
 @event_ns.route('/detail')
