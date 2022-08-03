@@ -8,6 +8,7 @@ from movie.models import review as Review
 from flask_restx import Resource, reqparse
 from movie.utils.other_util import convert_model_to_dict
 from movie.utils.recommendation_util import get_genre_director_movie
+from movie.utils.movie_util import remove_movie_in_the_list
 from random import randint
 from random import seed
 
@@ -39,7 +40,8 @@ class RCMGenre(Resource):
     # get the movies using random
     while movies_lst == []:
       offset = randint(0, 25799)
-      movie_res = db.session.query(Movie.Movies).filter(Movie.MovieGenre.genre_id.in_(ids)).join(Movie.MovieGenre).order_by(Movie.Movies.total_rating.desc()).limit(100).offset(offset).all()
+      movie_res = db.session.query(Movie.Movies).filter(Movie.MovieGenre.genre_id.in_(ids)
+      ).join(Movie.MovieGenre).order_by(Movie.Movies.total_rating.desc()).limit(100).offset(offset).all()
       movies_lst = convert_model_to_dict(movie_res)
 
     return {"movies": movies_lst}, 200  
@@ -66,14 +68,17 @@ class RecommendUser(Resource):
     if user == None:
       return {"message": "Invalid user id"}, 400
 
+
     # check if user has reviewed any movies
-    reviews = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id
+    reviews = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id, Review.Reviews.rating >=3
     ).order_by(Review.Reviews.rating.desc()).all()
-    
+    print(reviews)
     # has no review, return 20 movies randomly
     if len(reviews) == 0:
+      print(1)
       offset = randint(0, 25799)
       movies = db.session.query(Movie.Movies).limit(20).offset(offset).all()
+      return {"movies": convert_model_to_dict(movies)}, 200  
     else:
       # get the top40 movies start from the review with the highest the rating
       # until get 40 movies, and return top 20
@@ -91,7 +96,7 @@ class RecommendUser(Resource):
 
         # get all movies
         movies = get_genre_director_movie(genres, directors, by)
-        top40_movies+=movies
+        top40_movies+=remove_movie_in_the_list(user, movies)
         # only get top 40
         if len(top40_movies) == 40:
           break
@@ -101,3 +106,5 @@ class RecommendUser(Resource):
       top40_movies.reverse()
 
       return {"movies": convert_model_to_dict(top40_movies)}, 200    
+
+
