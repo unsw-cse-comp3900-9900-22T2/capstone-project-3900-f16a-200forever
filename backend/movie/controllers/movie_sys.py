@@ -24,7 +24,7 @@ class SearchMovie(Resource):
   @movie_ns.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('type', type=str, location='args')
+    parser.add_argument('type', choices=['movie name', 'description', 'director', 'actor'],type=str, location='args', required=True)
     parser.add_argument("keywords", type=str, location='args')
     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
     parser.add_argument('num_per_page', type=int, location='args')
