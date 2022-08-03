@@ -232,7 +232,7 @@ class AttempEvent(Resource):
     answers = data['answers']
     num = 0
     correctness = 0
-    print(answers)
+    # TODO CHECK WITH FRONTEND ABOUT THIS
     """
     if len(questions) != len(answers.keys()):
       # update the db
