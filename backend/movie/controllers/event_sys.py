@@ -49,6 +49,7 @@ class GetEventDetail(Resource):
       return {"message": f'Event {id} not found'}, 400
     
     data = convert_object_to_dict(event)
+    data['image'] = get_image(data['image'])
     questions = {}
     for que in event.questions:
       questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
