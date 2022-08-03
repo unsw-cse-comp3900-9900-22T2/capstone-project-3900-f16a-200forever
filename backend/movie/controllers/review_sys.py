@@ -316,8 +316,8 @@ class ReviewAdmin(Resource):
     # check auth
     message, auth_correct = check_auth(data["admin_email"], data['token'])
 
-    #if not auth_correct:
-    #  return {"message": message}, 400
+    if not auth_correct:
+      return {"message": message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
