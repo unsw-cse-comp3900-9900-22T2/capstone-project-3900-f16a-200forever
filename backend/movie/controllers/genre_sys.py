@@ -36,23 +36,11 @@ class GenreMovie(Resource):
   def get(self):
     parser = reqparse.RequestParser()
     parser.add_argument('genre_id', type=int, required=True, location="args")
-    parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
-    parser.add_argument('num_per_page', type=int, location='args')
-    parser.add_argument('page', type=int, location='args')
+    parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args', default="ascending")
+    parser.add_argument('num_per_page', type=int, location='args', default=10)
+    parser.add_argument('page', type=int, location='args', default=1)
     args = parser.parse_args()
     genre_id = args['genre_id']
-
-    # defualt the first page is 1
-    if args['page'] == None:
-      args['page'] = 1
-
-    # default num of movies in one page is 10
-    if args['num_per_page'] == None:
-      args['num_per_page'] = 10
-
-    # default order by asceding 
-    if args['order'] == None:
-      args['order'] = 'ascending'
     strategy = args['order']
 
     genre_movie_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies,
@@ -66,10 +54,6 @@ class GenreMovie(Resource):
         movie_info['id'] = movie.id
         movie_info['title'] = movie.title
         movie_info['backdrop'] = movie.backdrop
-        # if movie.id == 11:
-        #     movie_info['total_rating'] = 1000000
-        #     movie_info['rating_count'] = 234
-        # else:
         movie_info['total_rating'] = movie.total_rating
         movie_info['rating_count'] = movie.rating_count
 

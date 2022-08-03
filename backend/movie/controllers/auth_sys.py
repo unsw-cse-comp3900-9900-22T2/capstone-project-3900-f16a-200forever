@@ -73,6 +73,9 @@ class RegisterController(Resource):
         'name': new_user.name
     }, 200
 
+
+
+
 @auth_ns.route('/login')
 class LoginController(Resource):
   @auth_ns.response(200, "Login Successfully")
@@ -114,6 +117,9 @@ class LoginController(Resource):
         'token': token,
         'name': curr_user.name
     }, 200
+  
+
+
   
 @auth_ns.route('/logout')
 class logoutController(Resource):
@@ -216,7 +222,6 @@ class ForgotPassword(Resource):
     # check email exist
     if not email_exits(email):
       return {"message": "The email not exist"}, 400
-
 
     # check password format
     if not correct_password_format(pw):

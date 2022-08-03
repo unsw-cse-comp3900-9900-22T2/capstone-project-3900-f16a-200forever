@@ -2,6 +2,7 @@ from sqlalchemy import inspect
 import movie.models.movie as Movie
 import movie.models.user as User
 import movie.models.review as Review
+from movie.utils.user_util import user_id_valid
 from movie import db
 
 # check movie id is valid or not
@@ -54,3 +55,24 @@ def adjust_rating(user_id, movie_id):
       total_rating -= review.rating * review.weight
       rating_count -= review.weight
   return total_rating, rating_count
+
+
+# get the year of the movie
+def get_movie_year(movie):
+    year = None
+    if movie.release_time != None:
+      year = movie.release_time.split('-')[0]
+    return year
+
+def get_movie_rating(user_id, select_movie):
+  # adjust for banned list
+  if user_id != None:
+    # check user id valid
+    if not user_id_valid(user_id):
+      return {"message": "User id invalid"}, 400
+    else:
+      total_rating, rating_count = adjust_rating(user_id, select_movie.id)
+  else:
+    rating_count = select_movie.rating_count
+    total_rating = select_movie.total_rating
+  return (rating_count, total_rating)

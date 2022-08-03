@@ -20,6 +20,7 @@ class RCMGenre(Resource):
   @recommendation_ns.response(200, 'Successfully retrieved genres')
   @recommendation_ns.response(400, 'Something went wrong')
   def get(self):
+    # get arg
     parser = reqparse.RequestParser()
     parser.add_argument('movie_id', type=int, location='args', required=True)
     args = parser.parse_args()
@@ -30,28 +31,17 @@ class RCMGenre(Resource):
     if movie == None:
       return {"message": "Invalid movie id"}, 400
     
-    # get movie genre
+    # get movie genre id list
     genres = movie.movie_genre
     ids = [ge.id for ge in genres]
     movies_lst = []
+
+    # get the movies using random
     while movies_lst == []:
       offset = randint(0, 25799)
       movie_res = db.session.query(Movie.Movies).filter(Movie.MovieGenre.genre_id.in_(ids)).join(Movie.MovieGenre).order_by(Movie.Movies.total_rating.desc()).limit(100).offset(offset).all()
+      movies_lst = convert_model_to_dict(movie_res)
 
-      for movie in movie_res:
-        movie_detail = {}
-        movie_detail['movie_id'] = movie.id
-        movie_detail['movie_title'] = movie.title
-        movie_detail['tagline'] = movie.tagline
-        movie_detail['backdrop'] = movie.backdrop
-        movie_detail['description'] = movie.description
-        movie_detail['runtime'] = movie.runtime
-        movie_detail['release_time'] = movie.release_time
-        movie_detail['total_rating'] = movie.total_rating
-        movie_detail['rating_count'] = movie.rating_count
-
-        movies_lst.append(movie_detail)
-    
     return {"movies": movies_lst}, 200  
 
 
@@ -61,6 +51,7 @@ class RecommendUser(Resource):
   @recommendation_ns.response(200, 'Successfully retrieved genres')
   @recommendation_ns.response(400, 'Something went wrong')
   def get(self):
+    # get the argument and body
     parser = reqparse.RequestParser()
     parser.add_argument('user_id', type=str, location='args', required=True)
     parser.add_argument('by', type=str, location='args', choices=['genre', 'director'])    
@@ -69,6 +60,7 @@ class RecommendUser(Resource):
     if 'by' in args.keys():
       by = args['by']
     user_id = args['user_id']
+
     # check user id valid
     user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if user == None:
@@ -90,17 +82,22 @@ class RecommendUser(Resource):
         print(review)
         genres = []
         directors = []
-        
+        # get the genre id list of the movie
         tmp = [genre.id for genre in review.movies.movie_genre]
         genres+=tmp
+        # get the director id list of the movie
         tmp = [director.id for director in review.movies.movie_director_rel]
         directors+=tmp
+
         # get all movies
         movies = get_genre_director_movie(genres, directors, by)
         top40_movies+=movies
+        # only get top 40
         if len(top40_movies) == 40:
           break
+
+      # sort by rating desc
       top40_movies.sort(key=lambda x: x.total_rating)
       top40_movies.reverse()
-      #rec_movies = top_twenty(all_movies)
+
       return {"movies": convert_model_to_dict(top40_movies)}, 200    
