@@ -8,7 +8,7 @@ from movie.models import user as User
 from movie.models import event as Event
 from movie.models import movie as Movie
 from fuzzywuzzy import process
-from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login, check_auth
+from movie.utils.auth_util import user_is_admin, check_correct_answer,  check_auth
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event

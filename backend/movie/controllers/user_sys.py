@@ -11,7 +11,7 @@ from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict, paging
-from movie.utils.auth_util import user_has_login, user_is_valid, check_auth
+from movie.utils.auth_util import   check_auth
 from movie import db
 from flask import session
 from .api_models import UserNS

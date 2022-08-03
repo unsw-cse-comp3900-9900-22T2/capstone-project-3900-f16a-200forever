@@ -7,7 +7,7 @@ from movie.models import user as User
 from sqlalchemy import func
 from movie.utils.other_until import paging, convert_object_to_dict
 from movie.utils.movie_until import movie_id_valid
-from movie.utils.auth_util import user_is_valid, user_has_login, check_auth
+from movie.utils.auth_util import  check_auth
 from movie.utils.review_util import user_reviewed_movie, calculate_weight
 from movie.utils.user_util import get_user_id
 from movie.models import admin as Admin

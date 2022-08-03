@@ -69,18 +69,9 @@ def check_correct_answer(value):
   return True
 
 
-def user_is_valid(data):
-  email = data['email']
-  token = data['token']
-  real_token = str(redis_cli.get(email).decode())
-  print(real_token)
-  print(token)
-  if real_token != token:
-    return False
-  return True
 
-def user_has_login(data, session):
-  pass
+
+
 
 def check_auth(email, token):
   real = redis_cli.get(email)

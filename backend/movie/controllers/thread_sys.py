@@ -5,7 +5,7 @@ from attr import validate
 from movie.controllers.api_models import ThreadNS
 from flask_restx import Resource, reqparse
 from flask import session
-from movie.utils.auth_util import user_has_login, user_is_valid, check_auth
+from movie.utils.auth_util import  check_auth
 from movie.models import thread as Thread
 from movie.models import user as User
 from movie.models import admin as Admin

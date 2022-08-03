@@ -6,8 +6,8 @@ from flask import session, jsonify
 from flask_restx import Resource
 from json import dumps
 from flask_restx import Resource, Api
-from movie.utils.auth_util import generate_token, pw_encode, user_is_valid, \
-                                  user_has_login, correct_email_format, \
+from movie.utils.auth_util import generate_token, pw_encode, \
+                                  correct_email_format, \
                                   username_format_valid, username_is_unique, \
                                   email_exits, correct_password_format, generateOTP, \
                                   send_email, code_is_correct, get_user, password_is_correct, user_is_admin, check_auth
@@ -183,6 +183,7 @@ class logoutController(Resource):
   def post(self):
     data = auth_ns.payload
 
+    # check auth
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
