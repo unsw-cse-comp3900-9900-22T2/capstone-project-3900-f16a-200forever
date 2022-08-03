@@ -66,7 +66,7 @@ class EventCreate(Resource):
     message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     
     # check the user is admin
