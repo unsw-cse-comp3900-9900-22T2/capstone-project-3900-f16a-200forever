@@ -13,7 +13,7 @@ from movie import db
 import uuid
 from datetime import datetime
 from movie.utils.other_until import convert_model_to_dict, paging, convert_object_to_dict
-from movie.utils.user_util import get_user_id
+from movie.utils.user_util import get_user_id,get_image
 
 thread_ns = ThreadNS.thread_ns
 
@@ -110,8 +110,15 @@ class ThreadManager(Resource):
     threads = db.session.query(Thread.Threads).filter(Thread.Threads.genre_id == args['genre_id']).order_by(Thread.Threads.created_time.desc()).all()
     num_threads = len(threads)
     threads = paging(args['page'], args['num_per_page'], threads)
+    thread_result =[]
+    for thread in threads:
+      tmp = convert_object_to_dict(thread)
+      tmp["react_num"] = len(thread.thread_likes)
+      tmp["user_email"] = thread.user.email
+      tmp["user_image"] = get_image(thread.user.image)
+      thread_result.append(tmp)
 
-    return {"threads": convert_model_to_dict(threads), "num_threads": num_threads}, 200
+    return {"threads": thread_result, "num_threads": num_threads}, 200
 
 
 @thread_ns.route('/thread')
