@@ -7,7 +7,6 @@ import re
 from movie import db, redis_cli
 from movie.models import user as User
 from movie.models import admin as Admin
-import smtplib
 from email.mime.text import MIMEText
 import math, random
 from movie import smptyserver

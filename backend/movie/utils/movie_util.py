@@ -4,13 +4,17 @@ import movie.models.user as User
 import movie.models.review as Review
 from movie import db
 
+# check movie id is valie or not
 def movie_id_valid(id):
   movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == id).first()
   if movie == None:
     return False
   return True
 
+# convert movies object into list of dictionary
+# change release date to year
 def format_movie_return_list(movies):
+
   result = []
   for movie in movies:
     movie = movie[0]
@@ -24,6 +28,7 @@ def format_movie_return_list(movies):
     result.append(data)
   return result 
 
+# sort the movie, sort by rating
 def movie_sort(movies_lst, strategy):
   for movie in movies_lst:
     if movie['rating_count'] == None or movie['rating_count'] == 0:
@@ -37,6 +42,7 @@ def movie_sort(movies_lst, strategy):
     movies_lst.sort(key=lambda x:(x.get('rating', 0)))
   return movies_lst
 
+# caculate the rating based on the given user banned list
 def adjust_rating(user_id, movie_id):
   banned_list = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
   movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
