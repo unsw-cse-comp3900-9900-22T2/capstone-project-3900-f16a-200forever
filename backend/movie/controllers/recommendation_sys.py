@@ -14,6 +14,7 @@ from random import seed
 recommendation_ns = RecommendationNS.recommendation_ns
 seed(1)
 
+#----------------RECOMMENDATION------------------
 @recommendation_ns.route('/genre')
 class RCMGenre(Resource):
   @recommendation_ns.response(200, 'Successfully retrieved genres')

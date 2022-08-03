@@ -21,6 +21,39 @@ from flask import session
 
 event_ns = EventNS.event_ns
 
+#--------------------GET EVENT LIST--------------------
+@event_ns.route('')
+class GetAllEvents(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  def get(self):
+    events = db.session.query(Event.Events).filter(Event.Events.event_status == 'open').all()
+    events = convert_model_to_dict(events)
+    return {"events": events}, 200
+
+#--------------------GET EVENT DETAIL--------------------
+@event_ns.route('/detail')
+class GetEventDetail(Resource):
+  @event_ns.response(200, "Successfully")
+  @event_ns.response(400, "Something wrong")
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('id', type=str, location='args', required=True)
+    args = parser.parse_args()
+    id = args['id']
+    event = db.session.query(Event.Events).filter(Event.Events.id == id).first()
+
+    if event == None:
+      return {"message": f'Event {id} not found'}
+    
+    data = convert_object_to_dict(event)
+    questions = {}
+    for que in event.questions:
+      questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
+    data["questions"] = questions
+    return data, 200
+
+#--------------------MANAGE EVENT--------------------
 @event_ns.route('/create')
 class EventCreate(Resource):
   @event_ns.response(200, "Create Event Successfully")
@@ -68,37 +101,6 @@ class Search(Resource):
 
     return {"result": movies}, 200
 
-@event_ns.route('')
-class GetAllEvents(Resource):
-  @event_ns.response(200, "Successfully")
-  @event_ns.response(400, "Something wrong")
-  def get(self):
-    events = db.session.query(Event.Events).filter(Event.Events.event_status == 'open').all()
-    events = convert_model_to_dict(events)
-    return {"events": events}, 200
-
-
-@event_ns.route('/detail')
-class GetEventDetail(Resource):
-  @event_ns.response(200, "Successfully")
-  @event_ns.response(400, "Something wrong")
-  def get(self):
-    parser = reqparse.RequestParser()
-    parser.add_argument('id', type=str, location='args', required=True)
-    args = parser.parse_args()
-    id = args['id']
-    event = db.session.query(Event.Events).filter(Event.Events.id == id).first()
-
-    if event == None:
-      return {"message": f'Event {id} not found'}
-    
-    data = convert_object_to_dict(event)
-    questions = {}
-    for que in event.questions:
-      questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
-    data["questions"] = questions
-    return data, 200
-
 @event_ns.route('/edit')
 class EditEvent(Resource):
   @event_ns.response(200, "Successfully")
@@ -144,6 +146,7 @@ class EditEvent(Resource):
       return {"message": "Update false"}, 400
     return {"message": "Updated"}, 200
   
+#--------------------ATTEMP EVENT--------------------
 @event_ns.route('/attemp')
 class AttempEvent(Resource):
   @event_ns.response(200, "Successfully")

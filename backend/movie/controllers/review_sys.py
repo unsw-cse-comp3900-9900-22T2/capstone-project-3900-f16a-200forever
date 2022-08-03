@@ -16,6 +16,7 @@ from datetime import datetime
 
 review_ns = ReviewNS.review_ns
 
+#--------------------GET REVIEW LIST--------------------
 @review_ns.route('/sort')
 class ReviewSort(Resource):
   @review_ns.response(200, 'Successfully')
@@ -128,31 +129,7 @@ class ReviewSort(Resource):
 
     return {"total": total_num, "reviews": result}
 
-
-    """
-      total_num = len(all_reviews)
-    # paging
-    matched_movies = paging(args['page'], args['num_per_page'], all_reviews)
-    result = []
-    for mo in matched_movies:
-      review = convert_object_to_dict(mo[0])
-      user = convert_object_to_dict(mo[1])
-      review['likes_count'] = mo[2]
-      review['unlikes_count'] = mo[3]
-      review['user_email'] = user['email']
-      review['user_name'] = user['name']
-      review['user_image'] = user['image']
-      result.append(review)
-      
-    return {"total": total_num, "reviews": result}
-    """
-
-    # paging
-
-
-
-
-
+#---------------REACT TO REVIEW---------------
 @review_ns.route('/react')
 class ReactToReview(Resource):
     @review_ns.response(200, "Add reaction successfully")
@@ -222,7 +199,7 @@ class ReactToReview(Resource):
 
 review_ns = ReviewNS.review_ns
 
-# user profile page
+#---------------MANAGE REVIEW---------------
 @review_ns.route('')
 class ReviewController(Resource):
   @review_ns.response(200, "Create review success")
@@ -319,7 +296,7 @@ class ReviewController(Resource):
         "message": "Delete review success"
     }, 200 
 
-
+#---------------PROMOTE ADMIN---------------
 @review_ns.route('/admin')
 class ReviewAdmin(Resource):
   @review_ns.response(200, "Successfully")
@@ -352,53 +329,3 @@ class ReviewAdmin(Resource):
     user.is_review_admin = 1
     db.session.commit()
     return {'message': "User is now review admin"}, 200
-
-"""
-  @review_ns.response(200, "Delete review success")
-  @review_ns.response(400, "Something wrong")
-  @review_ns.expect(ReviewNS.review_admin_delete_form, validate=True)
-  def delete(self):
-    data = review_ns.payload
-    email = data['user_email']
-    movie = data['movie_id']
-    user_id = get_user_id(email)
-    admin = data['admin_email']
-
-    # check if logged in
-    '''if not user_has_login(admin_email, session):
-      return {"message": "the user has not logined"}, 400
-
-    # check token
-    if not user_is_valid(data):
-      return {"message": "Invalid user id"}, 400'''
-
-    # check valid user and movie ids
-    if not movie_id_valid(movie):
-      return {"message": "Invalid movie id"}, 400
-
-    # check user hasn't already reviewed this movie
-    if not user_reviewed_movie(user_id, movie):
-      return {"message": "User has not reviewed this movie"}, 400
-
-    # check if admin is review admin
-    deleter = db.session.query(User.Users).filter(User.Users.email == admin).first()
-    if deleter.is_review_admin != 1:
-      return {"message": 'Not review admin'}, 400
-
-    review = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == user_id).filter(Review.Reviews.movie_id == movie).first()
-    # this shouldn't be possible but check if review exists
-    if review == None:
-      return {"message": "Review doesn't exist???"}, 400
-
-    this_movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie).first()
-
-    this_movie.rating_count -= review.weight
-    this_movie.total_rating -= review.rating
-
-    db.session.delete(review)
-    db.session.commit()
-
-    return {
-        "message": "Delete review success"
-    }, 200
-"""
