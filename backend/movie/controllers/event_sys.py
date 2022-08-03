@@ -1,22 +1,19 @@
 
 from datetime import datetime
-from json import dumps
-from attr import validate
 from flask_restx import Resource, reqparse
 from datetime import datetime
 from movie.models import user as User
 from movie.models import event as Event
 from movie.models import movie as Movie
 from fuzzywuzzy import process
-from movie.utils.auth_util import user_is_admin, check_correct_answer,  check_auth
-from movie.utils.movie_util import movie_id_valid, format_movie_return_list
+from movie.utils.auth_util import user_is_admin, check_auth
+from movie.utils.movie_util import format_movie_return_list
 from movie.utils.other_util import convert_model_to_dict, convert_object_to_dict
 from movie.utils.event_util import create_event
-from movie.utils.user_util import get_admin_id, get_user_id
+from movie.utils.user_util import  get_user_id
 from .api_models import EventNS
 import uuid
 from movie import db
-from flask import session
 
 
 event_ns = EventNS.event_ns
