@@ -21,3 +21,13 @@ def calculate_weight(user, movie):
     if exists != None:
       return 2
   return 1
+
+# adjust review list for banned list
+def adjust_reviews(user_id, review_list):
+  banned_list = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
+  for review in review_list:
+    for banned in banned_list:
+      if banned.banned_user_id == review[1].id:
+        review_list.remove(review)
+        continue
+  return review_list

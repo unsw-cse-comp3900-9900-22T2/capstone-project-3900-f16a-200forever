@@ -86,7 +86,7 @@ class Users(db.Model):
     self.is_forum_admin = 0
     
 
-class UserEevnt(db.Model):
+class UserEvent(db.Model):
   __tablename__ = 'r_user_event'
   user_id = db.Column('user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
   event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), primary_key=True, nullable=False)
@@ -122,7 +122,7 @@ class BannedList(db.Model):
   banned_user_id = db.Column('banned_user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
 
   def __repr__(self):
-    return '<BannedList user id: {} follow id: {}>'.format(self.user_id, self.follow_id)
+    return '<BannedList user id: {} banned id: {}>'.format(self.user_id, self.banned_user_id)
   
   def __init__(self, data):
     self.user_id = data['user_id']
