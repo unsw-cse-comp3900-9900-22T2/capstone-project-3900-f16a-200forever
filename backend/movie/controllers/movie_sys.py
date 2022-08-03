@@ -61,9 +61,7 @@ class SearchMovie(Resource):
       matched_movies += result
       
     # search by description 
-    # elif args['by_description'] != None and args['by_description'] != '':
     elif args['type'] == 'description':
-      # kw = args['by_description']
       kw = args["keywords"]
       result = []
       if args['order'] == 'ascending':
@@ -79,7 +77,6 @@ class SearchMovie(Resource):
     # search by director
     # elif args['by_director'] != None and args['by_director'] != '':
     elif args['type'] == 'director':
-      # kw = args['by_director']
       kw = args["keywords"]
       result = []
       if args['order'] == 'ascending':
@@ -100,6 +97,33 @@ class SearchMovie(Resource):
           Person.MovieDirector.movie_id == Movie.Movies.id,
         ).filter(
           Person.MovieDirector.person_id == Person.Persons.id,
+        ).filter(
+          Person.Persons.name.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
+        ).all()
+      matched_movies += result
+
+    elif args['type'] == 'actor':
+      kw = args["keywords"]
+      result = []
+      if args['order'] == 'ascending':
+        result = db.session.query(
+          Person.MovieActor, Person.Persons, Movie.Movies, 
+        ).filter(
+          Person.MovieActor.movie_id == Movie.Movies.id,
+        ).filter(
+          Person.MovieActor.person_id == Person.Persons.id,
+        ).filter(
+          Person.Persons.name.ilike(f'%{kw}%')
+        ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
+        ).all()
+      else:
+        result = db.session.query(
+          Person.MovieActor, Person.Persons, Movie.Movies, 
+        ).filter(
+          Person.MovieActor.movie_id == Movie.Movies.id,
+        ).filter(
+          Person.MovieActor.person_id == Person.Persons.id,
         ).filter(
           Person.Persons.name.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
