@@ -215,8 +215,8 @@ class AttempEvent(Resource):
       return {"message": "The user haven't attemp the event before"}, 400
 
     # check the status
-    if event_attemp.event_status != 'attemping':
-      return {"message": "Have finished the event"}, 400
+    #if event_attemp.event_status != 'attemping':
+    #  return {"message": "Have finished the event"}, 400
 
     # check the time 
     diff = (now - event_attemp.start_time).seconds
@@ -226,19 +226,20 @@ class AttempEvent(Resource):
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"message": "Time out"}, 400
+      return {"message": "Time out"}, 200
 
     # check the answer
     questions = event.questions
     answers = data['answers']
     num = 0
     correctness = 0
+    print(answers)
     if len(questions) != len(answers.keys()):
       # update the db
       event_attemp.end_time = now
       event_attemp.event_status = 'failed'
       db.session.commit()
-      return {"message": "Failed"}, 400
+      return {"message": "Failed"}, 200
 
     for que in questions:
       # check the answer
