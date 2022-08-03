@@ -373,13 +373,11 @@ class DroppedMovieList(Resource):
   def post(self):
     data = user_ns.payload
 
-    # # check user login
-    # if not user_has_login(data['email'], session):
-    #     return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # # check user token valid
-    # if not user_is_valid(data):
-    #     return {"message": "the token is incorrect"}, 400
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -408,13 +406,11 @@ class DroppedMovieList(Resource):
   def delete(self):
     data = user_ns.payload
 
-    # # check user login
-    # if not user_has_login(data['email'], session):
-    #     return {"message": "the user has not logined"}, 400
+    # check auth
+    message, auth_correct = check_auth(data["email"], data['token'])
 
-    # # check user token valid
-    # if not user_is_valid(data):
-    #     return {"message": "the token is incorrect"}, 400
+    if not auth_correct:
+      return {"message", message}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
