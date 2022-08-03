@@ -6,7 +6,6 @@ from movie import db
 
 from movie.models import admin
 from movie.utils.auth_util import generate_token, pw_encode
-from flask import session
 from json import dumps
 
 admin_ns = AdminNS.admin_ns

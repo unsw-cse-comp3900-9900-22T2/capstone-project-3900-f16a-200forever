@@ -56,8 +56,6 @@ def pw_encode(password):
 
 
 def user_is_admin(email):
-  if email in session.keys() and session[email]['admin']:
-    return True
   user = db.session.query(Admin.Admins).filter(Admin.Admins.email == email).first()
   if user != None:
     return True
