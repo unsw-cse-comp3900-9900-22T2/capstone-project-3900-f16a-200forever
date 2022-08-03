@@ -68,3 +68,8 @@ def get_badges(id):
 def current_username(id):
   user = db.session.query(User.Users).filter(User.Users.id == id).first()
   return user.name
+
+def get_image(image):
+  if image is not None:
+      return str(image.decode())
+  return image

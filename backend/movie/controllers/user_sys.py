@@ -12,7 +12,7 @@ from flask_restx import Resource, reqparse
 from movie import db
 from .api_models import UserNS
 from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id, get_image
 from movie.utils.auth_util import user_has_login, user_is_valid
 import sqlite3
 from datetime import datetime
@@ -252,8 +252,17 @@ class BannedlistController(Resource):
       return {"message": "the user not exist"},400
     
     banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
+    result = []
+    for fo in user.user_banned_list:
+      user = fo.banner
+      data = {}
+      data['email'] = user.email
+      data['image'] = get_image(user.image)
+      data['id'] = user.id
+      data['name'] = user.name
+      result.append(data)
 
-    return {"list": banned}, 200
+    return {"list": result}, 200
 
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
