@@ -114,7 +114,7 @@ class EditEvent(Resource):
     message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check the user is admin
     if not user_is_admin(data['email']):
@@ -157,7 +157,7 @@ class AttempEvent(Resource):
     message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
 
     # check event valid
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
@@ -191,7 +191,7 @@ class AttempEvent(Resource):
     message, auth_correct = check_auth(data['email'], data['token'])
 
     if not auth_correct:
-      return {"message", message}, 400
+      return {"message": message}, 400
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
       return {"message": "The event not exists"}, 400
