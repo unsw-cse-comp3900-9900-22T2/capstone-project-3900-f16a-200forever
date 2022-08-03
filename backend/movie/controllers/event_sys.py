@@ -102,7 +102,7 @@ class EditEvent(Resource):
   @event_ns.response(200, "Successfully")
   @event_ns.response(400, "Something wrong")
   @event_ns.expect(EventNS.event_edit_form, validate=True)
-  def post(self):
+  def put(self):
     parser = reqparse.RequestParser()
     parser.add_argument('id', type=str, location='args', required=True)
     args = parser.parse_args()
