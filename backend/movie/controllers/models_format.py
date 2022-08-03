@@ -73,7 +73,8 @@ event_detail = {
   'description': fields.String(required=True),
   'require_correctness_amt': fields.Integer(required=True),
   'questions': fields.List(Question_Form(required=True)), 
-  'movies': fields.List(fields.Integer, required=True)
+  'movies': fields.List(fields.Integer, required=True),
+  'status': fields.String(required=True)
 }
 
 #----------------THREAD------------------
