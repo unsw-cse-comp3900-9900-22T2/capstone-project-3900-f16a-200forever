@@ -1,5 +1,7 @@
 from sqlalchemy import inspect
 import movie.models.movie as Movie
+import movie.models.user as User
+import movie.models.review as Review
 from movie import db
 
 def movie_id_valid(id):
@@ -35,3 +37,14 @@ def movie_sort(movies_lst, strategy):
     movies_lst.sort(key=lambda x:(x.get('rating', 0)))
   return movies_lst
 
+def adjust_rating(user_id, movie_id):
+  banned_list = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
+  movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
+  total_rating = movie.total_rating
+  rating_count = movie.rating_count
+  for banned in banned_list:
+    review = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == banned.banned_user_id, Review.Reviews.movie_id == movie_id).first()
+    if review != None:
+      total_rating -= review.rating * review.weight
+      rating_count -= review.weight
+  return total_rating, rating_count

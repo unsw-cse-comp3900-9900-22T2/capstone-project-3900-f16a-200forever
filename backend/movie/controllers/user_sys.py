@@ -1,5 +1,4 @@
 from operator import is_
-import sqlite3
 from attr import validate
 from movie.utils.auth_util import username_is_unique, username_format_valid, correct_password_format, password_is_correct, pw_encode
 from sqlalchemy import true
@@ -15,8 +14,12 @@ from movie.utils.auth_util import   check_auth
 from movie import db
 from flask import session
 from .api_models import UserNS
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, get_image, get_user_id
 import sqlite3
+from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, current_username, get_user_id, get_image
+from movie.utils.auth_util import user_has_login, user_is_valid
+import sqlite3
+from datetime import datetime
 
 user_ns = UserNS.user_ns
 
@@ -109,7 +112,7 @@ class UserProfileController(Resource):
     if not username_format_valid(username):
       return {"message": "Username must be 6-20 characters"}, 400
 
-    if not username_is_unique(username):
+    if not username_is_unique(username) and not current_username(user_id) == username:
       return {"message": "Username already taken"}, 400
 
     # edit pw

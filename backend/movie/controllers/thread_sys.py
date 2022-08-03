@@ -1,4 +1,3 @@
-
 import imp
 
 from attr import validate
@@ -13,7 +12,7 @@ from movie.models import genre as Genre
 from movie import db
 import uuid
 from datetime import datetime
-from movie.utils.other_until import convert_model_to_dict
+from movie.utils.other_until import convert_model_to_dict, paging, convert_object_to_dict
 from movie.utils.user_util import get_user_id
 
 thread_ns = ThreadNS.thread_ns
@@ -83,6 +82,68 @@ class ThreadManager(Resource):
     db.session.add(thread)
     db.session.commit()
     return {"thread_id": data['id']}, 200
+
+
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('genre_id', type=str, required=True, location="args")
+    parser.add_argument('num_per_page', type=int, location='args')
+    parser.add_argument('page', type=int, location='args')
+    args = parser.parse_args()
+    print(args)
+
+    # check valid genre id
+    genre = db.session.query(Genre.Genres).filter(Genre.Genres.id == args['genre_id']).first()
+    if genre == None:
+      return {"message": "Genre id invalid"}, 400
+
+    # default the first page is 1
+    if args['page'] == None:
+      args['page'] = 1
+
+    # default num of threads in one page is 10
+    if args['num_per_page'] == None:
+      args['num_per_page'] = 10
+
+    threads = db.session.query(Thread.Threads).filter(Thread.Threads.genre_id == args['genre_id']).order_by(Thread.Threads.created_time.desc()).all()
+    num_threads = len(threads)
+    threads = paging(args['page'], args['num_per_page'], threads)
+
+    return {"threads": convert_model_to_dict(threads), "num_threads": num_threads}, 200
+
+
+@thread_ns.route('/thread')
+class ThreadController(Resource):
+  @thread_ns.response(200, "Successfully")
+  @thread_ns.response(400, 'Something went wrong')
+  def get(self):
+    parser = reqparse.RequestParser()
+    parser.add_argument('thread_id', type=str, required=True, location="args")
+    parser.add_argument('num_per_page', type=int, location='args')
+    parser.add_argument('page', type=int, location='args')
+    args = parser.parse_args()
+    print(args)
+
+    # check valid genre id
+    thread = db.session.query(Thread.Threads).filter(Thread.Threads.id == args['thread_id']).first()
+    if thread == None:
+      return {"message": "Thread id invalid"}, 400
+
+    # default the first page is 1
+    if args['page'] == None:
+      args['page'] = 1
+
+    # default num of comments in one page is 10
+    if args['num_per_page'] == None:
+      args['num_per_page'] = 10
+
+    comments = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.thread_id == args['thread_id']).order_by(Thread.ThreadComment.comment_time.desc()).all()
+    num_comments = len(comments)
+    comments = paging(args['page'], args['num_per_page'], comments)
+
+    return {"thread": convert_object_to_dict(thread), "comments": convert_model_to_dict(comments), "num_comments": num_comments}, 200
 
 
 @thread_ns.route('/admin')

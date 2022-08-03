@@ -65,6 +65,10 @@ def get_badges(id):
     badges.append(badge.event_id)
   return badges
 
+def current_username(id):
+  user = db.session.query(User.Users).filter(User.Users.id == id).first()
+  return user.name
+
 def get_image(image):
   if image is not None:
       return str(image.decode())

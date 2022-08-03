@@ -8,8 +8,9 @@ from flask import session
 from movie import db
 from movie.models import movie as Movie
 from movie.models import person as Person
-from movie.utils.movie_until import format_movie_return_list
+from movie.utils.movie_until import format_movie_return_list, adjust_rating
 from movie.utils.other_until import convert_object_to_dict, convert_model_to_dict, paging
+from movie.utils.user_util import user_id_valid
 from operator import attrgetter
 from sqlalchemy import and_, null, or_
 from movie.models import genre as Genre
@@ -27,6 +28,7 @@ class SearchMovie(Resource):
     parser.add_argument('order', choices=['ascending', 'descending'], type=str, location='args')
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
+    parser.add_argument('user_id', type=str, location="args")
     args = parser.parse_args()
     print(args)
 
@@ -104,6 +106,15 @@ class SearchMovie(Resource):
         ).all()
       matched_movies += result
     
+    # adjust for banned list
+    if args['user_id'] != None:
+      # check user id valid
+      if not user_id_valid(args['user_id']):
+        return {"message": "User id invalid"}, 400
+      else:
+        for movie in matched_movies:
+          movie.total_rating, movie.rating_count = adjust_rating(args['user_id'], movie.id)
+
     total_num = len(matched_movies)
     # paging
     matched_movies = paging(args['page'], args['num_per_page'], matched_movies)
@@ -139,6 +150,7 @@ class MovieDetails(Resource):
   def get(self):
     parser = reqparse.RequestParser()
     parser.add_argument('movie_id', type=int, required=True, location="args")
+    parser.add_argument('user_id', type=str, location="args")
     args = parser.parse_args()
     print(args)
     movie_id = args['movie_id']
@@ -157,12 +169,23 @@ class MovieDetails(Resource):
     # title, backdrop, rating
     movie_title = select_movie.title
     movie_backdrop = select_movie.backdrop
-    rating_count = select_movie.rating_count
-    total_rating = select_movie.total_rating
     description = select_movie.description
     runtime = select_movie.runtime
     release_time = select_movie.release_time
     release_status = select_movie.release_status
+
+    
+
+    # adjust for banned list
+    if args['user_id'] != None:
+      # check user id valid
+      if not user_id_valid(args['user_id']):
+        return {"message": "User id invalid"}, 400
+      else:
+        total_rating, rating_count = adjust_rating(args['user_id'], movie_id)
+    else:
+      rating_count = select_movie.rating_count
+      total_rating = select_movie.total_rating
 
     movie_actors = []
     movie_directors = []

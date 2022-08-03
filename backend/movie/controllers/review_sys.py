@@ -7,9 +7,15 @@ from movie.models import user as User
 from sqlalchemy import func
 from movie.utils.other_until import paging, convert_object_to_dict
 from movie.utils.movie_until import movie_id_valid
+<<<<<<< HEAD
 from movie.utils.auth_util import  check_auth
 from movie.utils.review_util import user_reviewed_movie, calculate_weight
 from movie.utils.user_util import get_user_id
+=======
+from movie.utils.auth_util import user_is_valid, user_has_login
+from movie.utils.review_util import user_reviewed_movie, calculate_weight, adjust_reviews
+from movie.utils.user_util import get_user_id, user_id_valid
+>>>>>>> backend3-william
 from movie.models import admin as Admin
 import uuid
 from datetime import datetime
@@ -27,6 +33,7 @@ class ReviewSort(Resource):
     parser.add_argument('num_per_page', type=int, location='args')
     parser.add_argument('page', type=int, location='args')
     parser.add_argument('movie_id', type=int, location='args', required=True)
+    parser.add_argument('user_id', type=str, location="args")
     args = parser.parse_args()
 
     movie_id = args['movie_id']
@@ -95,6 +102,14 @@ class ReviewSort(Resource):
     for re in left:
       review = convert_object_to_dict(re[0])
       left_data[review['id']] = re[2]
+
+    # adjust for banned list
+    if args['user_id'] != None:
+      # check user id valid
+      if not user_id_valid(args['user_id']):
+        return {"message": "User id invalid"}, 400
+      else:
+        all_reviews = adjust_reviews(args['user_id'], all_reviews)
 
     # format:
     total_num = len(all_reviews)

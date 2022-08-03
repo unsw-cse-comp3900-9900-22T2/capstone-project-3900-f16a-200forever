@@ -15,14 +15,15 @@ class Users(db.Model):
   email = db.Column('email', db.String(256), unique=True, nullable=False)
   #public_status = db.Column('public_status', db.Boolean)
   signature = db.Column('signature', db.String(256))
-  image = db.Column('image', db.BLOB)
+  image = db.Column('image', db.String(256))
   password = db.Column('password', db.String(256), nullable=False)
   validation_code = db.Column('validation_code', db.String(256))
   code_expriy_time = db.Column('code_expriy_time', db.DateTime)
   is_forum_admin = db.Column('is_forum_admin', db.Integer, nullable=False)
-  is_review_admin = db.Column('is_review_admin', db.Integer, nullable=False)
   # relationships from reviews
-  reviews = db.relationship('Reviews', backref='user', lazy=True)
+  #reviews = db.relationship('Reviews', backref='users', lazy=True)
+  #review_likes = db.relationship('ReviewLikes', backref='users', lazy=True)
+  #review_unlikes = db.relationship('ReviewUnlikes', backref='users', lazy=True)
   user_review_likes_rel = db.relationship(
       "Reviews",
       secondary='r_review_likes',
@@ -122,11 +123,11 @@ class BannedList(db.Model):
   banned_user_id = db.Column('banned_user_id', db.String(256), db.ForeignKey('t_users.id'), primary_key=True, nullable=False)
 
   def __repr__(self):
-    return '<BannedList user id: {} follow id: {}>'.format(self.user_id, self.follow_id)
+    return '<BannedList user id: {} banned id: {}>'.format(self.user_id, self.banned_user_id)
   
   def __init__(self, data):
     self.user_id = data['user_id']
-    self.follow_id = data['follow_id']
+    self.banned_user_id = data['banned_user_id']
 
 class MovieDroppedList(db.Model):
   __tablename__ = 'r_droppedlist_movie'
@@ -139,7 +140,7 @@ class MovieDroppedList(db.Model):
   
   def __init__(self, data):
     self.user_id = data['user_id']
-    self.follow_id = data['movie_id']
+    self.movie_id = data['movie_id']
     self.added_time = str(datetime.now())
 
 class MovieWatchedList(db.Model):
@@ -153,7 +154,7 @@ class MovieWatchedList(db.Model):
   
   def __init__(self, data):
     self.user_id = data['user_id']
-    self.follow_id = data['movie_id']
+    self.movie_id = data['movie_id']
     self.added_time = str(datetime.now())
     
 
@@ -168,11 +169,5 @@ class MovieWishList(db.Model):
   
   def __init__(self, data):
     self.user_id = data['user_id']
-    self.follow_id = data['movie_id']
+    self.movie_id = data['movie_id']
     self.added_time = str(datetime.now())
-    
-
-
-
-
-
