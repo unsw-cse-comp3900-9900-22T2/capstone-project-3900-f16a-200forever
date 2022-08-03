@@ -15,11 +15,12 @@ from movie.utils.auth_util import   check_auth
 from movie import db
 from flask import session
 from .api_models import UserNS
-from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, get_image
+from movie.utils.user_util import get_wishlist, get_watchedlist, get_droppedlist, get_badges, get_user_email, get_image, get_user_id
 import sqlite3
 
 user_ns = UserNS.user_ns
 
+#--------------------EVENT-------------------
 @user_ns.route("/events")
 class UserEvent(Resource):
   @user_ns.response(200, "Successfully")
@@ -37,6 +38,7 @@ class UserEvent(Resource):
 
     return {"events": convert_model_to_dict(user.events)}, 200
     
+#--------------------PROFILE-------------------
 # user profile page
 @user_ns.route('/userprofile')
 class UserProfileController(Resource):
@@ -135,6 +137,7 @@ class UserProfileController(Resource):
         "message": "Edit profile success"
     }, 200
 
+#--------------------FOLLOWLIST-------------------
 @user_ns.route("/followlist")
 class FollowListManage(Resource):
   @user_ns.response(200, "Successfully")
@@ -229,6 +232,7 @@ class FollowReview(Resource):
 
     if not auth_correct:
       return {"message", message}, 400
+      
     if "page_num" not in data.keys() or "num_per_page" not in data.keys():
       return {"message", "page_num and num_per_page should by provided, type are both int"}, 400
 
@@ -267,8 +271,9 @@ class FollowReview(Resource):
     
     return {"reviews": reviews}, 200
 
-@user_ns.route("/watchedlist")
-class WatchedMovieList(Resource):
+#--------------------BANNEDLIST-------------------
+@user_ns.route('/bannedlist')
+class BannedlistController(Resource):
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
   def get(self):
@@ -276,153 +281,89 @@ class WatchedMovieList(Resource):
     parser.add_argument('email', type=str, location='args', required=True)
     args = parser.parse_args()
     email = args['email']
+    user_id = get_user_id(email)
 
     # 1. check the user is valid or not
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
       return {"message": "the user not exist"},400
+    
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id).all()
+    result = []
+    for fo in user.user_banned_list:
+      user = fo.banner
+      data = {}
+      data['email'] = user.email
+      data['image'] = get_image(user.image)
+      data['id'] = user.id
+      data['name'] = user.name
+      result.append(data)
 
-    # return
-    result = convert_model_to_dict(user.user_watched_list)
-    return {"movies": result}, 200
-      
+    return {"list": result}, 200
 
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @user_ns.expect(UserNS.banned_form, validate=True)
   def post(self):
     data = user_ns.payload
+
     # check auth
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
       return {"message", message}, 400
 
-    # check the movie id valid
-    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
-    if movie == None:
-      return {"message": "Invalid movie id"}, 400
+    user_id = get_user_id(data['email'])
 
-    # check the movie not in the watchedlist
-    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
-    print(user.user_watched_list)
+    # check ban itself
+    if data['email'] == data['banned_email']:
+      return {"message": "Cannot ban self"}, 400
 
-    if movie in user.user_watched_list:
-      return {"message": "Already in watched list"}, 400
+    # check banned email valid
+    banned = db.session.query(User.Users).filter(User.Users.email == data['banned_email']).first()
+    if banned == None:
+      return {"message": "Banned email invalid"}, 400
 
-    if movie in user.user_dropped_list:
-      user.user_dropped_list.remove(movie)
-
-    if movie in user.user_wish_list:
-      user.user_wish_list.remove(movie)
-
-    # check the movie in the dropped list or the wish list
-    user.user_watched_list.append(movie)
-    db.session.commit()
-    return {"message": "Succeffully"}, 200
+    banned_id = get_user_id(data['banned_email'])
     
+    # check if user already in banned list
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id, User.BannedList.banned_user_id == banned_id).first()
+    if banned != None:
+      return {'message': 'User already in banned list'}, 400
+
+    data['user_id'] = user_id
+    data['banned_user_id'] = banned_id
+    entry = User.BannedList(data)
+    db.session.add(entry)
+    db.session.commit()
+
+    return {"message": "Successfully"}, 200
+
   @user_ns.response(200, "Successfully")
   @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
+  @user_ns.expect(UserNS.banned_form, validate=True)
   def delete(self):
     data = user_ns.payload
+
     # check auth
     message, auth_correct = check_auth(data["email"], data['token'])
 
     if not auth_correct:
       return {"message", message}, 400
 
-
-    # check the movie id valid
-    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
-    if movie == None:
-      return {"message": "Invalid movie id"}, 400
-
-    # check the movie not in the watchedlist
+    # check ban valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
-
-    if movie not in user.user_watched_list:
-      return {"message": "Not in watched list"}, 400
-
-    # check the movie in the dropped list or the wish list
-    user.user_watched_list.remove(movie)
-    db.session.commit()
-    return {"message": "Succeffully"}, 200
-    
-@user_ns.route("/droppedlist")
-class DroppedMovieList(Resource):
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  def get(self):
-    parser = reqparse.RequestParser()
-    parser.add_argument('email', type=str, location='args', required=True)
-    args = parser.parse_args()
-    email = args['email']
-
-    # check the user is valid or not
-    user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
-      return {"message": "User do not exist!"},400
+      return {"message": "User email invalid"}
 
-    result = convert_model_to_dict(user.user_dropped_list)
-    return {"movies": result}, 200
+    banned = db.session.query(User.Users).filter(User.Users.email == data['banned_email']).first()
+    if banned == None:
+      return {"message": "Banned email invalid"}, 400
+    
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == banned.id).first()
+    if banned == None:
+      return {"message": "Haven't banned before"}, 400
 
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
-  def post(self):
-    data = user_ns.payload
-
-    # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
-
-    if not auth_correct:
-      return {"message", message}, 400
-
-    # check the movie id valid
-    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
-    if movie == None:
-      return {"message": "Invalid movie id"}, 400
-
-    # check the movie not in the droppedlist
-    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
-    if movie in user.user_dropped_list:
-      return {"message": "Movie already in dropped list"}, 400
-
-    if movie in user.user_watched_list:
-      user.user_watched_list.remove(movie)
-
-    if movie in user.user_wish_list:
-      user.user_wish_list.remove(movie)
-
-    # check the movie in the dropped list or the wish list
-    user.user_dropped_list.append(movie)
+    db.session.delete(banned)
     db.session.commit()
-    return {"message": "Succeffully"}, 200
-
-  @user_ns.response(200, "Successfully")
-  @user_ns.response(400, "Something wrong")
-  @user_ns.expect(UserNS.movie_list_form, validate=True)
-  def delete(self):
-    data = user_ns.payload
-
-    # check auth
-    message, auth_correct = check_auth(data["email"], data['token'])
-
-    if not auth_correct:
-      return {"message", message}, 400
-
-    # check the movie id valid
-    movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
-    if movie == None:
-      return {"message": "Invalid movie id"}, 400
-
-    # check the movie not in the droppedlist
-    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
-    if movie not in user.user_dropped_list:
-      return {"message": "Movie not in dropped list"}, 400
-
-    # check the movie in the dropped list or the wish list
-    user.user_dropped_list.remove(movie)
-    db.session.commit()
-    return {"message": "Succeffully"}, 200
+    return {"message": "Successfully"}, 200
