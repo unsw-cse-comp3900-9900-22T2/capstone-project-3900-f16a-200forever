@@ -216,7 +216,7 @@ class AttempEvent(Resource):
 
     # check the status
     if event_attemp.event_status != 'attemping':
-      return {"messagr": "Have finished the event"}, 400
+      return {"message": "Have finished the event"}, 400
 
     # check the time 
     diff = (now - event_attemp.start_time).seconds
