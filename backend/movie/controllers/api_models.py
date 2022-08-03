@@ -1,8 +1,6 @@
-from attr import field
 from flask_restx import Namespace
 from .models_format import login, validation, event_detail, register, send_email, reset_password, forgot_password, \
   attemp_event, finish_event, delete_thread, forum_admin, post_thread, follow
-from numpy import require
 
 class AuthNS:
   auth_ns = Namespace("Auth", description="the api of normal user authentication")

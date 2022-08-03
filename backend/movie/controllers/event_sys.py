@@ -7,7 +7,6 @@ from datetime import datetime
 from movie.models import user as User
 from movie.models import event as Event
 from movie.models import movie as Movie
-from numpy import character, require
 from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_valid, user_is_admin, check_correct_answer, user_has_login
 from movie.utils.movie_until import movie_id_valid, format_movie_return_list

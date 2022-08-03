@@ -1,5 +1,4 @@
 import imp
-from numpy import require
 from .api_models import PersonNS
 from flask_restx import Resource, reqparse
 from movie.models import person as Person
