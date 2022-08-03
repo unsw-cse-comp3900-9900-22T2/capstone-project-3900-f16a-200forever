@@ -71,7 +71,6 @@ class EventCreate(Resource):
     if not auth_correct:
       return {"message": message}, 400
 
-    
     # check the user is admin
     if not user_is_admin(data['email']):
       return {"message": "the user is not the admin, no permission"}, 400
@@ -173,7 +172,7 @@ class AttempEvent(Resource):
     # attemp the event
     user_id = get_user_id(data['email'])
     if user_id == None:
-      return {"message": "user id not valie"}, 400
+      return {"message": "user does not exist"}, 400
 
     data['user_id'] = user_id
     data['start_time'] = now
@@ -207,7 +206,7 @@ class AttempEvent(Resource):
     duration = event.duration
     user_id = get_user_id(data['email'])
     if user_id == None:
-      return {"message": "user id not valie"}, 400
+      return {"message": "user does not exist"}, 400
 
     # check the user have attemped the event or not
     event_attemp = db.session.query(User.UserEvent).filter(User.UserEvent.event_id == data['event_id'], \

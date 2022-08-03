@@ -29,6 +29,7 @@ def create_event(event_id, event):
     for que in list(questions):
       que = dict(que)
       if not check_correct_answer(int(que['correct_answer'])):
+        print("hi")
         return False
       que_id = str(uuid.uuid4())
       que['id'] = que_id
