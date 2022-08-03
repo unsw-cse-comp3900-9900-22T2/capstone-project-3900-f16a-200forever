@@ -384,12 +384,11 @@ class DroppedMovieList(Resource):
     args = parser.parse_args()
     email = args['email']
 
-    # 1. check the user is valid or not
+    # check the user is valid or not
     user = db.session.query(User.Users).filter(User.Users.email == email).first()
     if user == None:
       return {"message": "User do not exist!"},400
 
-    # return
     result = convert_model_to_dict(user.user_dropped_list)
     return {"movies": result}, 200
 
@@ -399,13 +398,13 @@ class DroppedMovieList(Resource):
   def post(self):
     data = user_ns.payload
 
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # # check user login
+    # if not user_has_login(data['email'], session):
+    #     return {"message": "the user has not logined"}, 400
 
-    # check user token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
+    # # check user token valid
+    # if not user_is_valid(data):
+    #     return {"message": "the token is incorrect"}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
@@ -434,13 +433,13 @@ class DroppedMovieList(Resource):
   def delete(self):
     data = user_ns.payload
 
-    # check user login
-    if not user_has_login(data['email'], session):
-        return {"message": "the user has not logined"}, 400
+    # # check user login
+    # if not user_has_login(data['email'], session):
+    #     return {"message": "the user has not logined"}, 400
 
-    # check user token valid
-    if not user_is_valid(data):
-        return {"message": "the token is incorrect"}, 400
+    # # check user token valid
+    # if not user_is_valid(data):
+    #     return {"message": "the token is incorrect"}, 400
 
     # check the movie id valid
     movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == data['movie_id']).first()
