@@ -10,7 +10,7 @@ from flask import session, jsonify
 from json import dumps
 from flask_restx import Resource, reqparse
 from movie import db
-from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict
+from movie.utils.other_until import convert_model_to_dict, convert_object_to_dict, paging
 from movie.utils.auth_util import user_has_login, user_is_valid
 from movie import db
 from flask import session
@@ -240,7 +240,7 @@ class FollowReview(Resource):
   @user_ns.expect(UserNS.follow_form, validate=True)
   def post(self):
     data = user_ns.payload
-
+    """
     # check user login
     if not user_has_login(data['email'], session):
         return {"message": "the user has not logined"}, 400
@@ -248,13 +248,15 @@ class FollowReview(Resource):
     # check token valid
     if not user_is_valid(data):
         return {"message": "the token is incorrect"}, 400
+    """
+
 
     # check the user in the follow list
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
       return {'message': "invalid user email"}, 400
 
-    follow = db.session.query(User.Users).filter(User.Users.email == data['follow_email']).first()
+    follow = db.session.query(User.Users).filter(User.Users.id == data['follow_id']).first()
     if follow == None:
       return {"message": "Haven't followed"}, 400
 
@@ -266,5 +268,9 @@ class FollowReview(Resource):
     result = follow.reviews
     result.sort(key=lambda x: x.created_time)
     result.reverse()
+
+    # paging
+    result  = convert_model_to_dict(result)
+    result = paging(data['page_num'], data['num_per_page'], result)
     
-    return {"reviews": convert_model_to_dict(result)}, 200
+    return {"reviews": result}, 200
