@@ -323,8 +323,8 @@ class ReviewAdmin(Resource):
     # check auth
     message, auth_correct = check_auth(data["admin_email"], data['token'])
 
-    #if not auth_correct:
-    #  return {"message": message}, 400
+    if not auth_correct:
+      return {"message": message}, 400
 
     # check is admin
     admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['admin_email']).first()
@@ -354,4 +354,4 @@ class ReviewAdmin(Resource):
         user.is_review_admin = 0
 
     db.session.commit()
-    return {'message': "User is now review admin"}, 200
+    return {'message': "User now is not a review admin"}, 200
