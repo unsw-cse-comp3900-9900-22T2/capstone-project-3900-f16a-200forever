@@ -16,7 +16,7 @@ thread_ns = ThreadNS.thread_ns
 
 #----------------GET ALL THREADS------------------
 @thread_ns.route('')
-class ThreadManager(Resource):
+class Threads(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):
@@ -55,7 +55,7 @@ class ThreadManager(Resource):
 
 #----------------Thread Manager------------------
 @thread_ns.route('/thread')
-class ThreadController(Resource):
+class ThreadManager(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   def get(self):

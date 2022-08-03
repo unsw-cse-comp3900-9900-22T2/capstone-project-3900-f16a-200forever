@@ -44,7 +44,6 @@ class Questions(db.Model):
   event = db.relationship("Events", back_populates="questions", lazy=True)
   event_id = db.Column('event_id', db.String(256), db.ForeignKey('t_events.id'), nullable=False)
 
-
   def __repr__(self):
     return '<Question id:{} event id:{}>'.format(self.id, self.event_id)
   
@@ -56,8 +55,6 @@ class Questions(db.Model):
     self.choice_3 = data['choice_3']
     self.correct_answer = data['correct_answer']
     self.event_id = data['event_id']
-
-
 
 class EventMovie(db.Model):
   __tablename__ = 'r_event_movie'
