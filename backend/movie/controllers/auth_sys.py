@@ -64,13 +64,11 @@ class RegisterController(Resource):
     print(new_user)
 
     # generate token, save to redis
-    token = generate_token(email)
-    print(token)
-    redis_cli.set(email, token)
+    #token = generate_token(email)
+    #print(token)
+    #redis_cli.set(email, token)
 
-    return {
-        'token': generate_token(email),
-        'name': new_user.name
+    return {"message": "Successfullly"
     }, 200
 
 
