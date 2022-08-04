@@ -5,7 +5,7 @@ class Persons(db.Model):
   __tablename__ = 't_persons'
   id = db.Column('id', db.Integer, primary_key=True)
   name = db.Column('name', db.String(256), nullable=False)
-  gender = db.Column('gender', db.Integer)
+  gender = db.Column('gender', db.String(256))
   profile_path = db.Column('profile_path', db.String(256))
   director_movie_rel = db.relationship(
         "Movies",
