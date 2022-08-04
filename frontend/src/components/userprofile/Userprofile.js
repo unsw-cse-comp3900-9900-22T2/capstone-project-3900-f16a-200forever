@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import TextField from "@mui/material/TextField";
+import { Paper } from "@mui/material";
+import MovieCard from "../movie/MovieCard";
 
 function fileToDataUrl(file) {
   const validFileTypes = [ 'image/jpeg', 'image/png', 'image/jpg' ]
@@ -33,8 +35,9 @@ const Userprofile = ({ setAlertInfo }) => {
 	const [newInfo, setNewInfo] = useState({});
 	const [isEdit, setIsEdit] = useState(false);
 	const [base64, setBase64] = useState("");
-	const [list, setList] = useState([]);
-	const [reviews, setReviews] = useState([]);
+	const [wishlist, setWishlist] = useState([]);
+	const [watchedlist, setWatchedlist] = useState([]);
+	const [droppedlist, setDroppedlist] = useState([]);
 	const [isError, setIsError] = useState(false);
 	const navigate = useNavigate();
 
@@ -66,6 +69,63 @@ const Userprofile = ({ setAlertInfo }) => {
           msg: error.response.data.message
         });
 			});
+
+		if (localStorage.getItem("email") !== null) {
+			axios
+				.get("http://127.0.0.1:8080/user/movielist", {
+					params: {
+						"user_id": id,
+						"type": "wish"
+					}
+				})
+				.then(function (response) {
+					// console.log(response.data);
+					setWishlist(response.data.movies)
+				})
+				.catch(function (error) {
+					console.log(error.response);
+					setAlertInfo({
+						status: 3,
+						msg: error.response.data.message
+					});
+				});
+			axios
+				.get("http://127.0.0.1:8080/user/movielist", {
+					params: {
+						"user_id": id,
+						"type": "watched"
+					}
+				})
+				.then(function (response) {
+					console.log(response.data);
+					setWatchedlist(response.data.movies)
+				})
+				.catch(function (error) {
+					console.log(error.response);
+					setAlertInfo({
+						status: 3,
+						msg: error.response.data.message
+					});
+				});
+			axios
+				.get("http://127.0.0.1:8080/user/movielist", {
+					params: {
+						"user_id": id,
+						"type": "dropped"
+					}
+				})
+				.then(function (response) {
+					console.log(response.data);
+					setDroppedlist(response.data.movies)
+				})
+				.catch(function (error) {
+					console.log(error.response);
+					setAlertInfo({
+						status: 3,
+						msg: error.response.data.message
+					});
+				});
+		}
 	}, [])
 
 	const changeProfile = () => {
@@ -115,30 +175,141 @@ const Userprofile = ({ setAlertInfo }) => {
 			});
 	}
 
-	const getList = (is_follow) => {
-		console.log(is_follow)
-		var type = ''
-		if (is_follow === 1) {
-			type = "follow"
-		} else {
-			type = "ban"
+	const followUser = () => {
+		if (localStorage.getItem("token") === null) {
+			setAlertInfo({
+				status: 2,
+				msg: "Please login"
+			});
+			return;
 		}
+		setAlertInfo({
+			status: 2,
+			msg: "wating"
+		});
 		axios
-			.get(`http://127.0.0.1:8080/user/${type}list`, {
-				params: {
-					"user_id": localStorage.getItem("id")
-				}
-			})
+      .post("http://127.0.0.1:8080/user/followlist", {
+        email: localStorage.getItem("email"),
+				token: localStorage.getItem("token"),
+				follow_id: id
+      })
+      .then(function (response) {
+        console.log(response);
+				setAlertInfo({
+					status: 1,
+					msg: response.data.message
+				});
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        setAlertInfo({
+          status: 3,
+          msg: error.response.data.message,
+        });
+      });
+	}
+
+	const banUser = () => {
+		if (localStorage.getItem("token") === null) {
+			setAlertInfo({
+				status: 2,
+				msg: "Please login"
+			});
+			return;
+		}
+		setAlertInfo({
+			status: 2,
+			msg: "wating"
+		});
+		axios
+      .post("http://127.0.0.1:8080/user/bannedlist", {
+        email: localStorage.getItem("email"),
+				token: localStorage.getItem("token"),
+				banned_id: id
+      })
+      .then(function (response) {
+        console.log(response);
+				setAlertInfo({
+					status: 1,
+					msg: response.data.message
+				});
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        setAlertInfo({
+          status: 3,
+          msg: error.response.data.message,
+        });
+      });
+	}
+
+	const unfollowUser = () => {
+		if (localStorage.getItem("token") === null) {
+			setAlertInfo({
+				status: 2,
+				msg: "Please login"
+			});
+			return;
+		}
+		setAlertInfo({
+			status: 2,
+			msg: "wating"
+		});
+		axios
+			.delete("http://127.0.0.1:8080/user/followlist", {
+				data:{
+					email: localStorage.getItem("email"),
+					token: localStorage.getItem("token"),
+					follow_id: id
+			}})
 			.then(function (response) {
 				console.log(response.data);
-				// todo
+				setAlertInfo({
+					status: 1,
+					msg: response.data.message
+				});
 			})
 			.catch(function (error) {
 				console.log(error.response);
 				setAlertInfo({
-          status: 3,
-          msg: error.response.data.message
-        });
+					status: 3,
+					msg: error.response.data.message
+				});
+			});
+	}
+
+	const unbanUser = () => {
+		if (localStorage.getItem("token") === null) {
+			setAlertInfo({
+				status: 2,
+				msg: "Please login"
+			});
+			return;
+		}
+		setAlertInfo({
+			status: 2,
+			msg: "wating"
+		});
+		axios
+			.delete("http://127.0.0.1:8080/user/bannedlist", {
+				data:{
+					email: localStorage.getItem("email"),
+					token: localStorage.getItem("token"),
+					banned_id: id
+			}})
+			.then(function (response) {
+				console.log(response.data);
+				setAlertInfo({
+					status: 1,
+					msg: response.data.message
+				});
+			})
+			.catch(function (error) {
+				console.log(error.response);
+				setAlertInfo({
+					status: 3,
+					msg: error.response.data.message
+				});
 			});
 	}
 
@@ -146,6 +317,7 @@ const Userprofile = ({ setAlertInfo }) => {
 		<>
 		{
 			isEdit === false ?
+			<>
 				<Grid container spacing={2}>
 				<Grid item xs={4}>
 					<Avatar 
@@ -168,13 +340,6 @@ const Userprofile = ({ setAlertInfo }) => {
 						<Typography variant="h6" component="div" sx={{ mb: 2 }}>
 							signature: {profile.signature}
 						</Typography>
-					</Grid>
-					<Grid item xs={12}>
-						<ButtonGroup variant="outlined" aria-label="outlined button group">
-							<Button>WishList</Button>
-							<Button>Watchedlist</Button>
-							<Button>dropedlist</Button>
-						</ButtonGroup>
 					</Grid>
 					<Grid item justifyContent="left">
 						<Typography variant="h6" component="div" sx={{ mb: 2 }}>
@@ -201,10 +366,10 @@ const Userprofile = ({ setAlertInfo }) => {
 										aria-label="vertical outlined button group"
 									>
 										{/* todo */}
-										<Button onClick={()=> { getList(1) }}>
+										<Button onClick={()=> { navigate(`/user/follow/${id}`) }}>
 											Follow list
 										</Button>
-										<Button onClick={()=> { getList(0) }}>
+										<Button onClick={()=> { navigate(`/user/ban/${id}`) }}>
 											Banlist
 										</Button>
 										<Button onClick={()=> { navigate(`/user/recommend/${id}`)}}>
@@ -220,20 +385,83 @@ const Userprofile = ({ setAlertInfo }) => {
 										aria-label="vertical outlined button group"
 									>
 										{/* todo */}
-										<Button onClick={()=> { getList(1) }}>
+										<Button onClick={followUser}>
 											Follow
 										</Button>
-										<Button onClick={()=> { getList(0) }}>
+										<Button onClick={banUser}>
 											ban
+										</Button>
+										<Button onClick={unfollowUser}>
+											unFollow
+										</Button>
+										<Button onClick={unbanUser}>
+											unban
 										</Button>
 									</ButtonGroup> 
 							}
 						</Box>
 					</Grid>
 				</Grid>
+				
+			
 			</Grid> 
+				<Paper elevation={6} sx={{ mt: 4 }}>
+          <Grid container xs={12} direction="row" alignItems="flex-start">
+            <Grid item xs={12}>
+              <Typography gutterBottom variant="h5" component="div" sx={{ ml: 4, mt: 4}}>
+                Wishlist movies
+              </Typography>
+            </Grid>
+            {
+              wishlist.map((movie) => {
+                return (
+                  <Grid item xs={3} sx={{ mb: 2}}>
+                    <MovieCard data={movie}></MovieCard>
+                  </Grid>
+                )
+              })
+            }
+          </Grid>
+				</Paper>
 
+				<Paper elevation={6} sx={{ mt: 4 }}>
+          <Grid container xs={12} direction="row" alignItems="flex-start">
+            <Grid item xs={12}>
+              <Typography gutterBottom variant="h5" component="div" sx={{ ml: 4, mt: 4}}>
+                watched movies
+              </Typography>
+            </Grid>
+            {
+              watchedlist.map((movie) => {
+                return (
+                  <Grid item xs={3} sx={{ mb: 2}}>
+                    <MovieCard data={movie}></MovieCard>
+                  </Grid>
+                )
+              })
+            }
+          </Grid>
+				</Paper>
 
+				<Paper elevation={6} sx={{ mt: 4 }}>
+          <Grid container xs={12} direction="row" alignItems="flex-start">
+            <Grid item xs={12}>
+              <Typography gutterBottom variant="h5" component="div" sx={{ ml: 4, mt: 4}}>
+                Dropped movies
+              </Typography>
+            </Grid>
+            {
+              droppedlist.map((movie) => {
+                return (
+                  <Grid item xs={3} sx={{ mb: 2}}>
+                    <MovieCard data={movie}></MovieCard>
+                  </Grid>
+                )
+              })
+            }
+          </Grid>
+				</Paper>
+			</>
 			: 
 				<Grid container spacing={2}>
 					<Grid item container xs={4} spacing={2}>
@@ -359,10 +587,6 @@ const Userprofile = ({ setAlertInfo }) => {
 							}}
 						/>
 					</Grid>
-
-
-
-
 				</Grid>
 
 				<Grid container item xs={2} zeroMinWidth sx={{ mt: 3 }}>

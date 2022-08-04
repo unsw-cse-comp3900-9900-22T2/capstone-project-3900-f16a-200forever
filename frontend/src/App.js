@@ -27,6 +27,10 @@ import AdminEventDetail from "./components/admin/AdminEventDetail";
 import EventHome from "./components/event/EventHome";
 import EventDetail from "./components/event/EventDetail";
 import AdminEventCreate from "./components/admin/AdminEventCreate";
+import FollowList from "./components/userprofile/FollowList";
+import BanList from "./components/userprofile/BanList";
+import AdminPromote from "./components/admin/AdminPromote";
+import AdminDemote from "./components/admin/AdminDemote";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -83,9 +87,13 @@ function App() {
           <Route path='/post/:id' element={<PostPage setAlertInfo={setAlertInfo}/>}/>
           <Route path='/userprofile/:id' element={<Userprofile setAlertInfo={setAlertInfo}/>}/>
           <Route path='/user/recommend/:id' element={<UserRecomm setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/user/follow/:id' element={<FollowList setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/user/ban/:id' element={<BanList setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/login' element={<AdminLogin setAuth={setAuth} setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/home' element={<AdminHome setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/events' element={<AdminEventHome setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/promote' element={<AdminPromote setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/demote' element={<AdminDemote setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/event/:id' element={<AdminEventDetail setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/event/create' element={<AdminEventCreate setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>

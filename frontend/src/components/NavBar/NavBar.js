@@ -206,7 +206,7 @@ const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={() => { navigate(`/userprofile/${localStorage.getItem("id")}`); setAnchorElUser(null); }}>
+              <MenuItem onClick={() => { navigate(`/userprofile/${localStorage.getItem("id")}`); setAnchorElUser(null); navigate(0);}}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
               <MenuItem onClick={logout}>

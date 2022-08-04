@@ -45,7 +45,7 @@ const Login = ({ setAuth, setAlertInfo }) => {
       .catch(function (error) {
         console.log(error.response.data);
         setAlertInfo({
-          status: 2,
+          status: 3,
           msg: error.response.data.message,
         });
       });

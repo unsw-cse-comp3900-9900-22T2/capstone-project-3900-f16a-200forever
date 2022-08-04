@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import image from "../../asset/NoMovieImg.png";
-import Container from '@mui/material/Container';
 import Rating from '@mui/material/Rating';
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
@@ -17,7 +16,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Paper } from "@mui/material";
 import Pagination from '@mui/material/Pagination';
-
 import Grid from '@mui/material/Grid';
 import MovieCard from "./MovieCard";
 import MovieReview from "./MovieReview";
@@ -134,11 +132,50 @@ const MovieDetails = ({ setAlertInfo }) => {
       });
   }
 
+  const removeList = (option) => {
+    if (localStorage.getItem("token") === null) {
+      setAlertInfo({
+        status: 2,
+        msg: "Please login",
+      });
+      return;
+    }
+    var type = "";
+    if (option === 0) {
+      type = "wishlist"
+    } else if (option === 1) {
+      type = "watchedlist"
+    } else {
+      type = "droppedlist"
+    }
+    axios
+      .delete(`http://127.0.0.1:8080/user/${type}`, {
+        data: {
+          email: localStorage.getItem("email"),
+          token: localStorage.getItem("token"),
+          movie_id: parseInt(id)
+        }})
+      .then(function (response) {
+        console.log(response);
+        setAlertInfo({
+          status: 1,
+          msg: response.data.message
+        })
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        setAlertInfo({
+          status: 3,
+          msg: error.response.data.message,
+        });
+      });
+  }
+  
   const sendReview = () => {
     if (!review.replace(/\s/g, "").length || rating === null) {
       setAlertInfo({
         status: 2,
-        msg: "Please enter valid review",
+        msg: "Please enter valid review.",
       });
       return;
     }
@@ -205,7 +242,7 @@ const MovieDetails = ({ setAlertInfo }) => {
 
               <Grid item xs={12} sx={{ ml: 4, mt: 2}}>
                 <Typography gutterBottom variant="h6" component="div">
-                  Release_status: {movieInfo.release_status}
+                  Release status: {movieInfo.release_status}
                 </Typography>
               </Grid>
 
@@ -229,9 +266,10 @@ const MovieDetails = ({ setAlertInfo }) => {
               {
                 movieInfo.genres.map((genre) => {
                   return (
-                    <Grid item xs={12}>
-                      <Typography gutterBottom variant="body1" component="div" sx={{ ml: 8}}>
-                        {genre}
+                    <Grid item xs={12} >
+                      <Typography gutterBottom variant="body1" component="div" sx={{ ml: 8}} 
+                        onClick={() => { navigate(`/genre/${genre.name.toLowerCase()}/${genre.id}`)}}>
+                        {genre.name}
                       </Typography>
                     </Grid>
                   )
@@ -311,7 +349,23 @@ const MovieDetails = ({ setAlertInfo }) => {
               </Grid>
               <Grid xs={12}>
                 <Button variant="contained" onClick={() => { addToList(2)}} sx={{ minWidth: 230, mt: 3 }}>
-                  add to drop list
+                  add to dropped list
+                </Button>
+              </Grid>
+
+              <Grid xs={12}>
+                <Button variant="contained" onClick={() => { removeList(0)}} sx={{ minWidth: 230, mt: 5 }}>
+                  remove from wishlist
+                </Button>
+              </Grid>
+              <Grid xs={12}>
+                <Button variant="contained" onClick={() => { removeList(1)}} sx={{ minWidth: 230, mt: 3 }}>
+                  remove from watched list
+                </Button>
+              </Grid>
+              <Grid xs={12}>
+                <Button variant="contained" onClick={() => { removeList(2)}} sx={{ minWidth: 230, mt: 3 }}>
+                  remove from dropped list
                 </Button>
               </Grid>
             </Grid>         

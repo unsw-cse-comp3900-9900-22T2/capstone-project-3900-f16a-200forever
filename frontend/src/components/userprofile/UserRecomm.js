@@ -41,7 +41,7 @@ const UserRecomm = ({ setAlertInfo }) => {
 				Guses what you like
 			</Typography>
 			<FormControl>
-				<FormLabel id="demo-row-radio-buttons-group-label" sx={{ mb: 1 }}>Recommend by</FormLabel>
+				<FormLabel sx={{ mb: 1 }}>Recommend by</FormLabel>
 				<RadioGroup
 					row
 					aria-labelledby="demo-row-radio-buttons-group-label"

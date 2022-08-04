@@ -24,25 +24,25 @@ const AdminHome = () => {
         </Grid>
 				{/* todo */}
         <Grid item xs={4}>
-					<Card sx={{ minWidth: 275 }}>
+					<Card sx={{ minWidth: 275 }} onClick={() => { navigate('/admin/promote') }}>
 						<CardContent>
 							<Typography variant="h4" component="div">
 								Set admins
 							</Typography>
 							<Typography variant="body2" sx={{ mt: 3}}>
-								Manage event system
+								Promote a regular user with authority
 							</Typography>
 						</CardContent>
 					</Card>
         </Grid>
         <Grid item xs={4}>
-					<Card sx={{ minWidth: 275 }}>
+					<Card sx={{ minWidth: 275 }}  onClick={() => { navigate('/admin/demote') }}>
 						<CardContent>
 							<Typography variant="h4" component="div">
-								EVENT
+								Unset admins
 							</Typography>
 							<Typography variant="body2" sx={{ mt: 3}}>
-								Manage event system
+								Remove user's authority
 							</Typography>
 						</CardContent>
 					</Card>
