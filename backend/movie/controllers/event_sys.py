@@ -9,7 +9,7 @@ from fuzzywuzzy import process
 from movie.utils.auth_util import user_is_admin, check_auth
 from movie.utils.movie_util import format_movie_return_list
 from movie.utils.other_util import  convert_object_to_dict
-from movie.utils.event_util import create_event
+from movie.utils.event_util import create_event, update_event_status
 from movie.utils.user_util import  get_user_id, get_image
 from .api_models import EventNS
 import uuid
@@ -24,6 +24,8 @@ class GetAllEvents(Resource):
   @event_ns.response(200, "Successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):
+    # update the event status, change to closed if due
+    update_event_status()
     events = db.session.query(Event.Events).filter(Event.Events.event_status == 'open').all()
     result = []
     for event in events:
@@ -38,6 +40,8 @@ class GetEventDetail(Resource):
   @event_ns.response(200, "Successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):
+    # update the event status, change to closed if due
+    update_event_status()
     parser = reqparse.RequestParser()
     parser.add_argument('id', type=str, location='args', required=True)
     args = parser.parse_args()
@@ -85,6 +89,8 @@ class Search(Resource):
   @event_ns.response(200, "Search successfully")
   @event_ns.response(400, "Something wrong")
   def get(self):   
+    # update the event status, change to closed if due
+    update_event_status()
     parser = reqparse.RequestParser()
     parser.add_argument('keyword', type=str, location='args', required=True)
     args = parser.parse_args()
@@ -154,6 +160,8 @@ class AttempEvent(Resource):
   @event_ns.response(400, "Something wrong")
   @event_ns.expect(EventNS.attemp_event_form, validate=True)
   def post(self):
+    # update the event status, change to closed if due
+    update_event_status()
     now = datetime.now()
     data = event_ns.payload
  
@@ -167,6 +175,8 @@ class AttempEvent(Resource):
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
       return {"message": "Event not exists"}, 400
+    if event.status == "closed":
+      return {"message": "event has been closed"}, 400
 
     # attemp the event
     user_id = get_user_id(data['email'])

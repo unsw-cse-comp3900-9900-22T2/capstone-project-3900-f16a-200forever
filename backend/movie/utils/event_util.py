@@ -1,3 +1,4 @@
+from datetime import datetime
 from movie import db
 from flask import session
 from movie.models import event as Event
@@ -52,3 +53,10 @@ def create_event(event_id, event):
     db.session.rollback()
     return False
   return True
+
+def update_event_status():
+  now = str(datetime.now()).split(' ')[0]
+  events = db.session.query(Event.Events).filter(Event.Events.deadline > now)
+  for event in events:
+    event.status = "closed"
+    db.session.commit()
