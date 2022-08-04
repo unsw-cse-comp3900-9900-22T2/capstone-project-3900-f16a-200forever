@@ -24,5 +24,5 @@ class PersonDetail(Resource):
     if person == None:
       return {"message": f"Person of id = {id} do not exist"}, 400
     data = convert_object_to_dict(person)
-    data["gender"] = get_gender(data["gender"])
+    #data["gender"] = get_gender(data["gender"])
     return data, 200
