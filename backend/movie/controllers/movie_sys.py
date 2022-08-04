@@ -170,7 +170,7 @@ class MovieDetails(Resource):
     movie_detail = convert_object_to_dict(select_movie)
     movie_detail['total_rating'] = total_rating
     movie_detail['rating_count'] = rating_count
-    movie_detail['actors']: movie_actors
-    movie_detail['directors']: movie_directors
+    movie_detail['actors'] = movie_actors
+    movie_detail['directors'] = movie_directors
 
     return movie_detail, 200
