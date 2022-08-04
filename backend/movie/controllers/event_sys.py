@@ -53,10 +53,25 @@ class GetEventDetail(Resource):
     
     data = convert_object_to_dict(event)
     data['image'] = get_image(data['image'])
-    questions = {}
-    for que in event.questions:
-      questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
-    data["questions"] = questions
+    data['movies'] = [{ "id": str(m.id), "name": m.title } for m in event.movies]
+    # questions = {}
+    # for que in event.questions:
+    #   questions[que.content] = [que.choice_1, que.choice_2, que.choice_3]
+    # data["questions"] = questions
+    data["questions"] = [{
+      "question": q.content,
+      "id": q.id,
+      "choices": [{
+        "choice": q.choice_1,
+        "num": 1
+      }, {
+        "choice": q.choice_2,
+        "num": 2
+      }, {
+        "choice": q.choice_3,
+        "num": 3
+      }]
+    } for q in event.questions]
     return data, 200
 
 #--------------------MANAGE EVENT--------------------
