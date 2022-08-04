@@ -1,10 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import Typography from '@mui/material/Typography';
 import axios from "axios";
-import { Box, Button, Paper, Select, InputLabel,ImageListItem, ImageList } from "@mui/material";
+import { Box, Button, Paper,ImageListItem, ImageList } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
@@ -47,32 +46,62 @@ const EventDetail = ({ setAlertInfo }) => {
 	}, []);
 
 	const submit = (event) => {
-		
+		event.preventDefault();
+    const data = new FormData(event.currentTarget);
+		const body = {
+			email: localStorage.getItem("email"),
+			token: localStorage.getItem("token"),
+			event_id: id,
+			answers: {}
+		}
+		body.answers[info.questions[0].id] = data.get("q1a");
+		body.answers[info.questions[1].id] = data.get("q2a");
+		body.answers[info.questions[2].id] = data.get("q3a");
+		body.answers[info.questions[3].id] = data.get("q4a");
+		body.answers[info.questions[4].id] = data.get("q5a");
+		axios
+			.post("http://127.0.0.1:8080/event/finish", body)
+			.then(function (response) {
+				console.log(response);
+				setAlertInfo({
+					status: 1,
+					msg: "Congrats! You passed!"
+				});
+				navigate("/events");
+			})
+			.catch(function (error) {
+				console.log(error.response.data);
+				setAlertInfo({
+					status: 3,
+					msg: error.response.data.message,
+				});
+				navigate("/events")
+			});
 	}
 
 	const attemp = () => {
+		setAlertInfo({
+			status: 2,
+			msg: "operating"
+		});
 		setBegin(true);
-		// axios
-		// 	.post("http://127.0.0.1:8080/event/attemp", {
-		// 		email: data.get("email"),
-		// 		password: data.get("password"),
-		// 		is_admin: false,
-		// 	})
-		// 	.then(function (response) {
-		// 		console.log(response);
-		// 		setAlertInfo({
-		// 			status: 1,
-		// 			msg: "Login successfully!",
-		// 		});
-		// 		navigate("/");
-		// 	})
-		// 	.catch(function (error) {
-		// 		console.log(error.response.data);
-		// 		setAlertInfo({
-		// 			status: 2,
-		// 			msg: error.response.data.message,
-		// 		});
-		// 	});
+		axios
+			.post("http://127.0.0.1:8080/event/attemp", {
+				email: localStorage.getItem("email"),
+				token: localStorage.getItem("token"),
+				event_id: id
+			})
+			.then(function (response) {
+				console.log(response);
+				setBegin(true);
+			})
+			.catch(function (error) {
+				console.log(error.response.data);
+				setAlertInfo({
+					status: 3,
+					msg: error.response.data.message,
+				});
+			});
 	}
 
   return (
@@ -636,8 +665,6 @@ const EventDetail = ({ setAlertInfo }) => {
 				</Grid>
 			</Box>
 			}
-			
-			
 		</>
   )
 };
