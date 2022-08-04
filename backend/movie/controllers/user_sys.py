@@ -169,7 +169,7 @@ class FollowListManage(Resource):
     # check follow valid
     follow = db.session.query(User.Users).filter(User.Users.id == data['follow_id']).first()
     if follow == None:
-      return {"message": "Follow email invalid"}, 400
+      return {"message": "User does not exist"}, 400
 
     # check follow itself
     if data['email'] == follow.email:
@@ -257,7 +257,7 @@ class FollowReview(Resource):
 
     reviews.sort(key=lambda x: x["created_time"])
     reviews.reverse()
-    print(reviews)
+    # print(reviews)
     
     return {"reviews": reviews}, 200
 
@@ -275,7 +275,7 @@ class BannedlistController(Resource):
     # 1. check the user is valid or not
     user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if user == None:
-      return {"message": "the user not exist"},400
+      return {"message": "user does not exist"},400
     
     result = []
     for ban in user.user_banned_list:
@@ -301,29 +301,30 @@ class BannedlistController(Resource):
     if not auth_correct:
       return {"message": message}, 400
 
-    user_id = get_user_id(data['email'])
-    if user_id == None:
-      return {"message": "user id not valie"}, 400
+    banned_id = data['banned_id']
+    # check ban valid
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    if user == None:
+      return {"message": "User does not exist"}, 400
+
+    banned_res = db.session.query(User.Users).filter(User.BannedList.banned_user_id == banned_id).first()
+    if banned_res != None:
+      return {"message": "Already banned"}, 400
+
+    banned = db.session.query(User.Users).filter(User.Users.id == banned_id).first()
+    if banned == None:
+      return {"message": "Banned user dose not exist"}, 400
 
     # check ban itself
-    if data['email'] == data['banned_email']:
+    if data['email'] == banned.email:
       return {"message": "Cannot ban self"}, 400
 
-    # check banned email valid
-    banned = db.session.query(User.Users).filter(User.Users.email == data['banned_email']).first()
-    if banned == None:
-      return {"message": "Banned email invalid"}, 400
-
-    banned_id = get_user_id(data['banned_email'])
-    if banned_id == None:
-      return {"message": "user id not valie"}, 400
-    
     # check if user already in banned list
-    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user_id, User.BannedList.banned_user_id == banned_id).first()
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == banned_id, User.BannedList.banned_user_id == banned_id).first()
     if banned != None:
       return {'message': 'User already in banned list'}, 400
 
-    data['user_id'] = user_id
+    data['user_id'] = user.id
     data['banned_user_id'] = banned_id
     entry = User.BannedList(data)
     db.session.add(entry)
@@ -336,7 +337,6 @@ class BannedlistController(Resource):
   @user_ns.expect(UserNS.banned_form, validate=True)
   def delete(self):
     data = user_ns.payload
-
     # check auth
     message, auth_correct = check_auth(data['email'], data['token'])
 
@@ -346,11 +346,11 @@ class BannedlistController(Resource):
     # check ban valid
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
-      return {"message": "User email invalid"}
+      return {"message": "User does not exist"}, 400
 
-    banned = db.session.query(User.Users).filter(User.Users.email == data['banned_email']).first()
+    banned = db.session.query(User.Users).filter(User.Users.id == data['banned_id']).first()
     if banned == None:
-      return {"message": "Banned email invalid"}, 400
+      return {"message": "Banned user does not exist"}, 400
     
     banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == banned.id).first()
     if banned == None:

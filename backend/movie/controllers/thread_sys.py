@@ -208,7 +208,7 @@ class ThreadAdmin(Resource):
 
 #----------------REACT THREAD-----------------
 @thread_ns.route('/react')
-class ReactToComment(Resource):
+class ReactToThread(Resource):
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
   @thread_ns.expect(ThreadNS.thread_react_form, validate=True)
@@ -224,7 +224,7 @@ class ReactToComment(Resource):
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     if user == None:
       return {"message": "Invalid user"}, 400
-    # check comment valid
+    # check thread valid
     comment = db.session.query(Thread.Threads).filter(Thread.Threads.id == data['thread_id']).first()
     if comment == None:
       return {"message": "Thread not exist"}, 400
@@ -281,7 +281,7 @@ class CommentThread(Resource):
 
   @thread_ns.response(200, "Successfully")
   @thread_ns.response(400, 'Something went wrong')
-  @thread_ns.expect(ThreadNS.thread_comment_form, validate=True)
+  @thread_ns.expect(ThreadNS.delete_comment_form, validate=True)
   def delete(self):
     data = thread_ns.payload
     # check auth
@@ -289,18 +289,23 @@ class CommentThread(Resource):
 
     if not auth_correct:
       return {"message": str(message)}, 400
-    # check user valid
-    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
-    if user == None:
-      return {"message": "Invalid user"}, 400
+
     # check comment valid
     comment = db.session.query(Thread.ThreadComment).filter(Thread.ThreadComment.id == data['comment_id']).first()
     if comment == None:
       return {"message": "Comment not exist"}, 400
 
-    # check comment belongs to user
-    if comment.user_id != user.id:
-      return {"message": "You can't delete this comment"}, 400
+    # thread own by the user
+    user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    admin = None
+    if user == None:
+      admin = db.session.query(Admin.Admins).filter(Admin.Admins.email == data['email']).first()
+   
+    if user != None and comment.user_id != user.id and user.is_forum_admin != 1:
+      return {"message": 'No permission'}, 400
+
+    if user == None and admin == None:
+      return {"message": 'No permission'}, 400
 
     # delete comment
     db.session.delete(comment)

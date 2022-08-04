@@ -1,6 +1,3 @@
-from audioop import reverse
-from json import dumps
-from movie.utils.movie_util import movie_sort
 from .api_models import MovieNS
 from flask_restx import Resource, reqparse
 from movie import db
