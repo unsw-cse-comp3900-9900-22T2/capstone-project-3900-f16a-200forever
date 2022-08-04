@@ -21,7 +21,7 @@ const EventDetail = ({ setAlertInfo }) => {
 	const { id } = useParams();
 	const [info, setInfo] = useState({ movies: [], questions: [] })
 	const [begin, setBegin] = useState(false);
-	const [test, setTest] = useState("");
+	// const [test, setTest] = useState("");
 	const navigate = useNavigate();
 	
 	useEffect( () => {
@@ -34,7 +34,7 @@ const EventDetail = ({ setAlertInfo }) => {
 			.then(function (response) {
 				console.log(response.data);
 				setInfo(response.data)
-				setTest(response.data.topic)
+				// setTest(response.data.topic)
 			})
 			.catch(function (error) {
 				console.log(error.response);
