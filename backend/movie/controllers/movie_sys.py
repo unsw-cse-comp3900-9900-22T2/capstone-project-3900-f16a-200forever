@@ -133,11 +133,13 @@ class MovieDetails(Resource):
   
     movie_genre = []
     genre_result = db.session.query(Genre.Genres, Movie.MovieGenre, Movie.Movies
-    ).with_entities(Genre.Genres.name).filter(Movie.Movies.id == movie_id
+    ).with_entities(Genre.Genres.name, Genre.Genres.id).filter(Movie.Movies.id == movie_id
     ).filter(Movie.MovieGenre.movie_id == movie_id).filter(Movie.MovieGenre.genre_id == Genre.Genres.id).all()
     for genre in genre_result:
-      genre_name = genre.name
-      movie_genre.append(genre_name)
+      genre_info = {}
+      genre_info['id'] = genre .id
+      genre_info['name'] = genre.name
+      movie_genre.append(genre_info)
 
 
     movie_actors = []
@@ -168,9 +170,11 @@ class MovieDetails(Resource):
     # adjust for banned list
     (rating_count, total_rating) = get_movie_rating(args['user_id'], select_movie)
     movie_detail = convert_object_to_dict(select_movie)
+    movie_detail['genres'] = movie_genre
     movie_detail['total_rating'] = total_rating
     movie_detail['rating_count'] = rating_count
     movie_detail['actors'] = movie_actors
     movie_detail['directors'] = movie_directors
+
 
     return movie_detail, 200
