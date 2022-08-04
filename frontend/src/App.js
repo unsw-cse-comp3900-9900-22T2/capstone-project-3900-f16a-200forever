@@ -15,6 +15,7 @@ import SearchPage from "./components/search/SearchPage";
 import MovieDetails from "./components/movie/MovieDetails";
 import GenrePage from "./components/genre/GenrePage";
 import GenreMovie from "./components/genre/GenreMovie";
+import UserProfile from "./components/user/userprofile";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -60,6 +61,7 @@ function App() {
           <Route path='/movie/details/:id' element={<MovieDetails setAlertInfo={setAlertInfo}/>}/>
           <Route path='/genres' element={<GenrePage setAlertInfo={setAlertInfo}/>}/>
           <Route path='/genre/:genre/:id' element={<GenreMovie setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/profile' element={<UserProfile setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
