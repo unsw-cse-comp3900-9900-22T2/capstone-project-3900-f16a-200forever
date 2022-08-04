@@ -54,6 +54,7 @@ const ResponsiveAppBar = ({ setAuth, loginStatus, setAlertInfo }) => {
           status: 1,
           msg: "Logout!",
         });
+        localStorage.setItem("status", false);
       })
       .catch(function (error) {
         console.log(error);
@@ -199,7 +200,7 @@ const ResponsiveAppBar = ({ setAuth, loginStatus, setAlertInfo }) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={() => { navigate("/profile"); setAnchorElUser(null); }}>
+              <MenuItem onClick={() => { navigate(`/userprofile/${localStorage.getItem("id")}`); setAnchorElUser(null); }}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
               <MenuItem onClick={logout}>

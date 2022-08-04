@@ -27,7 +27,7 @@ const PostComment = ({ comment }) => {
 				</Grid>
 				
 			</Grid>
-			<Fab disabled aria-label="like" size='small' sx={{ ml: 3 }}>
+				<Fab disabled aria-label="like" size='small' sx={{ ml: 3 }}>
 					<FavoriteIcon />
 				</Fab>
 		</Paper>
