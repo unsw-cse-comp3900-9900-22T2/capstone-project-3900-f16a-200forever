@@ -56,7 +56,8 @@ def create_event(event_id, event):
 
 def update_event_status():
   now = str(datetime.now()).split(' ')[0]
-  events = db.session.query(Event.Events).filter(Event.Events.deadline > now)
+  events = db.session.query(Event.Events).filter(Event.Events.deadline < now, Event.Events.event_status != "closed").all()
+  print(events)
   for event in events:
-    event.status = "closed"
+    event.event_status = "closed"
     db.session.commit()

@@ -175,7 +175,7 @@ class AttempEvent(Resource):
     event = db.session.query(Event.Events).filter(Event.Events.id == data['event_id']).first()
     if event == None:
       return {"message": "Event not exists"}, 400
-    if event.status == "closed":
+    if event.event_status == "closed":
       return {"message": "event has been closed"}, 400
 
     # attemp the event
