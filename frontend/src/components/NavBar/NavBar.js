@@ -18,7 +18,7 @@ import { ButtonGroup } from '@mui/material';
 import axios from 'axios';
 import "./NavBar.css"
 
-const ResponsiveAppBar = ({ setAuth, loginStatus, setAlertInfo }) => {
+const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -215,4 +215,5 @@ const ResponsiveAppBar = ({ setAuth, loginStatus, setAlertInfo }) => {
     </AppBar>
   );
 };
-export default ResponsiveAppBar;
+
+export default NavBar;

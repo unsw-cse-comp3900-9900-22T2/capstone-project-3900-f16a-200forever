@@ -20,6 +20,10 @@ import ForumPage from "./components/forum/ForumPage";
 import PostPage from "./components/forum/PostPage";
 import Userprofile from "./components/userprofile/Userprofile";
 import UserRecomm from "./components/userprofile/UserRecomm";
+import AdminLogin from "./components/admin/AdminLogin";
+import AdminHome from "./components/admin/AdminHome";
+import AdminEventHome from "./components/admin/AdminEventHome";
+import AdminEventDetail from "./components/admin/AdminEventDetail";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -73,6 +77,10 @@ function App() {
           <Route path='/post/:id' element={<PostPage setAlertInfo={setAlertInfo}/>}/>
           <Route path='/userprofile/:id' element={<Userprofile setAlertInfo={setAlertInfo}/>}/>
           <Route path='/user/recommend/:id' element={<UserRecomm setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/login' element={<AdminLogin setAuth={setAuth} setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/home' element={<AdminHome setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/events' element={<AdminEventHome setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/event/:id' element={<AdminEventDetail setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
