@@ -17,14 +17,14 @@ class MovieList(Resource):
   @movielist.response(400, "Something wrong")
   def get(self):
     parser = reqparse.RequestParser()
-    parser.add_argument('email', type=str, location='args', required=True)
+    parser.add_argument('user_id', type=str, location='args', required=True)
     parser.add_argument('type', type=str, choices=['watched', 'dropped', 'wish'], location='args', required=True)
     args = parser.parse_args()
-    email = args['email']
+    user_id = args['user_id']
     type = args['type']
 
     # 1. check the user is valid or not
-    user = db.session.query(User.Users).filter(User.Users.email == email).first()
+    user = db.session.query(User.Users).filter(User.Users.id == user_id).first()
     if user == None:
       return {"message": "the user not exist"},400
 
