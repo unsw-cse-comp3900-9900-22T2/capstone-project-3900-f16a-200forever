@@ -10,7 +10,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from "react-router-dom";
 
-const AdminEventHome = () => {
+const EventHome = () => {
 	const [events, setEvents] = useState([]);
 	const navigate = useNavigate();
 
@@ -31,10 +31,6 @@ const AdminEventHome = () => {
 		<>
 			<Typography variant="h2" component="div" sx={{ mb: 4 }}>
 				All Events
-				{/* todo */}
-				<Fab color="primary" aria-label="add" sx={{ ml: 5 }} onClick={() => { navigate("/admin/event/create")}}>
-					<AddIcon />
-				</Fab>
 			</Typography>
 			<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
 				{events.map((event) => {
@@ -58,7 +54,7 @@ const AdminEventHome = () => {
 								<CardActions>
 									<Button 
 										size="small"
-										onClick={() => { navigate(`/admin/event/${event.id}`)}}>
+										onClick={() => { navigate(`/event/${event.id}`)}}>
 										View More
 									</Button>
 								</CardActions>
@@ -71,4 +67,4 @@ const AdminEventHome = () => {
 	)
 };
 
-export default AdminEventHome;
+export default EventHome;

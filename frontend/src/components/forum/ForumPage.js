@@ -71,7 +71,7 @@ const ForumPage = ({ setAlertInfo }) => {
       return;
     }
 		axios
-      .post("http://127.0.0.1:8080/thread", {
+      .post("http://127.0.0.1:8080/thread/thread", {
         email: localStorage.getItem("email"),
         token: localStorage.getItem("token"),
 				genre_id: parseInt(id),

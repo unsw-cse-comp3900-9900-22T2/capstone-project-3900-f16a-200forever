@@ -10,15 +10,6 @@ import Box from "@mui/material/Box";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import TextField from "@mui/material/TextField";
 
-function CropDemo({ src }) {
-  const [crop, setCrop] = useState();
-  return (
-    <ReactCrop crop={crop} onChange={c => setCrop(c)}>
-      <img src={src} />
-    </ReactCrop>
-  )
-}
-
 function fileToDataUrl(file) {
   const validFileTypes = [ 'image/jpeg', 'image/png', 'image/jpg' ]
   const valid = validFileTypes.find(type => type === file.type);

@@ -170,6 +170,12 @@ const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
             >
               FORUMS
             </Button>
+            <Button
+              onClick={() => { navigate('/events'); handleCloseNavMenu(); }}
+              sx={{ ml: 4, my: 2, color: 'white', display: 'block' }}
+            >
+              EVENT
+            </Button>
           </Box>
           
           {loginStatus === false ?

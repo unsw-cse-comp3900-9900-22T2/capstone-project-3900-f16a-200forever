@@ -24,10 +24,14 @@ import AdminLogin from "./components/admin/AdminLogin";
 import AdminHome from "./components/admin/AdminHome";
 import AdminEventHome from "./components/admin/AdminEventHome";
 import AdminEventDetail from "./components/admin/AdminEventDetail";
+import EventHome from "./components/event/EventHome";
+import EventDetail from "./components/event/EventDetail";
+import AdminEventCreate from "./components/admin/AdminEventCreate";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
   const [loginStatus, setLoginStatus] = useState(localStorage.getItem("status"));
+  // const [loginStatus, setLoginStatus] = useState(false);
   const [alertInfo, setAlertInfo] = useState({
     "status": 0,
     "msg": ""
@@ -72,6 +76,8 @@ function App() {
           <Route path='/movie/details/:id' element={<MovieDetails setAlertInfo={setAlertInfo}/>}/>
           <Route path='/genres' element={<GenrePage setAlertInfo={setAlertInfo}/>}/>
           <Route path='/genre/:genre/:id' element={<GenreMovie setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/events' element={<EventHome setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/event/:id' element={<EventDetail setAlertInfo={setAlertInfo}/>}/>
           <Route path='/forums' element={<ForumHome setAlertInfo={setAlertInfo}/>}/>
           <Route path='/forum/:genre/:id' element={<ForumPage setAlertInfo={setAlertInfo}/>}/>
           <Route path='/post/:id' element={<PostPage setAlertInfo={setAlertInfo}/>}/>
@@ -81,6 +87,7 @@ function App() {
           <Route path='/admin/home' element={<AdminHome setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/events' element={<AdminEventHome setAlertInfo={setAlertInfo}/>}/>
           <Route path='/admin/event/:id' element={<AdminEventDetail setAlertInfo={setAlertInfo}/>}/>
+          <Route path='/admin/event/create' element={<AdminEventCreate setAlertInfo={setAlertInfo}/>}/>
           <Route path='*' element={<NotFoundPage />}></Route>
         </Routes>
         </Container>
