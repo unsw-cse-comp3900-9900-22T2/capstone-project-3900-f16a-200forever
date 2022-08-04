@@ -8,10 +8,13 @@ import TextField from '@mui/material/TextField';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import PostComment from "./PostComment";
 import Stack from "@mui/material/Stack";
+import Pagination from '@mui/material/Pagination';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import Fab from '@mui/material/Fab';
 
 const pageSize = 20;
 
-function getResult(id, page, setResult, setTotal, setInfo, setAlertInfo) {
+function getResult(id, page, setResult, setTotal, setInfo, setReaction, setAlertInfo) {
   axios
     .get("http://127.0.0.1:8080/thread/thread", {
       params: {
@@ -25,6 +28,7 @@ function getResult(id, page, setResult, setTotal, setInfo, setAlertInfo) {
       setTotal(response.data.num_comments);
       setResult(response.data.comments);
 			setInfo(response.data.thread);
+			setReaction(response.data.thread.react_num);
     })
     .catch(function (error) {
       console.log(error.response);
@@ -41,6 +45,7 @@ const PostPage = ({ setAlertInfo }) => {
 	const [total, setTotal] = useState(0);
   const [result, setResult] = useState([]);
 	const [info, setInfo] = useState({ created_time: "", user_id: "" });
+	const [reaction, setReaction] = useState(0);
 	const navigate = useNavigate();
 
 	const submit = (event) => {
@@ -65,6 +70,11 @@ const PostPage = ({ setAlertInfo }) => {
       })
       .then(function (response) {
         console.log(response);
+				setAlertInfo({
+					status: 1,
+					msg: "Sent"
+				})
+				navigate(0);
       })
       .catch(function (error) {
         console.log(error.response.data);
@@ -76,12 +86,16 @@ const PostPage = ({ setAlertInfo }) => {
 	}
 
   useEffect(() => {
-    getResult(id, 1, setResult, setTotal, setInfo, setAlertInfo);
+    getResult(id, 1, setResult, setTotal, setInfo, setReaction, setAlertInfo);
   }, [])
 
 	const delete_post = () => {
+		setAlertInfo({
+			status: 2,
+			msg: "Operating"
+		});
 		axios
-			.delete("http://127.0.0.1:8080/thread", {
+			.delete("http://127.0.0.1:8080/thread/thread", {
 				data:{
 					thread_id: id,
 					email: localStorage.getItem("email"),
@@ -103,6 +117,42 @@ const PostPage = ({ setAlertInfo }) => {
 				});
 			});
 	}
+
+	const react = () => {
+		setAlertInfo({
+			status: 2,
+			msg: "Operating"
+		});
+		axios
+      .post("http://127.0.0.1:8080/thread/react", {
+        email: localStorage.getItem("email"),
+				token: localStorage.getItem("token"),
+				thread_id: id
+      })
+      .then(function (response) {
+        console.log(response);
+				if (response.data.is_remove === 0) {
+					setReaction(reaction - 1);
+					setAlertInfo({
+						status: 1,
+						msg: "Unde like",
+					});
+				} else {
+					setReaction(reaction + 1);
+					setAlertInfo({
+						status: 1,
+						msg: "like",
+					});
+				}
+      })
+      .catch(function (error) {
+        console.log(error.response.data);
+        setAlertInfo({
+          status: 2,
+          msg: error.response.data.message,
+        });
+      });
+	}
 	
 	return (
 		<>
@@ -119,10 +169,13 @@ const PostPage = ({ setAlertInfo }) => {
 			 	Created at: {info.created_time.replace(/\..*/g, "")}
 			</Typography>
 			<ButtonGroup  sx={{ ml: 2, mb: 2 }} variant="outlined">
-				{/* todo add url */}
-				<Button>VIEW AUTHOR</Button>
+				<Button onClick={() => { navigate(`/userprofile/${info.user_id}`)}}>VIEW AUTHOR</Button>
 				<Button onClick={delete_post}>DELETE</Button>
 			</ButtonGroup>
+			<Fab aria-label="like" size='small' sx={{ ml: 3 }} >
+				<FavoriteIcon onClick={react} />
+				{reaction}
+			</Fab>
 			<Box
 				component="form"
 				sx={{
@@ -149,7 +202,7 @@ const PostPage = ({ setAlertInfo }) => {
 					POST
 				</Button>
 			</Box>
-			<Typography variant="h4" component="div" sx={{ mt: 3, mb: 3 }}>
+			<Typography variant="h4" component="div" sx={{ mt: 3 }}>
 				All comments
 			</Typography>
 
@@ -162,6 +215,13 @@ const PostPage = ({ setAlertInfo }) => {
 					})}
 				</Stack>
 			</Box>
+			{parseInt((total - 1) / pageSize) === 0 ?
+        null:
+        <Pagination 
+          sx={{ mt: 3 }}
+          count={parseInt((total - 1) / pageSize) + 1} page={page} 
+          onChange={(event, value) => { setPage(value); getResult(id, value, setResult, setTotal, setInfo, setReaction, setAlertInfo); }}/>
+      }
 		</>
 	)
 };

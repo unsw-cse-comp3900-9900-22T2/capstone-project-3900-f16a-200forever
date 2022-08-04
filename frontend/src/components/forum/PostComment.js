@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import Fab from '@mui/material/Fab';
 
 const PostComment = ({ comment }) => {
 	const navigate = useNavigate();
@@ -12,12 +10,13 @@ const PostComment = ({ comment }) => {
   return (
 		<Paper style={{ padding: "40px 20px", marginTop: 100 }}>
 			<Grid container wrap="nowrap" spacing={2}>
-				<Grid item>
-					{/* todo add url to userprofile */}
-					<Avatar alt="" src={imgLink} />
+				<Grid item onClick={() => { navigate(`/userprofile/${comment.user_id}`)}}>
+					<Avatar src={comment.user_image}/>
 				</Grid>
 				<Grid justifyContent="left" item xs zeroMinWidth>
-					<h4 style={{ margin: 0, textAlign: "left" }}>Michel Michel</h4>
+					<h4 style={{ margin: 0, textAlign: "left" }} onClick={() => { navigate(`/userprofile/${comment.user_id}`)}}>
+						{comment.user_email}
+					</h4>
 					<p style={{ textAlign: "left" }}>
 						{comment.content}.{" "}
 					</p>
@@ -27,9 +26,6 @@ const PostComment = ({ comment }) => {
 				</Grid>
 				
 			</Grid>
-				<Fab disabled aria-label="like" size='small' sx={{ ml: 3 }}>
-					<FavoriteIcon />
-				</Fab>
 		</Paper>
   )
 };

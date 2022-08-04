@@ -9,6 +9,9 @@ import TextField from '@mui/material/TextField';
 import { useNavigate, useParams } from "react-router-dom";
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
+import SendIcon from '@mui/icons-material/Send';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import Fab from '@mui/material/Fab';
 
 const pageSize = 20;
 
@@ -112,9 +115,10 @@ const ForumPage = ({ setAlertInfo }) => {
 			<Box
 				component="form"
 				sx={{
-					'& .MuiTextField-root': { m: 1, width: '50ch' },
+					'& .MuiTextField-root': { m: 1, width: '80ch' },					
 				}}
 				noValidate
+				
 				autoComplete="off"
 				onSubmit={submit}
 			>
@@ -141,6 +145,7 @@ const ForumPage = ({ setAlertInfo }) => {
 					variant="text"
 					type="submit"
 					sx={{ mt: 1, mb: 2 }}
+					endIcon={<SendIcon />}
 				>
 					POST
 				</Button>
@@ -166,6 +171,10 @@ const ForumPage = ({ setAlertInfo }) => {
 							<Typography variant="caption" component="div" sx={{ ml: 2 }}>
 								Created at: {post.created_time.replace(/\..*/g, "")}
 							</Typography>
+							<Fab disabled aria-label="like" size='small' sx={{ ml: 3 }} >
+								<FavoriteIcon/>
+								{post.react_num}
+							</Fab>
 						</Item>)
 					})}
 				</Stack>

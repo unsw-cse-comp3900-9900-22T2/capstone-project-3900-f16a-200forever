@@ -51,7 +51,7 @@ const Userprofile = ({ setAlertInfo }) => {
     axios
 			.get("http://127.0.0.1:8080/user/userprofile", {
 				params: {
-					"user_id": localStorage.getItem("id")
+					"user_id": id
 				}
 			})
 			.then(function (response) {
