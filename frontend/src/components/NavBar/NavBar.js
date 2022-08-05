@@ -48,7 +48,7 @@ const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
         token: localStorage.getItem("token")
       })
       .then(function (response) {
-        setAuth("", "", "", "", false)
+        setAuth(null, null, null, null, false)
         navigate("/");
         setAlertInfo({
           status: 1,
