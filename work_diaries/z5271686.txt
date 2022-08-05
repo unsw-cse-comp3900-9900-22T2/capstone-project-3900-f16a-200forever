@@ -60,3 +60,5 @@ also the wtachedlist api
 rewrite the function which written before to improve efficience
 add more comment to the backend to make the code more readable with harry and william
 test all the api written by backend also test the edge case with harry and william
+redraw the er diagram
+write the third-party part of the report also the chanllange part
