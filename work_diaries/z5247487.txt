@@ -26,3 +26,9 @@ Week8
 Worked on the interaction between frontend and backend.
 Meet some bugs and errors and have reported to backend developers.
 Cant finish functionalies "forum" and "event" due to complex reasons.
+
+Week9
+Worked on rearranging pages. Discussed about details of sprint3
+
+Week10
+Worked on rearranging pages and report.
