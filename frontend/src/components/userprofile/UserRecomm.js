@@ -19,16 +19,16 @@ const UserRecomm = ({ setAlertInfo }) => {
 	const [genreChecked, setGenreChecked] = useState(false);
 	const [directorChecked, setDirectorChecked] = useState(false);
 
-	const getList = () => {
+	const getList = (check1, check2) => {
 		var param = {
 			"user_id":id
 		}
-		if (genreChecked === true && directorChecked === false) {
+		if (check1 === true && check2 === false) {
 			param['by'] = "genre"
-		} else if (genreChecked === false && directorChecked === true) {
+		} else if (check1 === false && check2 === true) {
 			param["by"] = "director"
 		}
-		
+		console.log(param)
 		axios.get("http://127.0.0.1:8080/recommendation/user",{
       params: param
     })
@@ -46,8 +46,8 @@ const UserRecomm = ({ setAlertInfo }) => {
 			status: 1,
 			msg: "Movies are coming",
 		});
-		getList();
-	}, [genreChecked, directorChecked]);
+		getList(false, false);
+	}, []);
 
 	return (
 		<>
@@ -68,8 +68,8 @@ const UserRecomm = ({ setAlertInfo }) => {
 			</FormControl> */}
 			<FormLabel sx={{ mb: 1 }}>Recommend by</FormLabel>
 			<FormGroup>
-				<FormControlLabel control={<Checkbox onChange={(event) => {setGenreChecked(event.target.checked); getList() }}/> } label="genre" />
-				<FormControlLabel control={<Checkbox onChange={(event) => {setDirectorChecked(event.target.checked); getList() }} />} label="director" />
+				<FormControlLabel control={<Checkbox onChange={(event) => {setGenreChecked(event.target.checked); getList(event.target.checked, directorChecked) }}/> } label="genre" />
+				<FormControlLabel control={<Checkbox onChange={(event) => {setDirectorChecked(event.target.checked); getList(genreChecked, event.target.checked) }} />} label="director" />
 			</FormGroup>
 
 			<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
