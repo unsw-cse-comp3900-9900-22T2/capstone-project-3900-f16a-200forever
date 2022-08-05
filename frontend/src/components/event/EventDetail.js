@@ -84,7 +84,6 @@ const EventDetail = ({ setAlertInfo }) => {
 			status: 2,
 			msg: "operating"
 		});
-		setBegin(true);
 		axios
 			.post("http://127.0.0.1:8080/event/attemp", {
 				email: localStorage.getItem("email"),
