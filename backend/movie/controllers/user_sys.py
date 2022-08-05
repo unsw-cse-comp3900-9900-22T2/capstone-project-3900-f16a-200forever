@@ -318,6 +318,11 @@ class BannedlistController(Resource):
     if banned != None:
       return {'message': 'User already in banned list'}, 400
 
+    # check if user in follow list
+    follow = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == banned_id).first()
+    if follow != None:
+      return {'message': 'Cannot add followed to ban list'}, 400
+
     data['user_id'] = user.id
     data['banned_user_id'] = banned_id
     entry = User.BannedList(data)
