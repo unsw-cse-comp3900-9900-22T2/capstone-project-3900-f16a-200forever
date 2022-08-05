@@ -30,3 +30,14 @@ working diaries
   
 -Week 8
   test and fix the functions above
+  improve the code finished before
+  
+-Week 9
+  implement the function of movie lists
+  dropped list(show, add, delete)
+  fix some return values
+  
+-Week 10
+  write the report
+  merge all the codes and debug
+  test the program

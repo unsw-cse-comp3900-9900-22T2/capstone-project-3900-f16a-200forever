@@ -18,4 +18,16 @@ Week6
 code frontend page(admin/ details/ user profile/ movies) 
 
 Week7
-code event guess what you like page
+code event and guess what you like page
+
+Week8
+rearrange layout(login/register/forget password) -->sprint2
+
+Week9
+rearrange layout(search/admin/event)
+
+write report next week and prepare for the demo
+
+Week10
+write mannual and setup in the report
+write comment

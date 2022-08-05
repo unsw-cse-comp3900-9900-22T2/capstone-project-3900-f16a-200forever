@@ -175,7 +175,13 @@ class FollowListManage(Resource):
     if data['email'] == follow.email:
       return {"message": "Cannot follow self"}, 400
 
+
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
+    
+    # check if user in banned list
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == data['follow_id']).first()
+    if banned != None:
+      return {'message': 'Cannot add banned to follow list'}, 400
     
     # check has follow
     try:
@@ -305,10 +311,6 @@ class BannedlistController(Resource):
     if user == None:
       return {"message": "User does not exist"}, 400
 
-    banned_res = db.session.query(User.Users).filter(User.BannedList.banned_user_id == banned_id).first()
-    if banned_res != None:
-      return {"message": "Already banned"}, 400
-
     banned = db.session.query(User.Users).filter(User.Users.id == banned_id).first()
     if banned == None:
       return {"message": "Banned user dose not exist"}, 400
@@ -318,9 +320,14 @@ class BannedlistController(Resource):
       return {"message": "Cannot ban self"}, 400
 
     # check if user already in banned list
-    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == banned_id, User.BannedList.banned_user_id == banned_id).first()
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == banned_id).first()
     if banned != None:
       return {'message': 'User already in banned list'}, 400
+
+    # check if user in follow list
+    follow = db.session.query(User.FollowList).filter(User.FollowList.user_id == user.id, User.FollowList.follow_id == banned_id).first()
+    if follow != None:
+      return {'message': 'Cannot add followed to ban list'}, 400
 
     data['user_id'] = user.id
     data['banned_user_id'] = banned_id
