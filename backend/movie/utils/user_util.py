@@ -78,7 +78,7 @@ def get_badges(id):
   for badge in results:
     tmp = convert_object_to_dict(badge)
     tmp['image'] = get_image(tmp['image'])
-    badges.append()
+    badges.append(tmp)
   return badges
 
 # get the username of the give user
