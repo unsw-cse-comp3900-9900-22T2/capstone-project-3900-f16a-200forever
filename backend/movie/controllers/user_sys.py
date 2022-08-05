@@ -305,10 +305,6 @@ class BannedlistController(Resource):
     if user == None:
       return {"message": "User does not exist"}, 400
 
-    banned_res = db.session.query(User.Users).filter(User.BannedList.banned_user_id == banned_id).first()
-    if banned_res != None:
-      return {"message": "Already banned"}, 400
-
     banned = db.session.query(User.Users).filter(User.Users.id == banned_id).first()
     if banned == None:
       return {"message": "Banned user dose not exist"}, 400
@@ -318,7 +314,7 @@ class BannedlistController(Resource):
       return {"message": "Cannot ban self"}, 400
 
     # check if user already in banned list
-    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == banned_id, User.BannedList.banned_user_id == banned_id).first()
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == banned_id).first()
     if banned != None:
       return {'message': 'User already in banned list'}, 400
 
