@@ -11,7 +11,9 @@ Week4
 Worked on coding. Mainly Initializing project and some auth frontend.
 
 Week5
-Worked on coding. Auth, movie, event part
+Worked on coding. Auth, movie, event part.
+Helped debuging.
+Tested the project briefly.
 
 Week6
 Worked on the frontend re-build with material ui library.
@@ -26,9 +28,12 @@ Week8
 Worked on the interaction between frontend and backend.
 Meet some bugs and errors and have reported to backend developers.
 Cant finish functionalies "forum" and "event" due to complex reasons.
+Helped debuging.
+Tested the project briefly.
 
 Week9
 Worked on rearranging pages. Discussed about details of sprint3
 
 Week10
 Worked on rearranging pages and report.
+Tested the project briefly.
