@@ -120,7 +120,7 @@ class SearchMovie(Resource):
 
     # sort the movie
     movie_sort(movies, args['order'])
-    matched_movies = paging(args['page'], args['num_per_page'], matched_movies)
+    movies = paging(args['page'], args['num_per_page'], movies)
     return {"movies": movies, "total": total_num}, 200
 
 #-------------------SHOW MOVIE DETAIL-------------------
