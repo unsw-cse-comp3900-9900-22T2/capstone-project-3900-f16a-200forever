@@ -36,15 +36,24 @@ const MovieDetails = ({ setAlertInfo }) => {
   const [total, setTotal] = useState(0);
 
   function getReviews(type, order, page, setResult, setTotal, setAlertInfo) {
+    setAlertInfo({
+      status: 2,
+      msg: "loading"
+    });
+    var param = {
+      movie_id: id,
+      type: type,
+      order: order,
+      num_per_page: pageSize,
+      page: page,
+    }
+    if (localStorage.getItem("id") !== null) {
+      param.user_id = localStorage.getItem("id")
+    }
+
     axios
       .get("http://127.0.0.1:8080/review/sort", {
-        params: {
-          movie_id: id,
-          type: type,
-          order: order,
-          num_per_page: pageSize,
-          page: page,
-        },
+        params: param,
       })
       .then(function (response) {
         console.log(response.data);
@@ -61,11 +70,15 @@ const MovieDetails = ({ setAlertInfo }) => {
   }
 
   useEffect (() => {
+    var param = {
+      movie_id: id
+    }
+    if (localStorage.getItem("id") !== null) {
+      param.user_id = localStorage.getItem("id")
+    }
     axios
     .get("http://127.0.0.1:8080/movie/moviedetails", {
-      params: {
-        "movie_id": id,
-      }
+      params: param
     })
     .then(function (response) {
       console.log(response.data);

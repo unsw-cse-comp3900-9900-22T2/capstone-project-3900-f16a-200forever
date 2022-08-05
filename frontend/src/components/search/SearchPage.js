@@ -22,15 +22,19 @@ function getResult(searchTag, order, keywords, page, setResult, setTotal, setAle
     return;
   }
 
+  var param = {
+    type: searchTag,
+    keywords: keywords,
+    order: order,
+    num_per_page: pageSize,
+    page: page
+  }
+  if (localStorage.getItem("id") !== null) {
+    param.user_id = localStorage.getItem("id")
+  }
   axios
     .get("http://127.0.0.1:8080/movie/search", {
-      params: {
-        "type": searchTag,
-        "keywords": keywords,
-        "order": order,
-        "num_per_page": pageSize,
-        "page": page
-      }
+      params: param
     })
     .then(function (response) {
       console.log(response.data);
