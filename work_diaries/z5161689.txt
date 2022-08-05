@@ -5,8 +5,6 @@ Week 4 - about how to write system
 Week 5 - write password resetting backend, user profile page
 Week 6 - review creation written
 Week 7 - added conditions for review posting, finished writing delete review, still need to write weight calculation with badges
-<<<<<<< HEAD
-Week 8 - finish weight calculation, review admin promotion and ability to delete reviews
-=======
-Week 8 - finish weight calculation, review admin promotion and ability to delete reviews
->>>>>>> 94089966a03c2442fe31a1731da5167796cc914a
+Week 8 - finish weight calculation, review admin promotion and ability to delete reviews, finished recommendations based on reviews
+Week 9 - set up redis server, fill in some missing parts in api document
+Week 10 - wishlist done, edit profile bug fix, forum paging done, banned list done, fixed up code style and inconsistencies, reset database and did mass testing on everything

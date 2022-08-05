@@ -20,3 +20,9 @@ Discussed and assign frontend workload with frontend developer.
 Week7
 Worked on the interaction between frontend and backend.
 Worked on the pages of user profile, genre search and other pages.
+Meet some bugs and errors and have reported to backend developers.
+
+Week8
+Worked on the interaction between frontend and backend.
+Meet some bugs and errors and have reported to backend developers.
+Cant finish functionalies "forum" and "event" due to complex reasons.
