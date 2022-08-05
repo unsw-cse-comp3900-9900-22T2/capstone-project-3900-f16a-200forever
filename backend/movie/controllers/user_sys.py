@@ -175,6 +175,11 @@ class FollowListManage(Resource):
     if data['email'] == follow.email:
       return {"message": "Cannot follow self"}, 400
 
+    # check if user already in banned list
+    banned = db.session.query(User.BannedList).filter(User.BannedList.user_id == user.id, User.BannedList.banned_user_id == data['follow_id']).first()
+    if banned != None:
+      return {'message': 'Cannot add banned to follow list'}, 400
+
     user = db.session.query(User.Users).filter(User.Users.email == data['email']).first()
     
     # check has follow
