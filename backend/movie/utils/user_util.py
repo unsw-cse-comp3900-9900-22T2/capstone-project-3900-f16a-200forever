@@ -3,6 +3,7 @@ from sqlalchemy import inspect
 from movie import db
 import movie.models.user as User
 import movie.models.admin as Admin
+import movie.models.event as Event
 
 # check the user exist or not
 def user_id_valid(id):
@@ -73,10 +74,10 @@ def get_droppedlist(id):
 # id: id of the user
 # badges: the list of the event id
 def get_badges(id):
-  results = db.session.query(User.UserEvent).filter(User.UserEvent.user_id == id).filter(User.UserEvent.event_status.like(f'%passed%')).all()
+  results = db.session.query(User.UserEvent, Event.Events).filter(User.UserEvent.user_id == id, Event.Events.id == User.UserEvent.event_id).filter(User.UserEvent.event_status.like(f'%passed%')).all()
   badges = []
   for badge in results:
-    tmp = convert_object_to_dict(badge)
+    tmp = convert_object_to_dict(badge[1])
     tmp['image'] = get_image(tmp['image'])
     badges.append(tmp)
   return badges
