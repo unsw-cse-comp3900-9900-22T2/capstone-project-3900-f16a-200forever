@@ -31,7 +31,7 @@ function fileToDataUrl(file) {
 
 const Userprofile = ({ setAlertInfo }) => {
 	const { id } = useParams();
-	const [profile, setProfile] = useState({});
+	const [profile, setProfile] = useState({ badges: [] });
 	const [newInfo, setNewInfo] = useState({});
 	const [isEdit, setIsEdit] = useState(false);
 	const [base64, setBase64] = useState("");
@@ -347,6 +347,16 @@ const Userprofile = ({ setAlertInfo }) => {
 						<Typography variant="h6" component="div" sx={{ mb: 2 }}>
 							Badges:
 						</Typography>
+						{
+							profile.badges.map((badge) => {
+								return (
+									<Avatar 
+										src={badge.image}
+										sx={{ width: 50, height: 50}}
+									/>
+								)
+							})
+						}
 						{/* todo */}
 					</Grid>
 				</Grid>
