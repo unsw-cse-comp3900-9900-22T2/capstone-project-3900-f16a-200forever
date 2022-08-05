@@ -112,7 +112,11 @@ class SearchMovie(Resource):
     for movie in matched_movies:
       if args['type'] == 'director' or args['type'] == 'actor':
         movie = movie.Movies
-      (rating_count, total_rating) = get_movie_rating(args['user_id'], movie)
+      if 'user_id' in args.keys():
+        (rating_count, total_rating) = get_movie_rating(args['user_id'], movie)
+      else:
+        rating_count = movie.total_rating
+        total_rating = movie.rating_count
       print(args['user_id'])
       print(rating_count)
       movie_detail = convert_object_to_dict(movie)
