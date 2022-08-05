@@ -10,6 +10,8 @@ import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Button } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import MovieCard from "../movie/MovieCard";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,8 +29,12 @@ const FollowList = ({ setAlertInfo }) => {
 	const navigate = useNavigate();
 
 	const getReviews = (target) => {
-		console.log(localStorage.getItem("email"));
-		console.log(localStorage.getItem("token"))
+		// console.log(localStorage.getItem("email"));
+		// console.log(localStorage.getItem("token"))
+		setAlertInfo({
+			status: 2,
+			msg: "loading"
+		});
 		axios
       .post("http://127.0.0.1:8080/user/followlist/reviews", {
         email: localStorage.getItem("email"),
@@ -38,7 +44,8 @@ const FollowList = ({ setAlertInfo }) => {
 				follow_id: target
       })
       .then(function (response) {
-        console.log(response);
+        console.log(response.data.reviews);
+				setReviews(response.data.reviews)
       })
       .catch(function (error) {
         console.log(error.response.data);
@@ -102,7 +109,58 @@ const FollowList = ({ setAlertInfo }) => {
 					})
 				}
 			</Grid>
-			<Grid container item xs={10}>
+			<Grid container item xs={1}/>
+			<Grid 
+				container 
+				item 
+				xs={9}
+				direction="column"
+				justifyContent="center"
+				alignItems="stretch"
+			>
+				<Grid item xs={12}>
+					<Typography variant="h5" component="div">
+						Reviews:
+					</Typography>
+				</Grid>
+				{
+					reviews.map((review) => {
+						return (
+							<Paper elevation={4}>
+								<Grid item container direction="row"
+									justifyContent="flex-start"
+									alignItems="stretch"xs={12} sx={{ mb: 4 }}>
+									<Grid item xs={4}>
+										<Avatar onClick={() => setTarget(review.user_id)} src={review.user_image} sx={{ height:150, width: 150}}/>
+									</Grid>
+									<Grid item
+										container 
+										xs={8}
+										direction="column"
+										justifyContent="flex-start"
+										alignItems="stretch">
+
+									<Stack spacing={2} alignItems="left" textAlign="left">
+											<Grid item xs={12}>
+												<Item>{review.user_email}</Item>
+												<Typography variant="h5" component="div">
+													Content: {review.review_content}
+												</Typography>
+												<p style={{ textAlign: "left" }}>
+													{review.created_time.replace(/\..*/g, "")}	
+												</p>
+												<Typography variant="h6" component="div">
+													Movie: {review.title}
+													<Button onClick={() => { navigate(`/movie/details/${review.movie_id}`); navigate(0) }}>View movie</Button>
+												</Typography>
+											</Grid>
+											</Stack>
+									</Grid>
+								</Grid>		
+							</Paper>
+						)
+					})
+				}
 			</Grid>
 		</Grid>
 	)

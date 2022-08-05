@@ -13,7 +13,6 @@ const MovieCard = ({ data }) => {
   return (
     <Card sx={{ maxWidth: 250 }}
 			onClick={() => { navigate(`/movie/details/${data.id}`); navigate(0) }}
-			// onClick={() => {  }}
 			>
 			<CardActionArea>
 				<CardMedia
