@@ -106,19 +106,11 @@ class SearchMovie(Resource):
     # caculate the rating based on the given user banned list
     total_num = len(matched_movies)
     # paging
-    matched_movies = paging(args['page'], args['num_per_page'], matched_movies)
-    print(matched_movies)
     movies = []
     for movie in matched_movies:
       if args['type'] == 'director' or args['type'] == 'actor':
         movie = movie.Movies
-      if 'user_id' in args.keys():
-        (rating_count, total_rating) = get_movie_rating(args['user_id'], movie)
-      else:
-        rating_count = movie.total_rating
-        total_rating = movie.rating_count
-      print(args['user_id'])
-      print(rating_count)
+      (rating_count, total_rating) = get_movie_rating(args['user_id'], movie)
       movie_detail = convert_object_to_dict(movie)
       movie_detail['total_rating'] = total_rating
       movie_detail['rating_count'] = rating_count
@@ -128,6 +120,7 @@ class SearchMovie(Resource):
 
     # sort the movie
     movie_sort(movies, args['order'])
+    matched_movies = paging(args['page'], args['num_per_page'], matched_movies)
     return {"movies": movies, "total": total_num}, 200
 
 #-------------------SHOW MOVIE DETAIL-------------------

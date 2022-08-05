@@ -49,7 +49,6 @@ def adjust_rating(user_id, movie_id):
   movie = db.session.query(Movie.Movies).filter(Movie.Movies.id == movie_id).first()
   total_rating = movie.total_rating
   rating_count = movie.rating_count
-  print(user_id)
   for banned in banned_list:
     review = db.session.query(Review.Reviews).filter(Review.Reviews.user_id == banned.banned_user_id, Review.Reviews.movie_id == movie_id).first()
     if review != None:
