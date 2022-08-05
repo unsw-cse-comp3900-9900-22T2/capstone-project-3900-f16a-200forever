@@ -51,3 +51,12 @@ and format the api doc
 
 week9:
 try to setup the redis to store the token, will do more in weekend
+
+week10:
+set up the redis
+change the database table
+wirt the post react api
+also the wtachedlist api
+rewrite the function which written before to improve efficience
+add more comment to the backend to make the code more readable with harry and william
+test all the api written by backend also test the edge case with harry and william
