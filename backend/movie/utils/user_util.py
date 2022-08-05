@@ -76,7 +76,7 @@ def get_badges(id):
   results = db.session.query(User.UserEvent).filter(User.UserEvent.user_id == id).filter(User.UserEvent.event_status.like(f'%passed%')).all()
   badges = []
   for badge in results:
-    badges.append(badge.event_id)
+    badges.append(convert_object_to_dict(badge))
   return badges
 
 # get the username of the give user
