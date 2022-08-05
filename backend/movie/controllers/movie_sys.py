@@ -3,7 +3,7 @@ from flask_restx import Resource, reqparse
 from movie import db
 from movie.models import movie as Movie
 from movie.models import person as Person
-from movie.utils.movie_util import  get_movie_year, get_movie_rating
+from movie.utils.movie_util import  get_movie_year, get_movie_rating, movie_sort
 from movie.utils.other_util import convert_object_to_dict,  paging
 from movie.models import genre as Genre
  
@@ -30,7 +30,8 @@ class SearchMovie(Resource):
     if args['type'] == "movie name":
       # kw = args['by_title']
       kw = args["keywords"]
-      result = []
+      result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')).all()
+      """
       if args['order'] == 'ascending':
         result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
@@ -39,13 +40,15 @@ class SearchMovie(Resource):
         result = db.session.query(Movie.Movies).filter(Movie.Movies.title.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
         ).all()
+      """
       matched_movies += result
       
     # search by description 
     elif args['type'] == 'description':
       # kw = args['by_description']
       kw = args["keywords"]
-      result = []
+      result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')).all()
+      """
       if args['order'] == 'ascending':
         result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title
@@ -54,65 +57,73 @@ class SearchMovie(Resource):
         result = db.session.query(Movie.Movies).filter(Movie.Movies.description.ilike(f'%{kw}%')
         ).order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title
         ).all()
+      """
       matched_movies += result
 
     # search by director
     elif args['type'] == 'director':
       kw = args["keywords"]
       # get the query that find the movie with the same director
-      director_query = db.session.query(
+      result = db.session.query(
           Person.MovieDirector, Person.Persons, Movie.Movies, 
         ).filter(
           Person.MovieDirector.movie_id == Movie.Movies.id,
         ).filter(
           Person.MovieDirector.person_id == Person.Persons.id,
         ).filter(
-          Person.Persons.name.ilike(f'%{kw}%'))
-
+          Person.Persons.name.ilike(f'%{kw}%')).all()
+      """
       result = []
       # sort by rating
       if args['order'] == 'ascending':
         result = director_query.order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title).all()
       else:
         result = director_query.order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title).all()
+      """
       matched_movies += result
 
     elif args['type'] == 'actor':
       kw = args["keywords"]
       result = []
-      actor_query = db.session.query(
+      result = db.session.query(
         Person.MovieActor, Person.Persons, Movie.Movies, 
       ).filter(
         Person.MovieActor.movie_id == Movie.Movies.id,
       ).filter(
         Person.MovieActor.person_id == Person.Persons.id,
       ).filter(
-        Person.Persons.name.ilike(f'%{kw}%'))
-
+        Person.Persons.name.ilike(f'%{kw}%')).all()
+      """
       result = []
       # sort by rating
       if args['order'] == 'ascending':
         result = actor_query.order_by(Movie.Movies.total_rating.asc(), Movie.Movies.title).all()
       else:
         result = actor_query.order_by(Movie.Movies.total_rating.desc(), Movie.Movies.title).all()
+      """
       matched_movies += result
 
+    # caculate the rating based on the given user banned list
     total_num = len(matched_movies)
     # paging
     matched_movies = paging(args['page'], args['num_per_page'], matched_movies)
-
+    print(matched_movies)
     movies = []
     for movie in matched_movies:
       if args['type'] == 'director' or args['type'] == 'actor':
-        print(movie)
         movie = movie.Movies
       (rating_count, total_rating) = get_movie_rating(args['user_id'], movie)
+      print(args['user_id'])
+      print(rating_count)
       movie_detail = convert_object_to_dict(movie)
       movie_detail['total_rating'] = total_rating
       movie_detail['rating_count'] = rating_count
       year = get_movie_year(movie)
       movie_detail['release_time'] = year
       movies.append(movie_detail)
+
+    # sort the movie
+    movie_sort(movies, args['order'])
     return {"movies": movies, "total": total_num}, 200
 
 #-------------------SHOW MOVIE DETAIL-------------------
