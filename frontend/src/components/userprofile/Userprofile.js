@@ -142,7 +142,6 @@ const Userprofile = ({ setAlertInfo }) => {
 			token: newInfo.token,
 			username: newInfo.username,
 			signature: newInfo.signature,
-			image: newInfo.image
 		};
 		if (newInfo.current_password.replace(/\s/g, "").length &&
 				newInfo.new_password.replace(/\s/g, "").length &&
@@ -156,6 +155,9 @@ const Userprofile = ({ setAlertInfo }) => {
 				status: 2,
 				msg: "Enter valid password if you want to change"
 			});
+		}
+		if (newInfo.image.replace(/\s/g, "").length) {
+			body["image"] = newInfo.image
 		}
 
 		axios
@@ -428,7 +430,7 @@ const Userprofile = ({ setAlertInfo }) => {
           <Grid container xs={12} direction="row" alignItems="flex-start">
             <Grid item xs={12}>
               <Typography gutterBottom variant="h5" component="div" sx={{ ml: 4, mt: 4}}>
-                watched movies
+                Watched movies
               </Typography>
             </Grid>
             {
