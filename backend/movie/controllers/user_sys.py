@@ -251,9 +251,7 @@ class FollowReview(Resource):
       review["user_email"] = re.user.email
       review['user_id'] = re.user.id
       review["user_image"] = get_image(re.user.image)
-      review["user_image"] = re.user.image
       reviews.append(review)
-      print(review)
 
     reviews.sort(key=lambda x: x["created_time"])
     reviews.reverse()
