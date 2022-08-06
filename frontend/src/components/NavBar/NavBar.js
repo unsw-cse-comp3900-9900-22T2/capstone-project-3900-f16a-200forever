@@ -26,7 +26,9 @@ const NavBar = ({ setAuth, setAlertInfo }) => {
   const [loginStatus, setLoginStatus] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("token") !== null && localStorage.getItem("token").replace(/\s/g, "").length) {
+    if (localStorage.getItem("token") !== null && 
+      localStorage.getItem("token").replace(/\s/g, "").length &&
+      localStorage.getItem("token") !== "null") {
       setLoginStatus(true);
     } else {
       setLoginStatus(false);
