@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
-import ReactCrop from 'react-image-crop'
 import {Button} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
