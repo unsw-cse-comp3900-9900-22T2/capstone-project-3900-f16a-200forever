@@ -33,14 +33,14 @@ import AdminPromote from "./components/admin/AdminPromote";
 import AdminDemote from "./components/admin/AdminDemote";
 
 function App() {
-  const [userInfo, setUserInfo] = useState({});
-  const [loginStatus, setLoginStatus] = useState(localStorage.getItem("status"));
+  // const [userInfo, setUserInfo] = useState({});
+  // const [loginStatus, setLoginStatus] = useState(localStorage.getItem("status"));
   // const [loginStatus, setLoginStatus] = useState(false);
   const [alertInfo, setAlertInfo] = useState({
     "status": 0,
     "msg": ""
   })
-
+  
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -51,25 +51,24 @@ function App() {
     });
   };
 
-  const updateUserInfo = (userInfo) => {
-    setUserInfo(userInfo);
-  };
-
-  localStorage.setItem('status', false);
-
   function setAuth(token, id, username, email, status) {
     localStorage.setItem('token', token);
     localStorage.setItem('id', id);
     localStorage.setItem('username', username);
     localStorage.setItem('email', email);
     localStorage.setItem('status', status);
-    setLoginStatus(status);
+    if (status === false) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("id");
+      localStorage.removeItem("username");
+      localStorage.removeItem("email");
+    }
   }
 
   return (
     <Fragment>
       <Router>
-        <NavBar setAuth={setAuth} loginStatus={loginStatus} setAlertInfo={setAlertInfo}/>
+        <NavBar setAuth={setAuth} setAlertInfo={setAlertInfo}/>
         <Container maxWidth={false} className={classes.rootContainer}>
         <Routes>  
           <Route path='' element={<Home />}/>

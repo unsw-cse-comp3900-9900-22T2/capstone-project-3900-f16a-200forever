@@ -41,6 +41,7 @@ const Login = ({ setAuth, setAlertInfo }) => {
           msg: "Login successfully!",
         });
         navigate("/");
+        navigate(0);
       })
       .catch(function (error) {
         console.log(error.response.data);

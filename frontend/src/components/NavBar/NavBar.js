@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,11 +18,20 @@ import { ButtonGroup } from '@mui/material';
 import axios from 'axios';
 import "./NavBar.css"
 
-const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
+const NavBar = ({ setAuth, setAlertInfo }) => {
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [loginStatus, setLoginStatus] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null && localStorage.getItem("token").replace(/\s/g, "").length) {
+      setLoginStatus(true);
+    } else {
+      setLoginStatus(false);
+    }
+  }, [])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -42,6 +51,8 @@ const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
 
   const logout = () => {
     setAnchorElUser(null);
+    console.log(localStorage.getItem("email"));
+    console.log(localStorage.getItem("token"));
     axios
       .post("http://127.0.0.1:8080/logout", {
         email: localStorage.getItem("email"),
@@ -54,7 +65,8 @@ const NavBar = ({ setAuth, loginStatus, setAlertInfo }) => {
           status: 1,
           msg: "Logout!",
         });
-        localStorage.setItem("status", false);
+        setLoginStatus(false);
+        navigate(0);
       })
       .catch(function (error) {
         console.log(error);
